@@ -37,7 +37,7 @@ from scipy.stats.mstats import rankdata
 from absl import flags, app
 from polyaxon_client.tracking import Experiment, get_log_level
 
-from .model import GoldenRetriever, GoldenRetriever_BERT, GoldenRetriever_ALBERT
+from .models import GoldenRetriever, GoldenRetriever_BERT, GoldenRetriever_ALBERT
 from .dataloader import kb_train_test_split
 from .kb_handler import kb, kb_handler
 
