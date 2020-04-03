@@ -6,7 +6,7 @@ import numpy as np
 import shutil
 
 from src.models import GoldenRetriever
-from src.kb_handler import kb, kb_handler
+from src.data_handler.kb_handler import kb, kb_handler
 from sklearn.model_selection import train_test_split
 
 
