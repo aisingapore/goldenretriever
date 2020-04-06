@@ -1,11 +1,14 @@
+import sys
+sys.path.append('')
+
 import streamlit as st
 import pandas as pd
 import time
 
-from src.model import GoldenRetriever
-from src.kb_handler import kb_handler
-from src.importance import importance_by_erasure, partial_highlight
-from src import SessionState
+from src.models import GoldenRetriever
+from src.data_handler.kb_handler import kb_handler
+from importance import importance_by_erasure, partial_highlight
+import SessionState
 
 # Init per-session persistent state variabless
 state = SessionState.get(fetch=False, 

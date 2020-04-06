@@ -5,10 +5,14 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
 && apt-get update \
 && ACCEPT_EULA=Y apt-get -y install msodbcsql17 unixodbc unixodbc-dev 
 
-COPY api_requirements.txt ./api_requirements.txt
+COPY app/api/requirements.txt ./requirements.txt
 RUN pip install -r requirements.txt
 
-RUN wget https://finetunedweights.blob.core.windows.net/finetuned02/variables.tar.gz \
-&& tar -zxvf variables.tar.gz
+# RUN apt-get -y install wget \
+# && wget https://finetunedweights.blob.core.windows.net/finetuned02/variables.tar.gz \
+# && tar -zxvf variables.tar.gz
 
-CMD ["python", "app_flask.py", "-db", "db_cnxn_str.txt"]
+ADD . /code
+WORKDIR /code
+
+CMD ["python", "app/api/main.py", "-db", "db_cnxn_str.txt"]
