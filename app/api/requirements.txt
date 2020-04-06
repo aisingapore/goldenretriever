@@ -1,12 +1,12 @@
 azure-storage-blob
-flask 
 pandas 
 pyodbc
 scikit-learn
 tensorflow==2.1.0
-tensorflowhub
+tensorflow-hub
 tensorflow-estimator 
 tensorflow-text
 tika
-transfomers 
-waitress 
+transformers
+flask
+waitress
