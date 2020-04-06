@@ -6,13 +6,13 @@ import numpy as np
 import datetime
 # import tensorflow_text
 import pyodbc
-from .utils import split_txt, read_txt, clean_txt, read_kb_csv
+from .data_handler.data_preprocessing import split_txt, read_txt, clean_txt, read_kb_csv
 from sklearn.metrics.pairwise import cosine_similarity
 from tensorflow.keras.optimizers import Adam
 from transformers import AlbertTokenizer, TFAlbertModel
-from .bert_tokenization import FullTokenizer, get_masks, get_segments, get_ids, truncate_str, preprocess_one_str, preprocess_str
-from .metric_learning import triplet_loss
-from .kb_handler import kb
+from .tokenizers.bert_tokenization import FullTokenizer, get_masks, get_segments, get_ids, truncate_str, preprocess_one_str, preprocess_str
+from .loss_functions import triplet_loss
+from .data_handler.kb_handler import kb
 
 
 class GoldenRetriever:
