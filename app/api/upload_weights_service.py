@@ -43,11 +43,6 @@ def upload_weights(request, files=None):
 
     # Upload file
     if files is not None:
-    # if 'file' in request.keys():
-    # if request['file']:
-        # https://www.starlette.io/requests/
-        # f = await request['file'].read()
-        print(type(files))
 
         # Upload the created file, use WEIGHTS_FOLDER_NAME as the blob name
         blob_client = blob_service_client.get_blob_client(

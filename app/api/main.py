@@ -125,7 +125,6 @@ async def upload_knowledge_base_to_sql_endpoint(request : upload_kb_request):
 
 @app.post("/upload_weights")
 async def upload_weights_endpoint(request : Request):
-# async def upload_weights_endpoint(request:Request):
     """
     Upload finetuned weights to an azure blob storage container
 
