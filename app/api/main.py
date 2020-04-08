@@ -1,5 +1,5 @@
 """
-Flask API
+GoldenRetriever API
 
 Run from root folder:
 python app/api/main.py
@@ -10,8 +10,9 @@ import argparse
 import sys
 sys.path.append('')
 
-from flask import Flask, jsonify, request
-from waitress import serve
+import uvicorn
+from fastapi import FastAPI, Request
+from starlette.datastructures import FormData
 import pyodbc
 import numpy as np
 import pandas as pd
@@ -21,13 +22,13 @@ from src.models import GoldenRetriever
 from src.data_handler.kb_handler import kb_handler
 from db_handler import get_last_insert_ids, extract_qa_pair_based_on_idx, get_kb_id_ref, get_permissions, ensure_connection
 from exceptions import InvalidUsage
-from qa_service import make_query
-from feedback_service import save_feedback
-from upload_kb_service import upload_knowledge_base_to_sql
+from qa_service import make_query, query_request
+from feedback_service import save_feedback, feedback_request
+from upload_kb_service import upload_knowledge_base_to_sql, upload_kb_request
 from upload_weights_service import upload_weights
 
 
-app = Flask(__name__)
+app = FastAPI()
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-db", "--credentials", dest='dir',
@@ -36,8 +37,23 @@ parser.add_argument("-db", "--credentials", dest='dir',
 args = parser.parse_args()
 
 
-@app.route("/query", methods=['POST'])
-def make_query_endpoint():
+gr = GoldenRetriever()
+# gr.restore('./google_use_nrf_pdpa_tuned/variables-0')
+kbh = kb_handler()
+kbs = kbh.load_sql_kb(cnxn_path = args.dir, kb_names=['PDPA','nrf'])
+gr.load_kb(kbs)
+
+
+# make the SQL connection and cursor, store permissions and kb data
+conn = pyodbc.connect(open(args.dir, 'r').read())
+cursor = conn.cursor()
+
+get_kb_dir_id, get_kb_raw_id = get_kb_id_ref(conn)
+permissions = get_permissions(conn)
+
+
+@app.post("/query")
+async def make_query_endpoint(request: query_request):
     """
     Main function for User to make requests to. 
 
@@ -58,8 +74,8 @@ def make_query_endpoint():
 
     return {"responses":reply, "query_id":current_request_id}
 
-@app.route("/feedback", methods=['POST'])
-def save_feedback_endpoint():
+@app.post("/feedback")
+async def save_feedback_endpoint(request: feedback_request):
     """
     Retrieve feedback from end users
 
@@ -72,8 +88,8 @@ def save_feedback_endpoint():
 
     return {"message":"Success"}
 
-@app.route("/knowledge_base", methods=['POST'])
-def upload_knowledge_base_to_sql_endpoint():
+@app.post("/knowledge_base")
+async def upload_knowledge_base_to_sql_endpoint(request : upload_kb_request):
     """
     Receive knowledge bases from users
     
@@ -107,10 +123,14 @@ def upload_knowledge_base_to_sql_endpoint():
 
     return {"message":"Success"}
 
-@app.route("/upload_weights", methods=['POST'])
-def upload_weights_endpoint():
+@app.post("/upload_weights")
+async def upload_weights_endpoint(request : Request):
     """
     Upload finetuned weights to an azure blob storage container
+
+    To handle both JSON and files in the request in fastAPI, 
+    we may use Request.form():
+    https://github.com/tiangolo/fastapi/issues/143
     
     args:
     ----
@@ -126,32 +146,12 @@ def upload_weights_endpoint():
          'blob_name': BLOB_NAME
         } 
     """
+    request_form = await request.form()
+    files = await request_form['file'].read()
 
-    message = upload_weights(request)
+    message = upload_weights(request_form, files)
     
     return {"message":message}
 
-@app.errorhandler(InvalidUsage)
-def handle_invalid_usage(error):
-    response = jsonify(error.to_dict())
-    response.status_code = error.status_code
-    return response
-
-
-if __name__ == '__main__':
-    # load the model and knowledge bases
-    gr = GoldenRetriever()
-    # gr.restore('./google_use_nrf_pdpa_tuned/variables-0')
-    kbh = kb_handler()
-    kbs = kbh.load_sql_kb(cnxn_path = args.dir, kb_names=['PDPA','nrf'])
-    gr.load_kb(kbs)
-
-    # make the SQL connection and cursor
-    conn = pyodbc.connect(open(args.dir, 'r').read())
-    cursor = conn.cursor()
-
-    get_kb_dir_id, get_kb_raw_id = get_kb_id_ref(conn)
-    permissions = get_permissions(conn)
-
-    app.run(host="0.0.0.0", port="5000")
-    serve(app, host='0.0.0.0', port=5000, url_scheme='https')
+if __name__=="__main__":
+    uvicorn.run("main:app", host='0.0.0.0', port=5000)
