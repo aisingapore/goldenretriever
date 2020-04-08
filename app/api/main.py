@@ -25,7 +25,7 @@ from exceptions import InvalidUsage
 from qa_service import make_query, query_request
 from feedback_service import save_feedback, feedback_request
 from upload_kb_service import upload_knowledge_base_to_sql, upload_kb_request
-from upload_weights_service import upload_weights, upload_weights_request
+from upload_weights_service import upload_weights
 
 
 app = FastAPI()

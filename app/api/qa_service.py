@@ -9,7 +9,6 @@ from pydantic import BaseModel
 from db_handler import get_last_insert_ids, extract_qa_pair_based_on_idx, get_kb_id_ref, get_permissions, ensure_connection
 from exceptions import InvalidUsage
 
-
 class query_request(BaseModel):
     query: str
     kb_name: str 
