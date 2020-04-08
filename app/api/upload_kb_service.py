@@ -6,9 +6,15 @@ import pandas as pd
 import pandas.io.sql as pds
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient, PublicAccess
 import tarfile
+from pydantic import BaseModel
 
 from db_handler import get_last_insert_ids, extract_qa_pair_based_on_idx, get_kb_id_ref, get_permissions, ensure_connection
 from exceptions import InvalidUsage
+
+class upload_kb_request(BaseModel):
+    hashkey: str
+    kb_name: str
+    kb: dict
 
 def upload_knowledge_base_to_sql(request, conn, cursor, get_kb_dir_id, get_kb_raw_id, permissions, kbh):
     """
@@ -21,7 +27,6 @@ def upload_knowledge_base_to_sql(request, conn, cursor, get_kb_dir_id, get_kb_ra
         kb_name: (str) Name of knowledge base to save as
         kb: (dict) contains the responses, queries and mappings
                    where mapping maps the indices of (question, answer)
-
 
     Sample json body & sample kb:
         {
@@ -36,17 +41,6 @@ def upload_knowledge_base_to_sql(request, conn, cursor, get_kb_dir_id, get_kb_ra
               }
         } 
     """
-    def parse_req(request, conn, cursor):
-
-        request_timestamp = datetime.datetime.now()
-        request_dict = request.get_json()
-        conn, cursor = ensure_connection(conn, cursor)
-        
-        # verify that required arguments are inside
-        if not all([key in request_dict.keys() for key in ['hashkey','kb_name', 'kb']]):
-            raise InvalidUsage(message="knowledge_base endpoint requires arguments: hashkey, kb_name, kb")
-        
-        return request_dict, request_timestamp
 
     def save_kb_name_in_kb_dir_kb_raw(cursor, user_id, kb_name):
         """
@@ -124,12 +118,12 @@ def upload_knowledge_base_to_sql(request, conn, cursor, get_kb_dir_id, get_kb_ra
                                     list_of_query_labels)
                 cursor.commit()
 
-    request_dict, request_timestamp = parse_req(request, conn, cursor)
+    request_timestamp = datetime.datetime.now()
 
     # get and validate arguments
-    HASHKEY = request_dict.get('hashkey', '')
-    kb_name = request_dict["kb_name"]
-    kb = request_dict["kb"]
+    HASHKEY = request.hashkey if 'hashkey' in dir(request) else ''
+    kb_name = request.kb_name
+    kb = request.kb
 
     try:
         user_id = permissions.loc[HASHKEY].user_id.iloc[-1]

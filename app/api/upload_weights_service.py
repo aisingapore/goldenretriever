@@ -1,11 +1,13 @@
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient, PublicAccess
 from azure.core.exceptions import ResourceExistsError
 import tarfile
+from fastapi import FastAPI, File, UploadFile
+from pydantic import BaseModel
 
 from db_handler import get_last_insert_ids, extract_qa_pair_based_on_idx, get_kb_id_ref, get_permissions, ensure_connection
 from exceptions import InvalidUsage
 
-def upload_weights(request):
+def upload_weights(request, files=None):
     """
     Upload finetuned weights to an azure blob storage container
     
@@ -23,19 +25,10 @@ def upload_weights(request):
          'blob_name': BLOB_NAME
         } 
     """
-    def parse_req():
-        request_dict = request.form.to_dict()
 
-        if not all([key in request_dict.keys() for key in ['conn_str', 'container_name', 'blob_name'] ]):
-            raise InvalidUsage(message="upload_weights endpoint requires arguments: conn_str, container_name, blob_name")
-
-        return request_dict
-
-    request_dict = parse_req()
-
-    CONN_STR = request.form['conn_str']
-    CONTAINER_NAME = request.form['container_name']
-    BLOB_NAME = request.form['blob_name']
+    CONN_STR = request['conn_str']
+    CONTAINER_NAME = request['container_name']
+    BLOB_NAME = request['blob_name']
 
     # Create the BlobServiceClient that is used to call the Blob service for the storage account
     blob_service_client = BlobServiceClient.from_connection_string(conn_str=CONN_STR)
@@ -49,13 +42,17 @@ def upload_weights(request):
         return str(e)
 
     # Upload file
-    if request.files:
-        f = request.files['file']
+    if files is not None:
+    # if 'file' in request.keys():
+    # if request['file']:
+        # https://www.starlette.io/requests/
+        # f = await request['file'].read()
+        print(type(files))
 
         # Upload the created file, use WEIGHTS_FOLDER_NAME as the blob name
         blob_client = blob_service_client.get_blob_client(
-            container=CONTAINER_NAME, blob=f.filename)
+            container=CONTAINER_NAME, blob=BLOB_NAME)
 
-        blob_client.upload_blob(f)
+        blob_client.upload_blob(files)
     
     return "Success"

@@ -6,7 +6,6 @@ import pyodbc
 import numpy as np
 import pandas as pd
 import pandas.io.sql as pds
-from flask import jsonify
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient, PublicAccess
 import tarfile
 

@@ -8,5 +8,6 @@ tensorflow-estimator
 tensorflow-text
 tika
 transformers
-flask
-waitress
+fastapi
+uvicorn
+python-multipart
