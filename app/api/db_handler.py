@@ -3,11 +3,13 @@ Util func to handle pyodbc connections
 """
 import datetime
 import pyodbc
+import tarfile
 import numpy as np
 import pandas as pd
 import pandas.io.sql as pds
+
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient, PublicAccess
-import tarfile
+
 
 def get_last_insert_ids(cursor, inserted_iterable = ['single_string']):
     """
@@ -27,14 +29,21 @@ def get_last_insert_ids(cursor, inserted_iterable = ['single_string']):
         https://dba.stackexchange.com/questions/81604/how-to-insert-values-in-junction-table-for-many-to-many-relationships
         https://stackoverflow.com/questions/2548493/how-do-i-get-the-id-after-insert-into-mysql-database-with-python
     """
-    cursor.execute( "SELECT @@IDENTITY")
-    last_insert_id = cursor.fetchall()
-    last_insert_id = int(last_insert_id[0][0])
+    try:
+        cursor.execute( "SELECT @@IDENTITY")
+        last_insert_id = cursor.fetchall()
+        last_insert_id = int(last_insert_id[0][0])
+    except Exception as e:
+        last_insert_id = cursor.lastrowid
+
     last_insert_ids = [i for i in range(last_insert_id, last_insert_id-len(inserted_iterable), -1)][::-1]
+
     return last_insert_ids
+
 
 def extract_qa_pair_based_on_idx(lst, idx=0): 
     return [item[idx] for item in lst] 
+
 
 def get_kb_id_ref(conn):
     """
@@ -48,6 +57,7 @@ def get_kb_id_ref(conn):
 
     return get_kb_dir_id, get_kb_raw_id
 
+
 def get_permissions(conn):
     """
     Get user permissions to allow access only to allowed KBs
@@ -58,9 +68,11 @@ def get_permissions(conn):
                                 LEFT JOIN dbo.kb_directory ON dbo.users.id = dbo.kb_directory.user_id \
                                 LEFT JOIN kb_raw ON dbo.kb_directory.id = dbo.kb_raw.directory_id \
                                 ", conn)
+    
     permissions = pd.DataFrame(np.array(permissions), columns = ['hashkey', 'kb_name', 'user_id']).set_index('hashkey')
     
     return permissions
+
 
 def ensure_connection(conn, cursor):
     """
@@ -71,7 +83,7 @@ def ensure_connection(conn, cursor):
     try:
         cursor = conn.cursor()
         return conn, cursor
-    except e:
+    except Exception as e:
         if e.__class__ == pyodbc.ProgrammingError:        
             # make the SQL connection and cursor
             conn = pyodbc.connect(open(args.dir, 'r').read())
