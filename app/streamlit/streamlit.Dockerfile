@@ -15,4 +15,5 @@ WORKDIR /code
 # && wget https://finetunedweights.blob.core.windows.net/finetuned02/weights.tar.gz \
 # && tar -zxvf weights.tar.gz
 
+ENV PYTHONPATH "/code"
 CMD ["streamlit", "run", "--server.port", "5000","--server.headless","true", "--browser.serverAddress","0.0.0.0", "--server.enableCORS", "false",  "app/streamlit/main.py"]
