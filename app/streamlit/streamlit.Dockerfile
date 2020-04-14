@@ -12,7 +12,7 @@ ADD . /code
 WORKDIR /code 
 
 # RUN apt-get -y install wget  \
-# && wget https://finetunedweights.blob.core.windows.net/finetuned02/variables.tar.gz \
-# && tar -zxvf variables.tar.gz
+# && wget https://finetunedweights.blob.core.windows.net/finetuned02/weights.tar.gz \
+# && tar -zxvf weights.tar.gz
 
 CMD ["streamlit", "run", "--server.port", "5000","--server.headless","true", "--browser.serverAddress","0.0.0.0", "--server.enableCORS", "false",  "app/streamlit/main.py"]
