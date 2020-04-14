@@ -9,3 +9,7 @@ tika
 streamlit
 tensorflow-hub
 seaborn 
+azure-storage-blob==12.3.0
+python-multipart==0.0.5
+fastapi==0.54.0
+uvicorn==0.11.3
