@@ -359,7 +359,7 @@ class kb_handler():
                                          else if empty, parse all of them
         """
         if ".db" in cnxn_path:
-            conn = sqlite3.connect(conn_path, check_same_thread=False)
+            conn = sqlite3.connect(cnxn_path, check_same_thread=False)
             cursor = conn.cursor()
             cursor.execute("ATTACH './goldenretriever.db' as dbo;")
         elif cnxn_str == "":
