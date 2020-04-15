@@ -93,7 +93,6 @@ class GoldenRetriever:
             if isinstance(text,str):
                 return self.response_encoder(input=tf.constant([text]), context=tf.constant([context]))['outputs']
             elif hasattr(text, '__iter__'):
-
                 encoded_responses = [self.response_encoder(input=tf.constant([t]),
                                     context=tf.constant([c]))['outputs'] for t, c in zip(text, context)]
                 encoded_responses_tensor = tf.concat(encoded_responses, axis=0)

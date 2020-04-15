@@ -4,10 +4,11 @@ import pyodbc
 import numpy as np
 import pandas as pd
 import pandas.io.sql as pds
+
 from pydantic import BaseModel
 
-from db_handler import get_last_insert_ids, extract_qa_pair_based_on_idx, get_kb_id_ref, get_permissions, ensure_connection
-from exceptions import InvalidUsage
+from app.api.db_handler import get_last_insert_ids, extract_qa_pair_based_on_idx, get_kb_id_ref, get_permissions
+from app.api.exceptions import InvalidUsage
 
 class query_request(BaseModel):
     query: str
@@ -59,9 +60,8 @@ def make_query(request, gr, conn, cursor, permissions, get_kb_dir_id, get_kb_raw
         # returned answers clause_id
         rowinfo.extend(gr.kb[kb_name].responses.clause_id.iloc[reply_index].tolist())
 
-        conn, cursor = ensure_connection(conn, cursor)
-        cursor.execute('INSERT INTO query_log VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', rowinfo)
-        cursor.commit()
+        cursor.execute('INSERT INTO dbo.query_log (created_at, query_string, user_id, kb_dir_id, kb_raw_id, Answer1, Answer2, Answer3, Answer4, Answer5) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', rowinfo)
+        conn.commit()
 
         return conn, cursor
 

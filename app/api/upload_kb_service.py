@@ -1,22 +1,25 @@
 import requests
 import datetime
 import pyodbc
+import tarfile
 import numpy as np
 import pandas as pd
 import pandas.io.sql as pds
+
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient, PublicAccess
-import tarfile
 from pydantic import BaseModel
 
-from db_handler import get_last_insert_ids, extract_qa_pair_based_on_idx, get_kb_id_ref, get_permissions, ensure_connection
-from exceptions import InvalidUsage
+from app.api.db_handler import get_last_insert_ids, extract_qa_pair_based_on_idx, get_kb_id_ref, get_permissions
+from app.api.exceptions import InvalidUsage
+
 
 class upload_kb_request(BaseModel):
     hashkey: str
     kb_name: str
     kb: dict
 
-def upload_knowledge_base_to_sql(request, conn, cursor, get_kb_dir_id, get_kb_raw_id, permissions, kbh):
+
+def upload_knowledge_base_to_sql(request, conn, cursor, get_kb_dir_id, get_kb_raw_id, permissions):
     """
     Receive knowledge bases from users
     
@@ -42,14 +45,14 @@ def upload_knowledge_base_to_sql(request, conn, cursor, get_kb_dir_id, get_kb_ra
         } 
     """
 
-    def save_kb_name_in_kb_dir_kb_raw(cursor, user_id, kb_name):
+    def save_kb_name_in_kb_dir_kb_raw(conn, cursor, user_id, kb_name):
         """
         Load the knowledge base
         """
         # 1a. load to kb_directory
-        cursor.execute('INSERT INTO dbo.kb_directory VALUES ( ?, ?, ?)', 
+        cursor.execute('INSERT INTO dbo.kb_directory (created_at, dir_name, user_id) VALUES ( ?, ?, ?)', 
                         [request_timestamp, kb_name, user_id])
-        cursor.commit()
+        conn.commit()
 
         # 1b. get kb_directory index to load into kb_raw
         kb_dir = pds.read_sql("""
@@ -60,16 +63,17 @@ def upload_knowledge_base_to_sql(request, conn, cursor, get_kb_dir_id, get_kb_ra
                             conn,
                             params = [user_id, kb_name],
                             )
+
         kb_dir_idx = kb_dir.id.iloc[-1]
 
         # 2a. load into kb_raw
         # https://stackoverflow.com/questions/41973933/invalid-parameter-type-numpy-int64-when-inserting-rows-with-executemany
         # kb_dir_idx has to be integer typed
-        cursor.execute('INSERT INTO dbo.kb_raw VALUES ( ?, ?, ?, ?)', 
+        cursor.execute('INSERT INTO dbo.kb_raw (filepath, kb_name, type, directory_id) VALUES ( ?, ?, ?, ?)', 
                         [None, kb_name, 'user_uploaded', int(kb_dir_idx)])
-        cursor.commit()
+        conn.commit()
 
-    def save_responses(kb, cursor):
+    def save_responses(kb, conn, cursor):
         # 3. load into kb_clauses
         responses = kb['responses']
         
@@ -82,15 +86,14 @@ def upload_knowledge_base_to_sql(request, conn, cursor, get_kb_dir_id, get_kb_ra
                             for clause_ind, (context_string, raw_string) in enumerate(zip(context_strings, responses))
                             ]
 
-        cursor.executemany('INSERT INTO dbo.kb_clauses VALUES ( ?, ?, ?, ?, ?, ?)', 
+        cursor.executemany('INSERT INTO dbo.kb_clauses (raw_id, clause_ind, context_string, raw_string, processed_string, created_at) VALUES ( ?, ?, ?, ?, ?, ?)', 
                             list_of_clauses)
-        cursor.commit()
+        conn.commit()
         idx_of_inserted_clauses = get_last_insert_ids(cursor, list_of_clauses)
 
         return idx_of_inserted_clauses
-    
-    
-    def save_query_and_mappings(kb, idx_of_inserted_clauses):
+
+    def save_query_and_mappings(kb, conn, idx_of_inserted_clauses):
         # print(kb.keys())
         if all(key_ in kb.keys() for key_ in ['queries', 'mapping']):
             if (len(kb['queries'])>0) & (len(kb['mapping'])>0):
@@ -98,9 +101,9 @@ def upload_knowledge_base_to_sql(request, conn, cursor, get_kb_dir_id, get_kb_ra
                 print("loading labels")
 
                 # 4. load into query_db
-                cursor.executemany('INSERT INTO dbo.query_db VALUES (?)', 
+                cursor.executemany('INSERT INTO dbo.query_db (query_string) VALUES (?)', 
                                     [[query_] for query_ in kb['queries']])
-                cursor.commit()
+                conn.commit()
                 idx_of_inserted_queries = get_last_insert_ids(cursor, kb['queries'])
         
                 # 5. load into query_labels
@@ -114,9 +117,9 @@ def upload_knowledge_base_to_sql(request, conn, cursor, get_kb_dir_id, get_kb_ra
                                         in zip(mapped_query_ids,mapped_clause_ids )
                                         ]
 
-                cursor.executemany('INSERT INTO dbo.query_labels VALUES (?, ?, ?, ?, ?)', 
+                cursor.executemany('INSERT INTO dbo.query_labels (query_id, clause_id, span_start, span_end, created_at) VALUES (?, ?, ?, ?, ?)', 
                                     list_of_query_labels)
-                cursor.commit()
+                conn.commit()
 
     request_timestamp = datetime.datetime.now()
 
@@ -126,19 +129,19 @@ def upload_knowledge_base_to_sql(request, conn, cursor, get_kb_dir_id, get_kb_ra
     kb = request.kb
 
     try:
-        user_id = permissions.loc[HASHKEY].user_id.iloc[-1]
+        user_id = int(permissions.loc[HASHKEY].user_id.iloc[-1])
     except:
         print(f"ERROR: Tried to retrieve user id from {HASHKEY}")
         print( permissions.loc[HASHKEY] )
         raise InvalidUsage(message="Hashkey not recognized")
 
-    save_kb_name_in_kb_dir_kb_raw(cursor, user_id, kb_name)
+    save_kb_name_in_kb_dir_kb_raw(conn, cursor, user_id, kb_name)
 
     get_kb_dir_id, get_kb_raw_id = get_kb_id_ref(conn)
-    permissions = get_permissions(conn)
+    # permissions = get_permissions(conn)
     kb_raw_dir_idx = get_kb_raw_id[kb_name]
 
-    idx_of_inserted_clauses = save_responses(kb, cursor)
-    save_query_and_mappings(kb, idx_of_inserted_clauses)
+    idx_of_inserted_clauses = save_responses(kb, conn, cursor)
+    save_query_and_mappings(kb, conn, idx_of_inserted_clauses)
 
     return kb_name

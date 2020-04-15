@@ -9,6 +9,7 @@ import pyodbc
 from tika import parser
 import argparse
 import re
+import sqlite3
 
 def unique_indexing(non_unique):
     """
@@ -343,7 +344,6 @@ class kb_handler():
         responses, queries, mapping = self.parse_df(kb_name, clause_df, 'clause')
         return kb(kb_name, responses, queries, mapping) 
 
-
     def load_sql_kb(self, cnxn_str="", cnxn_path = "../db_cnxn_str.txt", kb_names=[]):
         """
         Load the knowledge bases from SQL.
@@ -358,7 +358,11 @@ class kb_handler():
             kb_names: (list, default=[]) to list specific kb_names to parse
                                          else if empty, parse all of them
         """
-        if cnxn_str == "":
+        if ".db" in cnxn_path:
+            conn = sqlite3.connect(cnxn_path, check_same_thread=False)
+            cursor = conn.cursor()
+            cursor.execute("ATTACH './goldenretriever.db' as dbo;")
+        elif cnxn_str == "":
             conn = pyodbc.connect(open(cnxn_path, 'r').read())
         else:
             conn = pyodbc.connect(cnxn_str)

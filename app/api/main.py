@@ -8,52 +8,71 @@ import os
 import datetime
 import argparse
 import sys
+import sqlite3
 sys.path.append('')
+import requests
 
 import uvicorn
-from fastapi import FastAPI, Request
-from starlette.datastructures import FormData
 import pyodbc
 import numpy as np
 import pandas as pd
 import pandas.io.sql as pds
+from fastapi import FastAPI, Request, Depends, HTTPException
+from starlette.datastructures import FormData
 
 from src.models import GoldenRetriever
 from src.data_handler.kb_handler import kb_handler
-from db_handler import get_last_insert_ids, extract_qa_pair_based_on_idx, get_kb_id_ref, get_permissions, ensure_connection
-from exceptions import InvalidUsage
-from qa_service import make_query, query_request
-from feedback_service import save_feedback, feedback_request
-from upload_kb_service import upload_knowledge_base_to_sql, upload_kb_request
-from upload_weights_service import upload_weights
-
+from app.api.db_handler import get_last_insert_ids, extract_qa_pair_based_on_idx, get_kb_id_ref, get_permissions, ensure_connection
+from app.api.exceptions import InvalidUsage
+from app.api.qa_service import make_query, query_request
+from app.api.feedback_service import save_feedback, feedback_request
+from app.api.upload_kb_service import upload_knowledge_base_to_sql, upload_kb_request
+from app.api.upload_weights_service import upload_weights
 
 app = FastAPI()
 
-parser = argparse.ArgumentParser()
-parser.add_argument("-db", "--credentials", dest='dir',
-                     default='db_cnxn_str.txt', 
-                     help="directory of the pyodbc password string")
-args = parser.parse_args()
+try:
+    # In production mode
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-db", "--credentials", dest='dir',
+                        default='./db_cnxn_str.txt',
+                        help="directory of the pyodbc password string")
+    args = parser.parse_args()
 
+    conn_path = args.dir
+    conn_str = open(conn_path, 'r').read()
+except SystemExit:
+    # In test mode
+    # conn_path will be supplied within the apis
+    conn_path = ""
+
+    # during tests, kbs in production database will be loaded
+    # hence production database conn_str will be used
+    # conn_str to be declared via gitlab ci/cd settings
+    conn_str = os.environ["CONN_STR"]
+
+# nrf kb needs to be loaded for test purposes
+kbh = kb_handler()
+kbs = kbh.load_sql_kb(cnxn_str=conn_str, kb_names=['PDPA', 'nrf'])
 
 gr = GoldenRetriever()
 # gr.restore('./google_use_nrf_pdpa_tuned/variables-0')
-kbh = kb_handler()
-kbs = kbh.load_sql_kb(cnxn_path = args.dir, kb_names=['PDPA','nrf'])
 gr.load_kb(kbs)
 
 
-# make the SQL connection and cursor, store permissions and kb data
-conn = pyodbc.connect(open(args.dir, 'r').read())
-cursor = conn.cursor()
+def get_common_params():
 
-get_kb_dir_id, get_kb_raw_id = get_kb_id_ref(conn)
-permissions = get_permissions(conn)
+    conn = pyodbc.connect(conn_str)
+    conn, cursor = ensure_connection(conn, conn_path)
+
+    get_kb_dir_id, get_kb_raw_id = get_kb_id_ref(conn)
+    permissions = get_permissions(conn)
+
+    return {"conn": conn, "conn_path": conn_path, "get_kb_dir_id": get_kb_dir_id, "get_kb_raw_id": get_kb_raw_id, "permissions": permissions}
 
 
 @app.post("/query")
-async def make_query_endpoint(request: query_request):
+async def make_query_endpoint(request: query_request, commons: dict = Depends(get_common_params)):
     """
     Main function for User to make requests to. 
 
@@ -70,12 +89,22 @@ async def make_query_endpoint(request: query_request):
         reply: (list) contains top_k string responses
         query_id: (int) contains id of the request to be used for when they give feedback
     """
-    reply, current_request_id = make_query(request, gr, conn, cursor, permissions, get_kb_dir_id, get_kb_raw_id)
 
-    return {"responses":reply, "query_id":current_request_id}
+    conn = commons["conn"]
+    cursor = conn.cursor()
+
+    get_kb_dir_id = commons["get_kb_dir_id"]
+    get_kb_raw_id = commons["get_kb_raw_id"]
+    permissions = commons["permissions"]
+
+    try:
+        reply, current_request_id = make_query(request, gr, conn, cursor, permissions, get_kb_dir_id, get_kb_raw_id)
+        return {"responses": reply, "query_id": current_request_id}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"{str(e)}")
 
 @app.post("/feedback")
-async def save_feedback_endpoint(request: feedback_request):
+async def save_feedback_endpoint(request: feedback_request, commons: dict = Depends(get_common_params)):
     """
     Retrieve feedback from end users
 
@@ -84,12 +113,19 @@ async def save_feedback_endpoint(request: feedback_request):
         query_id: (int) specifies the query to raise feedback for
         is_correct: (list) list fo booleans for true or false
     """
-    save_feedback(request,  conn, cursor)
 
-    return {"message":"Success"}
+    conn = commons["conn"]
+    cursor = conn.cursor()
+
+    try:
+        save_feedback(request, conn, cursor)
+        return {"message":"Success"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"{str(e)}")
+
 
 @app.post("/knowledge_base")
-async def upload_knowledge_base_to_sql_endpoint(request : upload_kb_request):
+async def upload_knowledge_base_to_sql_endpoint(request : upload_kb_request, commons: dict = Depends(get_common_params)):
     """
     Receive knowledge bases from users
     
@@ -115,13 +151,26 @@ async def upload_knowledge_base_to_sql_endpoint(request : upload_kb_request):
               }
         } 
     """
-    kb_name = upload_knowledge_base_to_sql(request, conn, cursor, get_kb_dir_id, get_kb_raw_id, permissions, kbh)
 
-    # load knowledge base into cached model
-    kbs = kbh.load_sql_kb(cnxn_path = args.dir, kb_names=[kb_name])
-    gr.load_kb(kbs)
+    # conn_path will be changed to sqlite db if in test mode
+    conn_path = commons["conn_path"]
+    conn = commons["conn"]
+    cursor = conn.cursor()
 
-    return {"message":"Success"}
+    get_kb_dir_id = commons["get_kb_dir_id"]
+    get_kb_raw_id = commons["get_kb_raw_id"]
+    permissions = commons["permissions"]
+
+    try:
+        kb_name = upload_knowledge_base_to_sql(request, conn, cursor, get_kb_dir_id, get_kb_raw_id, permissions)
+
+        # load knowledge base into cached model
+        kbs = kbh.load_sql_kb(cnxn_path=conn_path, kb_names=[kb_name])
+        gr.load_kb(kbs)
+        return {"message":"Success"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"{str(e)}")
+
 
 @app.post("/upload_weights")
 async def upload_weights_endpoint(request : Request):
@@ -146,12 +195,13 @@ async def upload_weights_endpoint(request : Request):
          'blob_name': BLOB_NAME
         } 
     """
-    request_form = await request.form()
-    files = await request_form['file'].read()
+    try:
+        request_form = await request.form()
+        files = await request_form['file'].read()
+        message = upload_weights(request_form, files)
+        return {"message":message}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"{str(e)}")
 
-    message = upload_weights(request_form, files)
-    
-    return {"message":message}
-
-if __name__=="__main__":
+if __name__ == "__main__":
     uvicorn.run("main:app", host='0.0.0.0', port=5000)
