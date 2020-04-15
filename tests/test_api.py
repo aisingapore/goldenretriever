@@ -20,14 +20,7 @@ def override_get_common_params():
     # Mock data
     get_kb_dir_id, get_kb_raw_id, permissions = insert_data_into_test_db(conn)
 
-    kbh = kb_handler()
-    kbs = kbh.load_sql_kb(cnxn_path=conn_path, kb_names=['nrf'])
-
-    gr = GoldenRetriever()
-    # gr.restore('./google_use_nrf_pdpa_tuned/variables-0')
-    gr.load_kb(kbs)
-
-    return {"conn": conn, "conn_path": conn_path, "get_kb_dir_id": get_kb_dir_id, "get_kb_raw_id": get_kb_raw_id, "permissions": permissions, "kbs": kbs, "gr": gr, "kbh": kbh}
+    return {"conn": conn, "conn_path": conn_path, "get_kb_dir_id": get_kb_dir_id, "get_kb_raw_id": get_kb_raw_id, "permissions": permissions}
 
 
 app.dependency_overrides[get_common_params] = override_get_common_params

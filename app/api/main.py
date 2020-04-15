@@ -41,10 +41,14 @@ try:
 
     conn_path = args.dir
     conn_str = open(conn_path, 'r').read()
-
 except SystemExit:
-    # If in test mode, conn_path will be supplied within the apis
+    # In test mode
+    # conn_path will be supplied within the apis
     conn_path = ""
+
+    # during tests, kbs in production database will be loaded
+    # hence production database conn_str will be used
+    # conn_str to be declared via gitlab ci/cd settings
     conn_str = os.environ["CONN_STR"]
 
 # nrf kb needs to be loaded for test purposes
@@ -156,10 +160,7 @@ async def upload_knowledge_base_to_sql_endpoint(request : upload_kb_request, com
     kb_name = upload_knowledge_base_to_sql(request, conn, cursor, get_kb_dir_id, get_kb_raw_id, permissions)
 
     # load knowledge base into cached model
-    try:
-        kbs = kbh.load_sql_kb(cnxn_path=conn_path, kb_names=[kb_name])
-    except Exception as e:
-        kbs = kbh.load_sql_kb(cnxn_str=conn_str, kb_names=[kb_name])
+    kbs = kbh.load_sql_kb(cnxn_path=conn_path, kb_names=[kb_name])
 
     gr.load_kb(kbs)
 
