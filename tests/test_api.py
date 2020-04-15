@@ -45,6 +45,7 @@ def test_query():
         json=d)
 
     data = response.json()
+    print(data)
 
     global query_id
     query_id = data["query_id"][0]
@@ -68,6 +69,7 @@ def test_feedback():
         json=d)
 
     data = response.json()
+    print(data)
 
     assert data["message"] == "Success"
     assert response.status_code == 200
@@ -87,9 +89,11 @@ def test_knowledge_base():
         json=d)
 
     data = response.json()
+    print(data)
 
-    assert data["message"] == "Success"
     assert response.status_code == 200
+    assert data["message"] == "Success"
+    
 
 
 @pytest.fixture
