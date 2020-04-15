@@ -7,7 +7,7 @@ import pandas.io.sql as pds
 from pydantic import BaseModel
 from typing import List
 
-from app.api.db_handler import get_last_insert_ids, extract_qa_pair_based_on_idx, get_kb_id_ref, get_permissions, ensure_connection
+from app.api.db_handler import get_last_insert_ids, extract_qa_pair_based_on_idx, get_kb_id_ref, get_permissions
 from app.api.exceptions import InvalidUsage
 
 class feedback_request(BaseModel):
@@ -27,7 +27,6 @@ def save_feedback(request, conn, cursor):
         rowinfo.append(query_id)
         rowinfo.extend(is_correct[:5]) # ensures only 5 values are logged
 
-        conn, cursor = ensure_connection(conn, cursor)
         cursor.execute('INSERT INTO dbo.feedback_log (created_at, query_log_id, Feedback1, Feedback2, Feedback3, Feedback4, Feedback5) VALUES (?, ?, ?, ?, ?, ?, ?)', rowinfo)
         conn.commit()
 

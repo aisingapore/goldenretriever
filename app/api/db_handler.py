@@ -2,6 +2,7 @@
 Util func to handle pyodbc connections
 """
 import datetime
+import time
 import pyodbc
 import tarfile
 import numpy as np
@@ -9,7 +10,7 @@ import pandas as pd
 import pandas.io.sql as pds
 
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient, PublicAccess
-
+from fastapi import HTTPException
 
 def get_last_insert_ids(cursor, inserted_iterable = ['single_string']):
     """
@@ -74,19 +75,29 @@ def get_permissions(conn):
     return permissions
 
 
-def ensure_connection(conn, cursor):
+def ensure_connection(conn, conn_path):
     """
     Ensure that pyodbc connection is still working
 
     https://stackoverflow.com/questions/10847703/check-if-pyodbc-connection-is-open-or-closed
+    https://stackoverflow.com/questions/41473137/pyodbc-how-to-retry-to-recover-from-transient-errors
     """
-    try:
-        cursor = conn.cursor()
-        return conn, cursor
-    except Exception as e:
-        if e.__class__ == pyodbc.ProgrammingError:        
-            # make the SQL connection and cursor
-            conn = pyodbc.connect(open(args.dir, 'r').read())
-            cursor = conn.cursor()
-            return conn, cursor
+    retry_count = 0
+    error_string = ''
 
+    while retry_count < 3:
+        try:
+            cursor = conn.cursor()
+            conn.execute("SELECT * FROM dbo.users").fetchall()
+            return conn, cursor
+        except Exception as e:    
+            # if e.__class__ == pyodbc.OperationalError:   
+            # make the SQL connection and cursor
+            print(f"retry count: {retry_count}")
+            retry_count += 1
+            time.sleep(retry_count)
+            conn = pyodbc.connect(open(conn_path, 'r').read())
+            cursor = conn.cursor()
+            error_string = str(e)
+    else:
+        raise HTTPException(status_code=500, detail=f"pyodbc error: {error_string}")

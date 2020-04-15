@@ -5,7 +5,7 @@ from azure.core.exceptions import ResourceExistsError
 from fastapi import FastAPI, File, UploadFile
 from pydantic import BaseModel
 
-from app.api.db_handler import get_last_insert_ids, extract_qa_pair_based_on_idx, get_kb_id_ref, get_permissions, ensure_connection
+from app.api.db_handler import get_last_insert_ids, extract_qa_pair_based_on_idx, get_kb_id_ref, get_permissions
 from app.api.exceptions import InvalidUsage
 
 def upload_weights(request, files=None):
