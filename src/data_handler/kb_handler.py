@@ -9,7 +9,7 @@ import pyodbc
 from tika import parser
 import argparse
 import re
-from tests.setup_test_env import create_connection
+import sqlite3
 
 def unique_indexing(non_unique):
     """
@@ -359,7 +359,7 @@ class kb_handler():
                                          else if empty, parse all of them
         """
         if ".db" in cnxn_path:
-            conn = create_connection(cnxn_path)
+            conn = sqlite3.connect(conn_path, check_same_thread=False)
             cursor = conn.cursor()
             cursor.execute("ATTACH './goldenretriever.db' as dbo;")
         elif cnxn_str == "":

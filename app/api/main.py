@@ -17,7 +17,7 @@ import pyodbc
 import numpy as np
 import pandas as pd
 import pandas.io.sql as pds
-from fastapi import FastAPI, Request, Depends
+from fastapi import FastAPI, Request, Depends, HTTPException
 from starlette.datastructures import FormData
 
 from src.models import GoldenRetriever
@@ -63,6 +63,7 @@ gr.load_kb(kbs)
 def get_common_params():
 
     conn = pyodbc.connect(conn_str)
+    conn, cursor = ensure_connection(conn, conn_path)
 
     get_kb_dir_id, get_kb_raw_id = get_kb_id_ref(conn)
     permissions = get_permissions(conn)
@@ -96,10 +97,11 @@ async def make_query_endpoint(request: query_request, commons: dict = Depends(ge
     get_kb_raw_id = commons["get_kb_raw_id"]
     permissions = commons["permissions"]
 
-    reply, current_request_id = make_query(request, gr, conn, cursor, permissions, get_kb_dir_id, get_kb_raw_id)
-
-    return {"responses": reply, "query_id": current_request_id}
-
+    try:
+        reply, current_request_id = make_query(request, gr, conn, cursor, permissions, get_kb_dir_id, get_kb_raw_id)
+        return {"responses": reply, "query_id": current_request_id}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"{str(e)}")
 
 @app.post("/feedback")
 async def save_feedback_endpoint(request: feedback_request, commons: dict = Depends(get_common_params)):
@@ -115,9 +117,11 @@ async def save_feedback_endpoint(request: feedback_request, commons: dict = Depe
     conn = commons["conn"]
     cursor = conn.cursor()
 
-    save_feedback(request, conn, cursor)
-
-    return {"message":"Success"}
+    try:
+        save_feedback(request, conn, cursor)
+        return {"message":"Success"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"{str(e)}")
 
 
 @app.post("/knowledge_base")
@@ -157,14 +161,15 @@ async def upload_knowledge_base_to_sql_endpoint(request : upload_kb_request, com
     get_kb_raw_id = commons["get_kb_raw_id"]
     permissions = commons["permissions"]
 
-    kb_name = upload_knowledge_base_to_sql(request, conn, cursor, get_kb_dir_id, get_kb_raw_id, permissions)
+    try:
+        kb_name = upload_knowledge_base_to_sql(request, conn, cursor, get_kb_dir_id, get_kb_raw_id, permissions)
 
-    # load knowledge base into cached model
-    kbs = kbh.load_sql_kb(cnxn_path=conn_path, kb_names=[kb_name])
-
-    gr.load_kb(kbs)
-
-    return {"message":"Success"}
+        # load knowledge base into cached model
+        kbs = kbh.load_sql_kb(cnxn_path=conn_path, kb_names=[kb_name])
+        gr.load_kb(kbs)
+        return {"message":"Success"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"{str(e)}")
 
 
 @app.post("/upload_weights")
@@ -190,12 +195,13 @@ async def upload_weights_endpoint(request : Request):
          'blob_name': BLOB_NAME
         } 
     """
-    request_form = await request.form()
-    files = await request_form['file'].read()
-
-    message = upload_weights(request_form, files)
-    
-    return {"message":message}
+    try:
+        request_form = await request.form()
+        files = await request_form['file'].read()
+        message = upload_weights(request_form, files)
+        return {"message":message}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"{str(e)}")
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host='0.0.0.0', port=5000)

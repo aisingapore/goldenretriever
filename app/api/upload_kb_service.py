@@ -9,7 +9,7 @@ import pandas.io.sql as pds
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient, PublicAccess
 from pydantic import BaseModel
 
-from app.api.db_handler import get_last_insert_ids, extract_qa_pair_based_on_idx, get_kb_id_ref, get_permissions, ensure_connection
+from app.api.db_handler import get_last_insert_ids, extract_qa_pair_based_on_idx, get_kb_id_ref, get_permissions
 from app.api.exceptions import InvalidUsage
 
 
