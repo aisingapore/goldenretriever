@@ -16,6 +16,19 @@ services:
       - es_data01:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
+    networks:
+      - esnet
+
+  kibana:
+    image: 'docker.elastic.co/kibana/kibana:7.0.0'
+    container_name: kibana
+    environment:
+      SERVER_NAME: kibana.local
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+    ports:
+      - 5601:5601
+    networks:
+      - esnet
     
   minio1:
     image: minio/minio:RELEASE.2020-04-22T00-11-12Z
@@ -39,8 +52,14 @@ services:
 ## For custom volumes replace with volume driver configuration.
 volumes:
   es_data01:
+    driver: local
   minio_data1-1:
+    driver: local
   minio_data1-2:
+    driver: local
+
+networks:
+  esnet:
   
 
 
