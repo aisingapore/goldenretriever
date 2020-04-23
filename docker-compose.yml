@@ -13,7 +13,7 @@ services:
       - "discovery.type=single-node"
       - "xpack.security.enabled=false"
     volumes:
-      - es_data01:/usr/share/elasticsearch/data
+      - ./data:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
     networks:
@@ -51,7 +51,7 @@ services:
 ## By default this config uses default local driver,
 ## For custom volumes replace with volume driver configuration.
 volumes:
-  es_data01:
+  data:
     driver: local
   minio_data1-1:
     driver: local
