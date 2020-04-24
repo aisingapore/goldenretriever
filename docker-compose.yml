@@ -33,29 +33,23 @@ services:
   minio1:
     image: minio/minio:RELEASE.2020-04-22T00-11-12Z
     volumes:
-      - minio_data1-1:/data1
-      - minio_data1-2:/data2
+      - ./data:/data1
     ports:
       - "9001:9000"
     environment:
       MINIO_ACCESS_KEY: minio
       MINIO_SECRET_KEY: minio123
-    command: server http://minio{1...4}/data{1...2}
+    command: server /data1
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
       interval: 30s
       timeout: 20s
       retries: 3
-
-
+  
 ## By default this config uses default local driver,
 ## For custom volumes replace with volume driver configuration.
 volumes:
   data:
-    driver: local
-  minio_data1-1:
-    driver: local
-  minio_data1-2:
     driver: local
 
 networks:
