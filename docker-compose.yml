@@ -1,9 +1,5 @@
-version: '3.7'
+version: '0.1'
 
-
-# starts 4 docker containers running minio server instances. Each
-# minio server's web interface will be accessible on the host at port
-# 9001 through 9004.
 services:
 
   elasticsearch:
