@@ -1,6 +1,6 @@
 from minio import Minio
 from minio.error import ResponseError, BucketAlreadyOwnedByYou, BucketAlreadyExists
-
+from dotenv import load_dotenv
 
 class MinioClient():
     def __init__(self, url_endpoint, access_key, secret_key):
@@ -42,11 +42,10 @@ class MinioClient():
 
 
 if __name__=='__main__':
-    URL_ENDPOINT = 'localhost:9001'
-    ACCESS_KEY = 'minio'
-    SECRET_KEY = 'minio123'
+    from dotenv import load_dotenv
+    load_dotenv()
     file_path = '/Users/nus/Downloads/use_model/1.tar.gz'
     model_obj_name = 'use_model'
     bucket_name = 'pdpa'
-    minio_client = MinioClient(URL_ENDPOINT, ACCESS_KEY, SECRET_KEY)
+    minio_client = MinioClient("URL_ENDPOINT", "ACCESS_KEY", "SECRET_KEY")
     minio_client.upload_model_weights(bucket_name, model_obj_name, file_path)
