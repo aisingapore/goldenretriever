@@ -126,8 +126,8 @@ if len(state.prediction)>0:
 
         if state.fetch:
             if getattr(state, f"interpret{ansnum}"):
-                setattr(state, f"k{ansnum}", st.slider("Most important words", 0, len(result.split())) )
-                markdown_prediction = partial_highlight(getattr(state, f"importance_frame_{ansnum}"), k=getattr(state, f"k{ansnum}"))
+                # setattr(state, f"k{ansnum}", st.slider("Most important words", 0, len(result.split())) )
+                markdown_prediction = partial_highlight(getattr(state, f"importance_frame_{ansnum}"), k=int(0.3*len(result.split())) ) # k=getattr(state, f"k{ansnum}"))
             else:
                 markdown_prediction = result
 
