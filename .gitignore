@@ -112,6 +112,5 @@ fastText/
 #database file
 *.db
 db_cnxn_str.txt
-data/nodes/*
 data/.minio.sys/
 data/pdpa/*
