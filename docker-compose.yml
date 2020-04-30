@@ -1,4 +1,4 @@
-version: '2.2'
+version: "3.3"
 services:
   es01:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.6.2
@@ -29,8 +29,8 @@ services:
     ports:
       - "9001:9000"
     environment:
-      MINIO_ACCESS_KEY: minio
-      MINIO_SECRET_KEY: minio123
+      MINIO_ACCESS_KEY: ${ACCESS_KEY}
+      MINIO_SECRET_KEY: ${SECRET_KEY}
     command: server /data1
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
