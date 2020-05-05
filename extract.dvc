@@ -1,0 +1,11 @@
+md5: 3b27cac334c31942bd50afa49e946d6b
+cmd: python src/elasticsearch/extract.py
+deps:
+- md5: 297ce050b05d16eac03d5edb9497b144
+  path: src/elasticsearch/extract.py
+outs:
+- md5: ad89f19194145faa190f66199eb9ed1a
+  path: data/nrf_test.csv
+  cache: true
+  metric: false
+  persist: false
