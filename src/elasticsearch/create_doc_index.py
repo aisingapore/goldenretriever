@@ -12,16 +12,16 @@ qa_nrf.settings = {
 class QA(InnerDoc):
     ans_id = Integer()
     ans_str = Text(fields={'raw': Keyword()})
-    query_str = Text()
     query_id = Integer()
+    query_str = Text()
 
 @qa_nrf.document
 class Doc(Document):
     doc = Text()
     created_at = Date()
     qa_pair = Nested(QA)
-    def add_qa_pair(self, ans_id, ans_str, ans_index, query_str):
-        self.qa_pair.append(QA(ans_id=ans_id, ans_str=ans_str, query_str=query_str))
+    def add_qa_pair(self, ans_id, ans_str, query_id, query_str):
+        self.qa_pair.append(QA(ans_id=ans_id, ans_str=ans_str, query_id=query_id, query_str=query_str))
 
     def save(self, **kwargs):
         self.created_at = datetime.now()
@@ -45,7 +45,7 @@ def upload_single_doc(qa_pairs):
     """
     for pair in qa_pairs: 
         first = Doc(doc=pair['ans_str'])
-        first.add_qa_pair(pair['ans_id'], pair['ans_str'], pair['query_str'], pair['query_id'])
+        first.add_qa_pair(pair['ans_id'], pair['ans_str'], pair['query_id'], pair['query_str'])
         first.save()
     print("indexing finished")
 
@@ -56,7 +56,7 @@ if __name__=='__main__':
     connections.create_connection(hosts=['localhost'])
 
     # read data 
-    nrf_df = pd.read_csv(DATA_FILEPATH)
+    nrf_df = pd.read_csv(DATA_FILEPATH).fillna('nan')
     nrf_js = nrf_df.to_dict('records')
     print('uploading docs')
     upload_single_doc(nrf_js)
