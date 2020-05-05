@@ -43,24 +43,22 @@ def upload_single_doc(qa_pairs):
     Returns: 
         document and qa_pair indexed to Elastic
     """
+    print('uploading docs')
+    counter = 0
     for pair in qa_pairs: 
         first = Doc(doc=pair['ans_str'])
         first.add_qa_pair(pair['ans_id'], pair['ans_str'], pair['query_id'], pair['query_str'])
         first.save()
+        counter += 1 
     print("indexing finished")
+    print(f'indexed {counter} documents')
 
 
 
 if __name__=='__main__':
     DATA_FILEPATH = 'data/nrf.csv'
     connections.create_connection(hosts=['localhost'])
-
     # read data 
     nrf_df = pd.read_csv(DATA_FILEPATH).fillna('nan')
     nrf_js = nrf_df.to_dict('records')
-    print('uploading docs')
     upload_single_doc(nrf_js)
-    print('docs uploaded')
-
-    
-
