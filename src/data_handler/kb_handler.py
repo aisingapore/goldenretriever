@@ -10,6 +10,8 @@ from tika import parser
 import argparse
 import re
 import sqlite3
+from elasticsearch import Elasticsearch, helpers
+
 
 def unique_indexing(non_unique):
     """
@@ -395,4 +397,56 @@ class kb_handler():
             kbs.append(kb_)
 
         conn.close()
+        return kbs
+
+
+
+    def load_es_kb(self, kb_names=[]):
+
+        # create connection
+        es = Elasticsearch()
+        
+        kbs = []
+        for kb_name in kb_names:
+
+            results = helpers.scan(es, index=kb_name, query={"query": {"match_all": {}}})
+            temp_list = []
+    
+            for i, r in enumerate(results):
+                qa_pair_dict = r["_source"]["qa_pair"][0]
+
+                # to allow downstream code to work, 'context_str' and 'process_str'..
+                # will be empty strings by default unless otherwise supplied
+                if "context_str" in qa_pair_dict.keys():
+                    context_str = qa_pair_dict["context_str"]
+                else:
+                    context_str = ''
+
+                if "processed_str" in qa_pair_dict.keys():
+                    processed_str = qa_pair_dict["processed_str"]
+                else:
+                    processed_str = qa_pair_dict["ans_str"]
+
+                temp_list.append(
+                    [
+                        qa_pair_dict["ans_id"],
+                        qa_pair_dict["ans_str"],
+                        processed_str,
+                        context_str,
+                        qa_pair_dict["query_str"],
+                        qa_pair_dict["query_id"]
+                    ]
+                )
+
+            kb_df = pd.DataFrame(temp_list, columns=['clause_id', 'raw_string', 'processed_string', 'context_string', 'query_string', 'query_id'])
+            
+            kb_df = kb_df[kb_df["query_string"] != "nan"]
+
+            indexed_responses = kb_df.loc[:,['clause_id', 'raw_string', 'context_string']].drop_duplicates(subset=['clause_id']).fillna('').reset_index(drop=True) # fillna: not all responses have a context_string
+            indexed_queries = kb_df.loc[:,['query_id', 'query_string']].drop_duplicates(subset=['query_id']).dropna(subset=['query_string']).reset_index(drop=True)
+
+            mappings = generate_mappings(kb_df.processed_string, kb_df.query_string)
+            kb_ = kb(kb_name, indexed_responses, indexed_queries, mappings)
+            kbs.append(kb_)
+
         return kbs

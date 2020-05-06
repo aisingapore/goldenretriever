@@ -59,5 +59,6 @@ dependencies:
     - uvicorn==0.11.3
     - azure-storage-blob==12.3.0
     - python-multipart==0.0.5
+    - elasticsearch==7.6.0
 prefix: /data/anaconda/envs/hotdoc
 
