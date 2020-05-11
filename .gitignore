@@ -114,3 +114,6 @@ fastText/
 db_cnxn_str.txt
 data/.minio.sys/
 data/pdpa/*
+
+#models
+model_artefacts/
