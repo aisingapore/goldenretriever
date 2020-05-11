@@ -100,7 +100,7 @@ def aiap_qna(question, answer_array, aiap_qa, model, k=1):
     used in notebook "Exploratory_notebook" to compare the question and list of the answers
 
     """
-    similarity_score=cosine_similarity(answer_array, model.predict([question], type='query'))
+    similarity_score=cosine_similarity(answer_array, model.predict([question], string_type='query'))
     sortargs=np.flip(similarity_score.argsort(axis=0))
     sortargs=[x[0] for x in sortargs]
     sorted_ans=[]

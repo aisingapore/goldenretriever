@@ -12,7 +12,7 @@ import pandas.io.sql as pds
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient, PublicAccess
 from fastapi import HTTPException
 
-def get_last_insert_ids(cursor, inserted_iterable = ['single_string']):
+def get_last_insert_ids(conn, table, inserted_iterable = ['single_string']):
     """
     Get ids of last inserted iterable
     
@@ -30,12 +30,8 @@ def get_last_insert_ids(cursor, inserted_iterable = ['single_string']):
         https://dba.stackexchange.com/questions/81604/how-to-insert-values-in-junction-table-for-many-to-many-relationships
         https://stackoverflow.com/questions/2548493/how-do-i-get-the-id-after-insert-into-mysql-database-with-python
     """
-    try:
-        cursor.execute( "SELECT @@IDENTITY")
-        last_insert_id = cursor.fetchall()
-        last_insert_id = int(last_insert_id[0][0])
-    except Exception as e:
-        last_insert_id = cursor.lastrowid
+    df = pd.read_sql_query(f"SELECT MAX(id) FROM {table} LIMIT 1", conn)
+    last_insert_id = df.iloc[0]["MAX(id)"]
 
     last_insert_ids = [i for i in range(last_insert_id, last_insert_id-len(inserted_iterable), -1)][::-1]
 

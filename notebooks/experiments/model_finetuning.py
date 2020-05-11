@@ -56,7 +56,7 @@ if __name__=='__main__':
                     # mlflow.log_metric('loss',current_loss)
                     # print(ii, current_loss)
                 # score on test data
-                question_vectors = model.predict(df_test['text'].tolist(), type='query')
+                question_vectors = model.predict(df_test['text'].tolist(), string_type='query')
                 predictions, gts = ranker(model, question_vectors, df_test, df_doc)
                 for k in range(5):
                     string='Accuracy_at_'

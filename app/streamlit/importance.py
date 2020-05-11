@@ -100,8 +100,8 @@ def importance_by_erasure(model, response_string, query_string, verbose=False):
         dtype: object
     """
     # get original encodings and similarities
-    encoded_query = model.predict(query_string, type='query')
-    encoded_original_response = model.predict(response_string, type='response')
+    encoded_query = model.predict(query_string, string_type='query')
+    encoded_original_response = model.predict(response_string, string_type='response')
     original_similarity = cosine_similarity(encoded_original_response, encoded_query)[0]
 
     # Iterate through each word in the response
@@ -116,7 +116,7 @@ def importance_by_erasure(model, response_string, query_string, verbose=False):
         perturbed = reconstruct(perturbed)
 
         # calculate similarity of perturbed string to ques
-        encoded_perturbed = model.predict(perturbed, type='response')
+        encoded_perturbed = model.predict(perturbed, string_type='response')
         perturbed_similarity = cosine_similarity(encoded_perturbed, encoded_query)[0]
         
         # calculate similarity

@@ -150,18 +150,24 @@ def insert_data_into_test_db(conn):
         pass
     else:
         # Upload mock nrf data into test_db
-        d = {"responses": ["Periodic Audit Report 34...",
-                        "Change in Research Scope 32...",
-                        "Yearly Progress Report 35...",
-                        "Acknowledgement Guidelines 40...",
-                        "Grant Extension 27..."],
+        d = {
+            "responses": ["Periodic Audit Report 34...",
+                          "Change in Research Scope 32...",
+                          "Yearly Progress Report 35...",
+                          "Acknowledgement Guidelines 40...",
+                          "Grant Extension 27..."
+            ],
             "contexts": [],
             "queries": ["Can we seek for an extension of the audit report submission deadline?",
                         "What should we do if there are changes to the research project",
                         "What is the deadline for the submission of the annual progress report",
                         "We would like to reflect 'Endorsed by Company A' in our advertisement posters, will that be ok?",
-                        "Are we able to extend our project deadline?"],
-            "mapping": [(0, 0), (1, 1), (2, 2), (3, 3), (4, 4)]}
+                        "Are we able to extend our project deadline?"
+            ],
+            "mapping": [
+                (0, 0), (1, 1), (2, 2), (3, 3), (4, 4)
+            ]
+        }
 
         mock_req = MockRequest(hashkey="12345", kb_name="nrf", kb=d)
 

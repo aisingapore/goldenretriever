@@ -89,7 +89,7 @@ def upload_knowledge_base_to_sql(request, conn, cursor, get_kb_dir_id, get_kb_ra
         cursor.executemany('INSERT INTO dbo.kb_clauses (raw_id, clause_ind, context_string, raw_string, processed_string, created_at) VALUES ( ?, ?, ?, ?, ?, ?)', 
                             list_of_clauses)
         conn.commit()
-        idx_of_inserted_clauses = get_last_insert_ids(cursor, list_of_clauses)
+        idx_of_inserted_clauses = get_last_insert_ids(conn, 'dbo.kb_clauses', list_of_clauses)
 
         return idx_of_inserted_clauses
 
@@ -104,7 +104,7 @@ def upload_knowledge_base_to_sql(request, conn, cursor, get_kb_dir_id, get_kb_ra
                 cursor.executemany('INSERT INTO dbo.query_db (query_string) VALUES (?)', 
                                     [[query_] for query_ in kb['queries']])
                 conn.commit()
-                idx_of_inserted_queries = get_last_insert_ids(cursor, kb['queries'])
+                idx_of_inserted_queries = get_last_insert_ids(conn, 'dbo.query_db', kb['queries'])
         
                 # 5. load into query_labels
                 #    query labels have the following columns

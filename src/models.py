@@ -63,7 +63,7 @@ class GoldenRetriever:
         self.var_finetune=[x for x in self.embed.variables for vv in self.v if vv in x.name] #get the weights we want to finetune.
 
 
-    def predict(self, text, context=None, type='response'):
+    def predict(self, text, context=None, string_type='response'):
         """
         Return the tensor representing embedding of input text.
         
@@ -74,14 +74,14 @@ class GoldenRetriever:
         representing embedding of input text
 
         """
-        if type=='query':
+        if string_type =='query':
             if isinstance(text,str):
                 return self.question_encoder(tf.constant([text]))['outputs']
             # return self.session.run(self.question_embeddings, feed_dict={self.question:text})['outputs']
             elif hasattr(text, '__iter__'):
                 return tf.concat([self.question_encoder(tf.constant([one_text]))['outputs'] for one_text in text], axis=0)
 
-        elif type=='response':
+        elif string_type =='response':
             """
             A frequent error is OOM - Error recorded below.
             The fix is to encode each entry separately.
@@ -95,6 +95,7 @@ class GoldenRetriever:
             elif hasattr(text, '__iter__'):
                 encoded_responses = [self.response_encoder(input=tf.constant([t]),
                                     context=tf.constant([c]))['outputs'] for t, c in zip(text, context)]
+
                 encoded_responses_tensor = tf.concat(encoded_responses, axis=0)
                 return encoded_responses_tensor
                 
@@ -114,7 +115,7 @@ class GoldenRetriever:
         return the top K vectorized answers and their scores
 
         """
-        similarity_score=cosine_similarity(self.kb[kb_name].vectorised_responses, self.predict([querystring], type=predict_type))
+        similarity_score=cosine_similarity(self.kb[kb_name].vectorised_responses, self.predict([querystring], string_type=predict_type))
         sortargs=np.flip(similarity_score.argsort(axis=0))
         sortargs=[x[0] for x in sortargs]
         # sorted answer 
@@ -195,7 +196,9 @@ class GoldenRetriever:
         """
         if type(kb_) == kb:
             context_and_raw_string = kb_.responses.context_string.fillna('') + ' ' + kb_.responses.raw_string.fillna('')
-            kb_.vectorised_responses = self.predict(clean_txt(context_and_raw_string), type='response')
+
+            kb_.vectorised_responses = self.predict(clean_txt(context_and_raw_string), string_type='response')
+
             self.kb[kb_.name] = kb_
             print(f'{datetime.datetime.now()} : kb loaded - {kb_.name} ')
 
@@ -334,7 +337,7 @@ class GoldenRetriever_BERT:
         Choose index=True to return sorted index of matches.
         type can be 'query' or 'response' if you are comparing statements
         """
-        similarity_score=cosine_similarity(self.vectorized_knowledge[kb_name], self.predict([querystring], type=predict_type))
+        similarity_score=cosine_similarity(self.vectorized_knowledge[kb_name], self.predict([querystring], string_type=predict_type))
         sortargs=np.flip(similarity_score.argsort(axis=0))
         sortargs=[x[0] for x in sortargs]
         sorted_ans=[self.text[kb_name][i] for i in sortargs]
@@ -433,7 +436,7 @@ class GoldenRetriever_BERT:
             delim = '\n'
             self.text[kb_name] = split_txt([front+delim for front in raw_text.split('\n')])
         else: raise NameError('invalid kb input!')
-        self.vectorized_knowledge[kb_name] = self.predict(clean_txt(self.text[kb_name]), type='response')
+        self.vectorized_knowledge[kb_name] = self.predict(clean_txt(self.text[kb_name]), string_type='response')
         print('knowledge base lock and loaded!')
 
 
@@ -441,7 +444,7 @@ class GoldenRetriever_BERT:
                     query_col='question', answer_str_col='answer', cutoff=None):
         self.text[kb_name], self.questions[kb_name] = read_kb_csv(path_to_kb, meta_col=meta_col, answer_col=answer_col, 
                             query_col=query_col, answer_str_col=answer_str_col, cutoff=None)
-        self.vectorized_knowledge[kb_name] = self.predict(clean_txt(self.text[kb_name]), type='response')
+        self.vectorized_knowledge[kb_name] = self.predict(clean_txt(self.text[kb_name]), string_type='response')
         print('knowledge base (csv) lock and loaded!')
 
 
@@ -594,7 +597,7 @@ class GoldenRetriever_ALBERT:
         Choose index=True to return sorted index of matches.
         type can be 'query' or 'response' if you are comparing statements
         """
-        similarity_score=cosine_similarity(self.vectorized_knowledge[kb_name], self.predict([querystring], type=predict_type))
+        similarity_score=cosine_similarity(self.vectorized_knowledge[kb_name], self.predict([querystring], string_type=predict_type))
         sortargs=np.flip(similarity_score.argsort(axis=0))
         sortargs=[x[0] for x in sortargs]
         sorted_ans=[self.text[kb_name][i] for i in sortargs]
@@ -697,7 +700,7 @@ class GoldenRetriever_ALBERT:
             delim = '\n'
             self.text[kb_name] = split_txt([front+delim for front in raw_text.split('\n')])
         else: raise NameError('invalid kb input!')
-        self.vectorized_knowledge[kb_name] = self.predict(clean_txt(self.text[kb_name]), type='response')
+        self.vectorized_knowledge[kb_name] = self.predict(clean_txt(self.text[kb_name]), string_type='response')
         print('knowledge base lock and loaded!')
 
         
@@ -705,7 +708,7 @@ class GoldenRetriever_ALBERT:
                     query_col='question', answer_str_col='answer', cutoff=None):
         self.text[kb_name], self.questions[kb_name] = read_kb_csv(path_to_kb, meta_col=meta_col, answer_col=answer_col, 
                             query_col=query_col, answer_str_col=answer_str_col, cutoff=None)
-        self.vectorized_knowledge[kb_name] = self.predict(clean_txt(self.text[kb_name]), type='response')
+        self.vectorized_knowledge[kb_name] = self.predict(clean_txt(self.text[kb_name]), string_type='response')
         print('knowledge base (csv) lock and loaded!')
 
 
