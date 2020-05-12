@@ -65,15 +65,15 @@ def make_query(request, gr, conn, cursor, permissions, get_kb_dir_id, get_kb_raw
 
         return conn, cursor
 
-    def get_request_id(cursor):
+    def get_request_id(conn, table):
         # 4. Return response to user
         # return id of latest log request to user for when they give feedback
-        current_request_id = get_last_insert_ids(cursor)
+        current_request_id = get_last_insert_ids(conn, table)
         return current_request_id
 
     request_timestamp = datetime.datetime.now()
     reply, reply_index = get_inference(request.query, request.kb_name)
     conn, cursor = log_req(request, request_timestamp, reply_index, conn, cursor)
-    current_request_id = get_request_id(cursor)
+    current_request_id = get_request_id(conn, "dbo.query_log")
 
     return reply, current_request_id

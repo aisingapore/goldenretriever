@@ -18,7 +18,10 @@ python -m src.finetune_eval \
     --loss_type='triplet' \
     --margin=0.3 \
     --task_type='train_eval' \
-    --early_stopping_steps=5
+    --early_stopping_steps=5 \
+    --save_dir="./test_finetune"\
+    --kb_names="nrf_virement","nrf"\
+    --cnxn_path="./db_cnxn_str.txt"
 """
 import tensorflow as tf
 import os
@@ -29,34 +32,25 @@ import numpy as np
 import logging
 import random
 import sys
-sys.path.append('/polyaxon-data/goldenretriever')
 
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.model_selection import train_test_split
 from scipy.stats.mstats import rankdata
 from absl import flags, app
-from polyaxon_client.tracking import Experiment, get_log_level
 
-from .models import GoldenRetriever, GoldenRetriever_BERT, GoldenRetriever_ALBERT
-from .dataloader import kb_train_test_split
-from .kb_handler import kb, kb_handler
+from src.models import GoldenRetriever, GoldenRetriever_BERT, GoldenRetriever_ALBERT
+from src.data_handler.kb_handler import kb, kb_handler
 
 
+# Setup logging
+logging.basicConfig()
 
-# For logging
-def setup_logging():
-    log_level = get_log_level()
-    if log_level is None:
-        log_level = logging.INFO
-    logging.basicConfig(level=log_level)
-
-experiment = Experiment()
-setup_logging()
 logger = logging.getLogger(__name__)
-logger.info("Starting experiment")
+logger.setLevel(logging.DEBUG)
+logger.addHandler(logging.StreamHandler())
 
-
-
+# To prevent duplicate logs
+logger.propagate = False
 
 FLAGS = flags.FLAGS
 
@@ -152,6 +146,23 @@ flags.DEFINE_integer(
     "How many epochs without improvement in loss for early stopping"
 )
 
+# eg. './finetuned'
+flags.DEFINE_string(
+    "save_dir", None,
+    "Directory that will be used to save model weights and results"
+)
+
+# eg. 'kb_1','kb_2'
+flags.DEFINE_list(
+    "kb_names", None,
+    "Names of the knowledge base to be trained on"
+)
+
+# eg. './db_cnxn_str.txt'
+flags.DEFINE_string(
+    "cnxn_path", None,
+    "Path to .txt file containining connection string to MSSQL database"
+)
 
 
 """
@@ -248,11 +259,11 @@ def _generate_hard_neg_ans(df, train_dict, model):
 
         # encodings of all possible answers
         all_possible_answers_in_kb = train_df.processed_string.unique().tolist()
-        encoded_all_possible_answers_in_kb = model.predict(all_possible_answers_in_kb, type='response')
+        encoded_all_possible_answers_in_kb = model.predict(all_possible_answers_in_kb, string_type='response')
 
         # encodings of train questions
         train_questions = train_df.query_string
-        encoded_train_questions = model.predict(train_questions, type='query')
+        encoded_train_questions = model.predict(train_questions, string_type='query')
 
         # get similarity matrix
         from sklearn.metrics.pairwise import cosine_similarity
@@ -430,8 +441,8 @@ def eval_model(model, df, test_dict):
                             for nonunique_response_string in response_list_w_duplicates]
         response_idx_list = np.array(response_idx_list)[[test_mask]]
         
-        encoded_queries = model.predict(query_list, type='query')
-        encoded_responses = model.predict(response_list, type='response')
+        encoded_queries = model.predict(query_list, string_type='query')
+        encoded_responses = model.predict(response_list, string_type='response')
 
         # get matrix of shape [Q_test x Responses]
         # this holds the relevance rankings of the responses to each test ques
@@ -474,14 +485,22 @@ def eval_model(model, df, test_dict):
 def main(_):
 
     # Define file/directory paths
-    MAIN_DIR = experiment.get_tf_config()['model_dir']
-    MODEL_DIR = os.path.join(MAIN_DIR, 'model_nrf_pdpa_ins', FLAGS.model_name)
-    MODEL_BEST_DIR = os.path.join(MAIN_DIR, 'model_nrf_pdpa_ins', FLAGS.model_name, 'best')
-    MODEL_LAST_DIR = os.path.join(MAIN_DIR, 'model_nrf_pdpa_ins', FLAGS.model_name, 'last')
-    EVAL_DIR = os.path.join(MAIN_DIR, 'results_nrf_pdpa_ins', FLAGS.model_name)
+    concat_kb_names = "_".join(FLAGS.kb_names)
+
+    model_folder_name = "model_" + concat_kb_names
+    results_folder_name = "results_" + concat_kb_names
+    flags_folder_name = "flags_" + concat_kb_names
+    MAIN_DIR = FLAGS.save_dir
+
+    MODEL_DIR = os.path.join(MAIN_DIR, model_folder_name, FLAGS.model_name)
+    MODEL_BEST_DIR = os.path.join(MAIN_DIR, model_folder_name, FLAGS.model_name, 'best')
+    MODEL_LAST_DIR = os.path.join(MAIN_DIR, model_folder_name, FLAGS.model_name, 'last')
+    EVAL_DIR = os.path.join(MAIN_DIR, results_folder_name, FLAGS.model_name)
+    FLAGS_DIR =os.path.join(MAIN_DIR, flags_folder_name)
 
     if not os.path.isdir(MODEL_LAST_DIR): os.makedirs(MODEL_LAST_DIR)
     if not os.path.isdir(EVAL_DIR):os.makedirs(EVAL_DIR)
+    if not os.path.isdir(FLAGS_DIR):os.makedirs(FLAGS_DIR)
 
     EVAL_SCORE_PATH = os.path.join(EVAL_DIR, '_eval_scores.xlsx')
     EVAL_DICT_PATH = os.path.join(EVAL_DIR, '_eval_details.pickle')
@@ -491,6 +510,9 @@ def main(_):
     logger.info(f'Last trained model will be saved at {MODEL_LAST_DIR}')
     logger.info(f'Saving Eval_Score at: {EVAL_SCORE_PATH}')
     logger.info(f'Saving Eval_Dict at: {EVAL_DICT_PATH}')
+    logger.info(f'Saving Flags at: {FLAGS_DIR}')
+
+    FLAGS.append_flags_into_file(FLAGS_DIR + '/flagfile.txt')
 
     # Create training set based on chosen random seed
     logger.info("Generating training/ evaluation set")
@@ -528,12 +550,8 @@ def main(_):
     # Get df using kb_handler
     kbh = kb_handler()
     kbs = kbh.load_sql_kb(
-                        #   cnxn_path='db_cnxn_str.txt', 
-                          cnxn_path='/polyaxon-data/goldenretriever/db_cnxn_str.txt', 
-                        #   kb_names=['PDPA', 'nrf_16032020', 'covid19_16032020','annuities','home-insurance','Super_Bowl_50','Nikola_Tesla'])
-                        #   kb_names=['PDPA', 'nrf_16032020', 'covid19_16032020']) 
-                        #   kb_names=['PDPA', 'nrf_16032020']) # covid19_16032020 is to be excluded
-                          kb_names=['nrf_16032020'])
+                          cnxn_path=FLAGS.cnxn_path, 
+                          kb_names=FLAGS.kb_names)
         
     df = pd.concat([single_kb.create_df() for single_kb in kbs]).reset_index(drop='True')
     kb_names = df['kb_name'].unique()
@@ -559,9 +577,7 @@ def main(_):
         # see the performance of out of box model
         OOB_overall_eval, eval_dict = eval_model(model, df, test_dict)
         epoch_eval_score = OOB_overall_eval.loc['Across_all_kb','mrr_score']
-        epoch_nrf_eval_score = OOB_overall_eval.loc['nrf_16032020','mrr_score']
         logger.info(f'Eval Score for OOB: {epoch_eval_score}')
-        logger.info(f'Eval Score for OOB: {epoch_nrf_eval_score}')
 
         earlystopping_counter = 0
         for i in range(FLAGS.num_epochs):
@@ -610,13 +626,11 @@ def main(_):
 
             epoch_overall_eval, eval_dict = eval_model(model, df, test_dict)
             epoch_eval_score = epoch_overall_eval.loc['Across_all_kb','mrr_score']
-            epoch_nrf_eval_score = epoch_overall_eval.loc['nrf_16032020','mrr_score']
             print(epoch_eval_score)
 
             logger.info(f'Number of batches trained: {batch_counter}')
             logger.info(f'Loss for Epoch #{i}: {cost_mean_total}')
             logger.info(f'Eval Score for Epoch #{i}: {epoch_eval_score}')
-            logger.info(f'Eval Score for Epoch for nrf #{i}: {epoch_nrf_eval_score}')
 
             epoch_end_time = datetime.datetime.now()
             logger.info(f'Time taken for Epoch #{i}: {epoch_end_time - epoch_start_time}')
@@ -648,8 +662,6 @@ def main(_):
             else:
                 # Activate early stopping counter
                 earlystopping_counter += 1
-
-            experiment.log_metrics(steps=i, loss=cost_mean_total)
 
             # Early stopping
             if earlystopping_counter == FLAGS.early_stopping_steps:
@@ -685,8 +697,6 @@ def main(_):
     print(OOB_overall_eval)
     print("="*10 + ' FINETUNED ' + "="*10)
     print(overall_eval)
-    experiment.log_metrics(nrf_mrr=overall_eval.loc['nrf_16032020', 'mrr_score'])
-    experiment.log_metrics(overall_mrr=overall_eval.loc['Across_all_kb', 'mrr_score'])
 
     # save the scores and details for later evaluation. WARNING: User will need to create the necessary directories to save df
     overall_eval.to_excel(EVAL_SCORE_PATH)

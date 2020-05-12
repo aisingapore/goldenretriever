@@ -167,6 +167,7 @@ async def upload_knowledge_base_to_sql_endpoint(request : upload_kb_request, com
         # load knowledge base into cached model
         kbs = kbh.load_sql_kb(cnxn_path=conn_path, kb_names=[kb_name])
         gr.load_kb(kbs)
+
         return {"message":"Success"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"{str(e)}")
