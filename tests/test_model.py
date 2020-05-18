@@ -6,6 +6,7 @@ import numpy as np
 import shutil
 
 from src.models import GoldenRetriever
+from src.encoders import USEEncoder
 from src.data_handler.kb_handler import kb, kb_handler
 from sklearn.model_selection import train_test_split
 
@@ -14,7 +15,8 @@ CONN_STR = os.environ['CONN_STR']
 
 
 def test_make_query():
-    gr = GoldenRetriever()
+    use = USEEncoder()
+    gr = GoldenRetriever(use)
     kbh = kb_handler() 
     nrf = kbh.load_sql_kb(cnxn_str=CONN_STR, cnxn_path="", kb_names=["nrf"])
     gr.load_kb(nrf)
@@ -111,7 +113,8 @@ def create_delete_model_savepath():
 
 
 def test_finetune_export_restore(create_delete_model_savepath):
-    gr = GoldenRetriever()
+    use = USEEncoder()
+    gr = GoldenRetriever(use)
 
     train_dict = dict()
     test_dict = dict()
@@ -157,26 +160,28 @@ def test_finetune_export_restore(create_delete_model_savepath):
 
     initial_pred = gr.predict("What is personal data?")
 
-    savepath = create_delete_model_savepath
-    gr.export(savepath)
+    save_dir = create_delete_model_savepath
+    gr.export_encoder(save_dir=save_dir)
 
-    gr_new = GoldenRetriever()
-    gr_new.restore(savepath)
+    use_new = USEEncoder()
+    gr_new = GoldenRetriever(use_new)
+    gr_new.restore_encoder(save_dir=save_dir)
     restored_pred = gr_new.predict("What is personal data?")
 
     assert isinstance(cost_mean_total, np.floating)
     assert cost_mean_total != 0.0000
-    assert os.path.isdir(savepath)
+    assert os.path.isdir(save_dir)
     assert np.array_equal(initial_pred, restored_pred)
 
 
 def test_load_kb():
-    gr = GoldenRetriever()
+    use = USEEncoder()
+    gr = GoldenRetriever(use)
     kbh = kb_handler()
 
     pdpa_df = pd.read_csv('./data/pdpa.csv')
     pdpa = kbh.parse_df('pdpa', pdpa_df, 'answer', 'question', 'meta')
 
-    gr.load_kb(kb_=pdpa)
+    gr.load_kb(pdpa)
 
     assert isinstance(gr.kb["pdpa"], kb)
