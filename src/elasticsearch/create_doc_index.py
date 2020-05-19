@@ -1,40 +1,21 @@
+"""
+Version:
+--------
+0.1 11th May 2020
+
+Usage:
+------
+Script to handle indexing of QnA datasets into Elasticsearch for downstream finetuning and serving
+- Define index schema using elasticsearch_dsl classes
+- Connect and upload NRF Documents to Elasticsearch
+"""
 from datetime import datetime
 from elasticsearch_dsl import Index, Document, InnerDoc, Date, Nested, Keyword, Text, Integer, connections
+from argparse import ArgumentParser
 import pandas as pd 
 
-qa_nrf = Index('qa_nrf')
 
-qa_nrf.settings = {
-            "number_of_shards": 1,
-            "number_of_replicas": 0
-        }
-
-class QA(InnerDoc):
-    ans_id = Integer()
-    ans_str = Text(fields={'raw': Keyword()})
-    query_id = Integer()
-    query_str = Text()
-
-@qa_nrf.document
-class Doc(Document):
-    doc = Text()
-    created_at = Date()
-    qa_pair = Nested(QA)
-    def add_qa_pair(self, ans_id, ans_str, query_id, query_str):
-        self.qa_pair.append(QA(ans_id=ans_id, ans_str=ans_str, query_id=query_id, query_str=query_str))
-
-    def save(self, **kwargs):
-        self.created_at = datetime.now()
-        return super().save(**kwargs)
-
-
-def setup():
-    """create an IndexTemplate and save it into elasticsearch"""
-    index_template = Doc._index.as_template('base')
-    index_template.save()
-
-
-def upload_single_doc(qa_pairs):
+def upload_docs(qa_pairs):
     """adds document with qa pair to elastic index
         assumes that index fields correspond to template in create_doc_index.py
     Args:
@@ -54,11 +35,40 @@ def upload_single_doc(qa_pairs):
     print(f'indexed {counter} documents')
 
 
+if __name__ == '__main__':
+    parser = ArgumentParser(description='index qa dataset to Elasticsearch')
+    parser.add_argument('url', help='elasticsearch url')
+    parser.add_argument('csv_file', help='csv file with qa pairs')
+    parser.add_argument('index_name', help='name of index to create')
+    args = parser.parse_args()
 
-if __name__=='__main__':
-    DATA_FILEPATH = 'data/nrf.csv'
-    connections.create_connection(hosts=['localhost'])
-    # read data 
-    nrf_df = pd.read_csv(DATA_FILEPATH).fillna('nan')
-    nrf_js = nrf_df.to_dict('records')
-    upload_single_doc(nrf_js)
+    index = Index(args.index_name)
+
+    index.settings = {"number_of_shards": 1,
+                      "number_of_replicas": 0}
+
+    # index schema
+    class QA(InnerDoc):
+        ans_id = Integer()
+        ans_str = Text(fields={'raw': Keyword()})
+        query_id = Integer()
+        query_str = Text()
+
+    @index.document
+    class Doc(Document):
+        doc = Text()
+        created_at = Date()
+        qa_pair = Nested(QA)
+
+        def add_qa_pair(self, ans_id, ans_str, query_id, query_str):
+            self.qa_pair.append(QA(ans_id=ans_id, ans_str=ans_str, query_id=query_id, query_str=query_str))
+
+        def save(self, **kwargs):
+            self.created_at = datetime.now()
+            return super().save(**kwargs)
+
+    # connect to ES instance and start indexing
+    connections.create_connection(host=[args.url])
+    qa_pairs = pd.read_csv(args.csv_file).to_dict('records')
+    counter = upload_docs(qa_pairs)
+    print('successfully indexed {counter} documents')
