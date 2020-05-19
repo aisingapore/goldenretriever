@@ -37,6 +37,12 @@ class Model(ABC):
         pass
 
     @abstractmethod
+    def load_kb(self):
+        """
+        load and encode knowledge bases to return predictions
+        """
+
+    @abstractmethod
     def make_query(self):
         """
         uses predict method to vectorize texts
