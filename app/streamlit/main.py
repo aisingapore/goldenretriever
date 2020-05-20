@@ -13,7 +13,7 @@ import streamlit as st
 import requests
 import argparse
 import SessionState
-
+from urllib.parse import quote
 
 # API arguments
 parser = argparse.ArgumentParser()
@@ -26,6 +26,7 @@ parser.add_argument('--url',
 
 args = parser.parse_args()
 APP_URL = args.url
+if not APP_URL.endswith('/'): APP_URL = APP_URL+'/'
 
 
 # SessionState
@@ -45,32 +46,9 @@ st.title('GoldenRetriever')
 st.header('This Information Retrieval demo allows you to query FAQs, T&Cs, or your own knowledge base in natural language.')
 st.markdown('View the source code [here](https://github.com/aimakerspace/goldenretriever)!')
 st.markdown('Visit our [community](https://makerspace.aisingapore.org/community/ai-makerspace/) and ask us a question!')
-kb_to_starqn = {'pdpa':"Can an organization retain the physical NRIC?",
-                'resale_tnc':"How much is the option fee?",
-                'aiap':"Do I need to pay for the program?",
-                'covid19':'what is coronavirus?',
-                # 'nrf':"Can I vire from EOM into travel?",
-                'raw_kb':"What do you not love?"}
-
-# 2. USER INPUT FOR KNOWLEDGE BASES AND QUERY
-def format_func(kb_name):
-    namedicts={'covid19':'COVID-19',
-                'pdpa':'PDPA',
-                'resale_tnc':'HDB Resale',
-                'aiap':'AIAP',
-                # 'nrf':'NRF',
-                'raw_kb':'Paste Raw Text'}
-    return namedicts[kb_name]
-kb = st.selectbox('Select Knowledge Base', options=['covid19', 'pdpa', 'resale_tnc', 'aiap', 'raw_kb'],
-                    format_func=format_func)
-if kb=='raw_kb':
-    kb_raw = st.text_area(label='Paste raw text (terms separated by empty line)', 
-                        value="""I love my chew toy!\n\nI hate Mondays.\n""")
-top_k = st.radio('Number of Results', options=[1,2,3], index=2)
-
 
 # fetch logic and query string
-query_string = st.text_input(label='Input query here', value=kb_to_starqn[kb])
+query_string = st.text_input(label='Input query here') 
 if st.button('Fetch', key='fetch'):
     state.fetch = True
     if APP_URL == '':
@@ -82,13 +60,10 @@ if st.button('Fetch', key='fetch'):
                             'Yearly Audit Report\n12.3 Each Institution shall submit on an annual basis, no later than 30 September of each year, an audit report (“Yearly Audit Report”) containing all relevant financial information on the Research for the preceding year ending 31 March, including but not limited to:\n(a) its use of Funds disbursed by Grantor;\n(b) [applicable for advance disbursement] any unspent Funds that such Institution is required to return to Grantor;\n(c) [applicable for advance disbursement] any unspent Funds that such Institution is carrying over into the next year.\n12.4 The Yearly Audit Report must be prepared by each Institution’s internal or external auditors and certified as correct by its director of research and chief financial officer (or their authorised nominees). In particular, each Institution shall confirm and state in the Yearly Audit Report that such Institution’s requisitions for the Funding are made in accordance with the terms of this Contract.\n',
                             '17. Third Party Collaborations\n17.1 The Institutions may undertake work on the Research in collaboration with a Collaborator subject to this Clause 17. Notwithstanding Clause 2.5, the Institutions may also receive funds or any other means of support from a Collaborator for carrying out the research in accordance with this Clause 17.\n17.2 The applicable Institutions shall, prior to commencing their collaboration with a Collaborator, enter into a written agreement with such Collaborator which is consistent with the obligations assumed under this Contract setting out, among other things: -\n(a)\tthe role of the Collaborator in the Research;\n(b)\tthe provision of cash or in-kind contributions by the Collaborator for the Research;\n(c)\tthe work to be undertaken by the Collaborator and its scientific contributions.\n17.3 All agreements with Collaborators must conform with the Collaboration Guidelines specified in the Annex. For the avoidance of doubt, Collaborators are not entitled to receive (directly or indirectly) any or any part of the Funds. The Host Institution shall keep Grantor informed of the progress on the work under the collaboration through the Yearly Progress Reports and the Final Progress Report.\n17.4 The Host Institution shall be responsible for providing Grantor with copies of the relevant collaboration agreement between the Collaborator and the applicable Institutions including all amendments, modifications or revisions thereto.\n17.5 [Applicable to projects awarded to private companies or of national interest.] The Institutions shall promptly inform Grantor if any aspect of the Research is the product of or otherwise relates to results obtained from a previous collaboration and the terms and conditions of any encumbrances on the relevant Research IP which may adversely affect Grantor’s rights under Clause 16.\n']
     else:
-        res = requests.post(APP_URL + 'query', 
-                            json={"query":query_string, 
-                                "kb_name":kb
-                                })
+        res = requests.get(APP_URL + 'query/' + quote(query_string) + '/10')
         if res.status_code == 200:
             res = res.json()
-            state.prediction = res['responses']
+            state.prediction = res['resp']
             state.query_id = res['query_id']
         else:
             st.markdown(res.status_code)
@@ -113,7 +88,10 @@ if state.fetch:
                                         json={"query_id":state.query_id, 
                                             "is_correct": feedbacks
                                             })
-        st.text("Feedback received!")
+        if feedback_res.json()['resp'] == 'updated': 
+            st.text("Feedback received!")
+        else:
+            st.text(f"unpexpected response: {feedback_res.json()}")
         
         # reset states
         state.fetch=False
