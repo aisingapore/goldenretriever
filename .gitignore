@@ -117,3 +117,4 @@ data/pdpa/*
 
 #models
 model_artefacts/
+/test_finetune

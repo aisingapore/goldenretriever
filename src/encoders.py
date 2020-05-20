@@ -40,8 +40,10 @@ class Encoder(ABC):
 
 
 class USEEncoder(Encoder):
-    def __init__(self, **kwargs):
+    def __init__(self, max_seq_length=None, **kwargs):
 
+        # Not used for USEEncoder but included for standardization across encoders
+        self.max_seq_length = max_seq_length
         # variables to be finetuned
         # self.v=['QA/Final/Response_tuning/ResidualHidden_1/dense/kernel','QA/Final/Response_tuning/ResidualHidden_0/dense/kernel', 'QA/Final/Response_tuning/ResidualHidden_1/AdjustDepth/projection/kernel']
         self.v = ['QA/Final/Response_tuning/ResidualHidden_1/AdjustDepth/projection/kernel']

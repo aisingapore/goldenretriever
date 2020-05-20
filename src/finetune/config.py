@@ -23,7 +23,7 @@ config_dict={
     "MINIO_URL":"localhost:9001",
     "MINIO_ACCESS_KEY":"minio",
     "MINIO_SECRET_KEY":"minio123",
-    "SAVEDMODELNAME":"finetuned"
+    "SAVEDMODELNAME":"finetuned.tar.gz"
     }
 
 class config_obj:

@@ -15,6 +15,9 @@ dvc run -f dvc/encode.dvc \
         python src/dvc_pipeline_scripts/nrf_encode.py --data data/nrf_test.csv --output_folder model_artefacts --index_prefix nrf --tfhub_module_url 'https://tfhub.dev/google/universal-sentence-encoder-multilingual-qa/3'
 
 # finetune pipeline
-
+dvc run -f dvc/finetune.dvc \
+        -d src/finetune/config.py \
+        -o test_finetune \
+        python -m src.finetune.main
 
 # make query pipeline
