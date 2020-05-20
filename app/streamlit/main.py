@@ -1,58 +1,45 @@
-import sys
-sys.path.append('')
+"""
+Streamlit app for NRF testing
+Runs frontend to test query and feedback endpoints on GoldenRetriever's API.
 
+Sample usage:
+note the empty double flag --  to input app arguments, as opposed to streamlit arguments
+https://github.com/streamlit/streamlit/issues/337
+---------------------------------------------------
+    streamlit run app/streamlit/main.py -- --url https://goldenretrieveraisg.azurewebsites.net/
+
+"""
 import streamlit as st
-import pandas as pd
-import time
-
-from src.models import GoldenRetriever
-from src.data_handler.kb_handler import kb_handler
-from importance import importance_by_erasure, partial_highlight
+import requests
+import argparse
 import SessionState
 
+
+# API arguments
+parser = argparse.ArgumentParser()
+parser.add_argument('--url', 
+                    # default="",
+                    # default="http://0.0.0.0:5000/",
+                    # default="https://goldenretrieveraisg.azurewebsites.net/",
+                    default="https://nrfgoldenretriever-backend.azurewebsites.net/",
+                    help="GoldenRetriever's API endpoint to query / feddback to")
+
+args = parser.parse_args()
+APP_URL = args.url
+
+
+# SessionState
 # Init per-session persistent state variabless
-state = SessionState.get(fetch=False, 
-                        prediction=[], 
-                        interpret0=False, interpret1=False, interpret2=False, interpret3=False, interpret4=False, 
-                        importance_frame_0=None,importance_frame_1=None,importance_frame_2=None,importance_frame_3=None,importance_frame_4=None, 
-                        k0=5,k1=5,k2=5,k3=5,k4=5,
+# by default in streamlit, when one checkbox is click, the others reset
+# SessionState solves that by retaining persistent variables in the session
+state = SessionState.get(
+    fetch=False, 
+    prediction=[],      
+    query_id='',           
+    k0=False,k1=False,k2=False,k3=False,k4=False,
 )
 
-# 0. CACHED FUNCTIONS FOR INIT AND INTERPRET
-@st.cache(allow_output_mutation=True)
-def init():
-    retriever = GoldenRetriever()
-    # retriever.restore('./2/')
-
-    # parse text into kb
-    kbh = kb_handler()
-    resale_tnc = kbh.parse_text('data/resale_tnc.txt', 
-                                   clause_sep='\n\n', inner_clause_sep="\n", 
-                                   context_idx=0,
-                                   kb_name = 'resale_tnc'
-                                  )
-    aiap = kbh.parse_text('data/aiap.txt', clause_sep='\n\n', inner_clause_sep="\n", query_idx=0)
-    pdpa = kbh.parse_csv('data/pdpa.csv', 
-                         answer_col='answer', query_col='question', context_col='meta', 
-                         kb_name='pdpa')
-    covid19 = kbh.parse_csv('data/covid19.csv',
-                        answer_col='answer', query_col='question', context_col='meta', 
-                        kb_name='covid19')
-
-    # load kbs
-    retriever.load_kb(resale_tnc)
-    retriever.load_kb(aiap)
-    retriever.load_kb(pdpa)
-    retriever.load_kb(covid19)
-
-    # load SQL db
-    # kbs = kbh.load_sql_kb(cnxn_path = "db_cnxn_str.txt", kb_names=['PDPA','nrf'])
-    # retriever.load_kb(kbs)
-    return retriever
-
-gr = init()
-
-
+# header and info
 # 1. INTRODUCTION AND INFO
 st.title('GoldenRetriever')
 st.header('This Information Retrieval demo allows you to query FAQs, T&Cs, or your own knowledge base in natural language.')
@@ -80,73 +67,60 @@ if kb=='raw_kb':
     kb_raw = st.text_area(label='Paste raw text (terms separated by empty line)', 
                         value="""I love my chew toy!\n\nI hate Mondays.\n""")
 top_k = st.radio('Number of Results', options=[1,2,3], index=2)
-data = st.text_input(label='Input query here', value=kb_to_starqn[kb])
 
 
-# 3. PRESENTING RESULTS
+# fetch logic and query string
+query_string = st.text_input(label='Input query here', value=kb_to_starqn[kb])
 if st.button('Fetch', key='fetch'):
-    
-    # 1. Sets fetch to True
-    # 2. Resets all interpret states to False
     state.fetch = True
-    for i in range(5):
-        setattr(state, f"interpret{i}", False)
+    if APP_URL == '':
+        # for testing purposes
+        state.query_id = 46
+        state.prediction = ['Requests for variations to the awarded grant\nVirement between Votes\n21. Grantor delegates the approval authority for the virement of funds between votes to the Host Institution, subject to a cumulative amount not exceeding 10% of the original total project direct cost value. For virements cumulatively above 10%, the approval authority remains with the Grantor.\n22. Any virement into the EOM and Research Scholarship votes would require Grantor’s approval, even if the cumulative amount is below 10% of the original total project direct cost value.\n23. Inter-institutional virements, where applicable, require the Grantor’s approval and acknowledgement from the director of research (or equivalent) for all Institutions involved.\n24. Virement of funds into the Overseas Travel vote is not allowed. Overspending will not be reimbursed.\n25. Variation from Research Scholarship vote to other budget category is not allowed, regardless of variation amount.\n',
+                            'Requests for variations to the awarded grant\n19. Grantor reserves the right to reject any claims that have resulted from project changes without prior approval from Grantor (in specific circumstances as stated in these guidelines).\n20. Request for any variation (except for Grant Extension) should be made before the last 3 months of the original end of the Term. Retrospective variation requests will not be allowed, unless there is compelling justification for submission of a late variation request.\n',
+                            'Grant Extension\n27. Request for grant extension should be made before the last 6 months of the original end of the Term. The PI must ensure sufficient funds in each vote to support the extension request. Any variation requests necessary to meet the extension period must be made known as part of the extension request.\n28. A one-off project extension should not be more than a total of 6 months. An extension beyond 6 months will require compelling justification. No additional funds should be given for any extensions.\n',
+                            'Yearly Audit Report\n12.3 Each Institution shall submit on an annual basis, no later than 30 September of each year, an audit report (“Yearly Audit Report”) containing all relevant financial information on the Research for the preceding year ending 31 March, including but not limited to:\n(a) its use of Funds disbursed by Grantor;\n(b) [applicable for advance disbursement] any unspent Funds that such Institution is required to return to Grantor;\n(c) [applicable for advance disbursement] any unspent Funds that such Institution is carrying over into the next year.\n12.4 The Yearly Audit Report must be prepared by each Institution’s internal or external auditors and certified as correct by its director of research and chief financial officer (or their authorised nominees). In particular, each Institution shall confirm and state in the Yearly Audit Report that such Institution’s requisitions for the Funding are made in accordance with the terms of this Contract.\n',
+                            '17. Third Party Collaborations\n17.1 The Institutions may undertake work on the Research in collaboration with a Collaborator subject to this Clause 17. Notwithstanding Clause 2.5, the Institutions may also receive funds or any other means of support from a Collaborator for carrying out the research in accordance with this Clause 17.\n17.2 The applicable Institutions shall, prior to commencing their collaboration with a Collaborator, enter into a written agreement with such Collaborator which is consistent with the obligations assumed under this Contract setting out, among other things: -\n(a)\tthe role of the Collaborator in the Research;\n(b)\tthe provision of cash or in-kind contributions by the Collaborator for the Research;\n(c)\tthe work to be undertaken by the Collaborator and its scientific contributions.\n17.3 All agreements with Collaborators must conform with the Collaboration Guidelines specified in the Annex. For the avoidance of doubt, Collaborators are not entitled to receive (directly or indirectly) any or any part of the Funds. The Host Institution shall keep Grantor informed of the progress on the work under the collaboration through the Yearly Progress Reports and the Final Progress Report.\n17.4 The Host Institution shall be responsible for providing Grantor with copies of the relevant collaboration agreement between the Collaborator and the applicable Institutions including all amendments, modifications or revisions thereto.\n17.5 [Applicable to projects awarded to private companies or of national interest.] The Institutions shall promptly inform Grantor if any aspect of the Research is the product of or otherwise relates to results obtained from a previous collaboration and the terms and conditions of any encumbrances on the relevant Research IP which may adversely affect Grantor’s rights under Clause 16.\n']
+    else:
+        res = requests.post(APP_URL + 'query', 
+                            json={"query":query_string, 
+                                "kb_name":kb
+                                })
+        if res.status_code == 200:
+            res = res.json()
+            state.prediction = res['responses']
+            state.query_id = res['query_id']
+        else:
+            st.markdown(res.status_code)
+            st.markdown(res.json())
 
-# if state.fetch == True or (data != kb_to_starqn[kb]): 
-#     # first condition is separate from st.button('Fetch'), to keep the state persistent
-#     # Second condition ensures the answer will not appear right away
+checkbox_list = [st.empty() for i in range(5)]
 
-    if kb=='raw_kb':
-        # load raw text kb
-        kbh = kb_handler()
-        raw_kb = kbh.parse_text(kb_raw,
-                                clause_sep='\n\n',
-                                kb_name = 'raw_kb'
-                                )
-        gr.load_kb(raw_kb)
-        
-    prediction, scores = gr.make_query(data, top_k=int(top_k), kb_name=kb)
-    state.prediction = prediction
-    time.sleep(2)
-    
-qn_string="""<h3><text>Question: </text>{}</h3>""".format(data)
-st.markdown(qn_string, unsafe_allow_html=True)
+# feedback logic
+if state.fetch:        
 
-if len(state.prediction)>0:
     for ansnum, result in enumerate(state.prediction):
+        if checkbox_list[ansnum].checkbox(result, key=f"checkbox{ansnum}"):
+        # if st.checkbox(result, key=f"checkbox{ansnum}"):
+            setattr(state, f'k{ansnum}', True)
         
-        anshead_string = """<h3><text>Answer {}</text></h3>""".format(ansnum+1)
-
-        markdown_context = st.empty()
-        markdown_answer = st.empty()
-
-        if st.button('interpret', key=f"key_{ansnum}"):
-            setattr(state, f"interpret{ansnum}", True) 
-            setattr(state, f"importance_frame_{ansnum}", importance_by_erasure(gr, result, data))
-
-        if state.fetch:
-            if getattr(state, f"interpret{ansnum}"):
-                markdown_prediction = partial_highlight(getattr(state, f"importance_frame_{ansnum}"), k=int(0.3*len(result.split())) )
-            else:
-                markdown_prediction = result
-
-            # set the markdown object
-            markdown_context.markdown(anshead_string, unsafe_allow_html=True)
-            reply_string="""<table>"""
-            lines = [line for line in markdown_prediction.split('\n') if line]
-            for line in lines:
-                reply_string += """<tr>"""
-                tabledatas = line.split(';;')
-                for tabledata in tabledatas:
-                    if len(tabledatas)>1:
-                        line_string = """<td>{}</td>""".format(tabledata)
-                    else:
-                        line_string = """<td colspan=42>{}</td>""".format(tabledata)
-                    reply_string += line_string
-                reply_string += """</tr>"""
-            reply_string+="""</table><br>"""
-
-        markdown_answer.markdown(reply_string, unsafe_allow_html=True)
+    submit_button = st.empty()
+    if submit_button.button('Feedback relevant answers'):
+        feedbacks = [int(getattr(state,f"k{i}")) for i in range(5)]
+        # st.markdown(feedbacks)
+        if len(APP_URL) > 0:
+            feedback_res = requests.post(APP_URL + 'feedback', 
+                                        json={"query_id":state.query_id, 
+                                            "is_correct": feedbacks
+                                            })
+        st.text("Feedback received!")
+        
+        # reset states
+        state.fetch=False
+        state.prediction=[]
+        for i in range(5):
+            checkbox_list[i].empty()
+        submit_button.empty()
 
 st.markdown(
 """
