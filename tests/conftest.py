@@ -1,5 +1,5 @@
 import os 
-from elasticsearch.helpers.test import SkipTest, get_test_client
+# from elasticsearch.helpers.test import SkipTest, get_test_client
 from elasticsearch_dsl.connections import connections, add_connection
 from mock import Mock 
 import pytest
@@ -14,14 +14,14 @@ def test_app():
       client = TestClient(app)
       yield client
 
-@fixture(scope='session')
-def es_client():
-    try:
-        connection = get_test_client(nowait='WAIT_FOR_ES' not in os.environ)
-        add_connection('default', connection)
-        return connection
-    except SkipTest:
-        skip()
+# @fixture(scope='session')
+# def es_client():
+#     try:
+#         connection = get_test_client(nowait='WAIT_FOR_ES' not in os.environ)
+#         add_connection('default', connection)
+#         return connection
+#     except SkipTest:
+#         skip()
 
 @pytest.fixture
 def create_dummy_weights(tmpdir): 
