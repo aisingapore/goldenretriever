@@ -186,7 +186,6 @@ def make_finetune(row, gr, kb_name='default_kb', query_col_name='queries', answe
 def make_contrastive_finetune(row, gr, kb_name='default_kb', query_col_name='queries', answer_col_name='answer', closewrong_col_name='closewrong'):
     """
     Stochastic finetuning for contrastive loss.
-    
     """
     loss = gr.finetune(question=[row[query_col_name]], answer=[gr.text[kb_name][row[answer_col_name][0]]], context=[gr.text[kb_name][row[answer_col_name][0]]], label=[1])
     print('1: ', loss)

@@ -403,7 +403,17 @@ class kb_handler():
 
 
     def load_es_kb(self, kb_names=[]):
+        """
+        Load knowledge base from ES
 
+        args:
+        ----
+            kb_names: (list of str) names of kbs to load
+        
+        Return:
+        ------
+            kbs: (list of kb_objects)
+        """
         # create connection
         es = Elasticsearch()
         

@@ -119,8 +119,6 @@ if __name__ == "__main__":
     """
     if CONFIG.task_type == 'train_eval':
         logger.info("Fine-tuning model")
-            # Required for contrastive loss
-            # label = tf.placeholder(tf.int32, [None], name='label')
 
         # see the performance of out of box model
         OOB_overall_eval, eval_dict = eval_model(model, df, test_dict)
@@ -196,7 +194,6 @@ if __name__ == "__main__":
 
             # Model checkpoint
             if epoch_eval_score > highest_epoch_eval_score:
-            # if cost_mean_total < lowest_cost:
                 best_epoch = i
                 lowest_cost = cost_mean_total
                 highest_epoch_eval_score = epoch_eval_score

@@ -1,4 +1,3 @@
-
 """
 Internal state object stores persistent per-session variables.
 

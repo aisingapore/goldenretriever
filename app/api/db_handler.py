@@ -86,8 +86,7 @@ def ensure_connection(conn, conn_path):
             cursor = conn.cursor()
             conn.execute("SELECT * FROM dbo.users").fetchall()
             return conn, cursor
-        except Exception as e:    
-            # if e.__class__ == pyodbc.OperationalError:   
+        except Exception as e:     
             # make the SQL connection and cursor
             print(f"retry count: {retry_count}")
             retry_count += 1

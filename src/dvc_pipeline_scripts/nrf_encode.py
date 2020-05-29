@@ -8,8 +8,8 @@ example script of how to vectorize responses in KB and save them into a simple n
 to be used at query time 
 """
 
-
 def get_responses_and_contexts(filepath):
+    """Read csv file and return responses and contexts"""
     df = pd.read_csv(filepath)
     responses = df['ans_str'].tolist()[0:5]
     contexts = [' '] * len(responses)
@@ -17,12 +17,14 @@ def get_responses_and_contexts(filepath):
 
 
 def extract_response_embeddings(tfhub_module_url, responses, contexts):
+    """Extract encoded responses"""
     embs = USEResponseEncoder(tfhub_module_url).encode(responses, contexts)
     print(f"responses created with dim {len(embs['outputs'][0])}")
     return embs
 
 
 def index_responses(responses, embs, output_folder, index_prefix):
+    """Index responses w SimpleNNIndex class"""
     simple_nn = SimpleNNIndex(len(embs['outputs'][0]))
     simple_nn.build(responses, embs)
     simple_nn.save(output_folder, index_prefix)

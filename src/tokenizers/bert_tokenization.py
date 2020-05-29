@@ -30,10 +30,6 @@ import six
 import tensorflow as tf
 
 
-
-
-
-
 # tokenizer utility functions
 def get_masks(tokens, max_seq_length):
     """Mask for padding"""
