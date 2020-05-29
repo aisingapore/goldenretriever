@@ -1,6 +1,5 @@
 azure-storage-blob
 pandas 
-pyodbc
 scikit-learn
 tensorflow==2.1.0
 tensorflow-hub
