@@ -5,21 +5,64 @@ import random
 import numpy as np
 import shutil
 
-from src.models import GoldenRetriever
-from src.encoders import USEEncoder
-from src.data_handler.kb_handler import kb, kb_handler
+from mock import Mock
 from sklearn.model_selection import train_test_split
 
+from src.models import GoldenRetriever
+from src.encoders import USEEncoder
+from src.data_handler.kb_handler import kb, kb_handler, generate_mappings
 
-CONN_STR = os.environ['CONN_STR']
+
+def load_es_kb():
+    kbs = []
+
+    responses = [
+        "Personal data refers to data, whether true or not...",
+        "The PDPA was implemented in phases to allow time for organisations to...",
+        "The PDPA aims to safeguard individuals personal data...",
+        "The PDPA will strengthen Singapore's overall economic competitiveness...",
+        "The provisions of the PDPA were formulated keeping in mind"
+    ]
+
+    queries = [
+        "What is personal data?",
+        "When did the PDPA come into force?",
+        "What are the objectives of the PDPA?",
+        "How does the PDPA benefit business?",
+        "How will the PDPA impact business costs?"
+    ]
+
+    query_id = [0, 1, 2, 3, 4]
+    clause_id = [0, 1, 2, 3, 4]
+    d = {
+        "clause_id": clause_id, "raw_string": responses, "processed_string": responses,
+        "context_string": responses, "query_string": queries, "query_id": query_id
+    }
+
+    df = pd.DataFrame(d)
+
+    mappings = generate_mappings(df.processed_string, df.query_string)
+
+    responses_df = df.loc[:, ['clause_id', 'raw_string', 'context_string']]
+    queries_df = df.loc[:, ['query_id', 'query_string']]
+    nrf = kb('nrf', responses_df, queries_df, mappings)
+    kbs.append(nrf)
+    return kbs
 
 
-def test_make_query():
+def test_make_query(monkeypatch):
+
+    def mock_load_es_kb(*args, **kwargs):
+        return load_es_kb()
+
+    monkeypatch.setattr(kb_handler, 'load_es_kb', mock_load_es_kb)
     use = USEEncoder()
     gr = GoldenRetriever(use)
-    kbh = kb_handler() 
-    nrf = kbh.load_sql_kb(cnxn_str=CONN_STR, cnxn_path="", kb_names=["nrf"])
-    gr.load_kb(nrf)
+
+    kbh = kb_handler()
+    kbs = kbh.load_es_kb()
+
+    gr.load_kb(kbs)
 
     querystring = "Can I change funding source"
     actual = gr.make_query(querystring, top_k=5, index=False, predict_type="query", kb_name="nrf")
@@ -112,17 +155,20 @@ def create_delete_model_savepath():
     shutil.rmtree(savepath)
 
 
-def test_finetune_export_restore(create_delete_model_savepath):
+def test_finetune_export_restore(monkeypatch, create_delete_model_savepath):
+
+    def mock_load_es_kb(*args, **kwargs):
+        return load_es_kb()
+
+    monkeypatch.setattr(kb_handler, 'load_es_kb', mock_load_es_kb)
     use = USEEncoder()
     gr = GoldenRetriever(use)
 
+    kbh = kb_handler()
+    kbs = kbh.load_es_kb()
+
     train_dict = dict()
     test_dict = dict()
-
-    # Get df using kb_handler
-    kbh = kb_handler()
-    kbs = kbh.load_sql_kb(cnxn_str=CONN_STR, cnxn_path="",
-                          kb_names=['PDPA'])
 
     df = pd.concat([single_kb.create_df() for single_kb in kbs]).reset_index(drop='True')
     kb_names = df['kb_name'].unique()
@@ -137,12 +183,9 @@ def test_finetune_export_restore(create_delete_model_savepath):
 
     train_dataset_loader = random_triplet_generator(df, train_dict)
 
-    
     for i in range(1):
         cost_mean_total = 0
         batch_counter = 0
-
-        train_dataset_loader = random_triplet_generator(df, train_dict)
 
         for q, r, neg_r in train_dataset_loader:
             
@@ -150,16 +193,17 @@ def test_finetune_export_restore(create_delete_model_savepath):
             if batch_counter == 1:
                 break
 
-            cost_mean_batch = gr.finetune(question=q, answer=r, context=r, \
-                                          neg_answer=neg_r, neg_answer_context=neg_r, \
-                                          margin=0.3, loss="triplet")
+            cost_mean_batch = gr.finetune(
+                question=q, answer=r, context=r,
+                neg_answer=neg_r, neg_answer_context=neg_r,
+                margin=0.3, loss="triplet"
+            )
 
             cost_mean_total += cost_mean_batch
 
             batch_counter += 1
 
     initial_pred = gr.predict("What is personal data?")
-
     save_dir = create_delete_model_savepath
     gr.export_encoder(save_dir=save_dir)
 
@@ -172,16 +216,3 @@ def test_finetune_export_restore(create_delete_model_savepath):
     assert cost_mean_total != 0.0000
     assert os.path.isdir(save_dir)
     assert np.array_equal(initial_pred, restored_pred)
-
-
-def test_load_kb():
-    use = USEEncoder()
-    gr = GoldenRetriever(use)
-    kbh = kb_handler()
-
-    pdpa_df = pd.read_csv('./data/pdpa.csv')
-    pdpa = kbh.parse_df('pdpa', pdpa_df, 'answer', 'question', 'meta')
-
-    gr.load_kb(pdpa)
-
-    assert isinstance(gr.kb["pdpa"], kb)
