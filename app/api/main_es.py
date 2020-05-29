@@ -100,8 +100,9 @@ def save_feedback(feedback_request: FeedbackRequest):
     -----
         feedback_request: (pydantic BaseModel) 
         class FeedbackRequest(BaseModel):
+            index_name: str
             query_id: str
-            is_correct: List[bool]
+            is_correct: List[int]
 
     Return:
     -------
