@@ -23,8 +23,6 @@ ES_URL = 'localhost:9200'
 QUERY_LOG = 'querylog'
 
 # query log schema
-
-
 class QueryLog(Document):
     created_at = Date()
     query_id = Text()

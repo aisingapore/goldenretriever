@@ -20,9 +20,9 @@ connections.create_connection(hosts=[ES_URL])
 enc = USEEncoder()
 gr = GoldenRetriever(enc)  # use gr_2.restore_encoder(save_dir=save_dir) if instantiating a saved model 
 
-@app.get("/ping")
-def pong():
-    return {"ping": "pong!"}
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
 
 @app.get("/query/{query_string}/{k}")
 def query(query_string: str, k: int = 5):

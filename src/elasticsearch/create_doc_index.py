@@ -68,7 +68,6 @@ if __name__ == '__main__':
             return super().save(**kwargs)
 
     # connect to ES instance and start indexing
-    connections.create_connection(host=[args.url])
-    qa_pairs = pd.read_csv(args.csv_file).to_dict('records')
+    connections.create_connection(hosts=[args.url])
+    qa_pairs = pd.read_csv(args.csv_file).fillna('nan').to_dict('records')
     counter = upload_docs(qa_pairs)
-    print('successfully indexed {counter} documents')
