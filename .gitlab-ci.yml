@@ -1,20 +1,23 @@
-image: tmaier/docker-compose:latest
+variables:
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+
+# Official docker compose image.
+image:
+  name: docker/compose:latest
 
 services:
-    - docker:dind
-    
-before_script:
-    - docker info 
-    - docker-compose --version 
-    
-buildJob:
-    stage:build
-    tags:
-        - docker
-    script:
-        -docker-compose build 
+  - docker:dind
 
-# evaluate:
-#   script:
-#     - chmod +x ./evaluate_code.sh
-#     - ./evaluate_code.sh
+before_script:
+  - docker version
+  - docker-compose version
+
+build:
+  stage: build
+  script:
+    - docker-compose down
+    - docker-compose build
+    - docker-compose up 
+    - chmod +x ./evaluate_code.sh
+    - ./evaluate_code.sh
