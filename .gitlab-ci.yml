@@ -1,6 +1,20 @@
-image: continuumio/miniconda
+image: tmaier/docker-compose:latest
 
-evaluate:
-  script:
-    - chmod +x ./evaluate_code.sh
-    - ./evaluate_code.sh
+services:
+    - docker:dind
+    
+before_script:
+    - docker info 
+    - docker-compose --version 
+    
+buildJob:
+    stage:build
+    tags:
+        - docker
+    script:
+        -docker-compose build 
+
+# evaluate:
+#   script:
+#     - chmod +x ./evaluate_code.sh
+#     - ./evaluate_code.sh
