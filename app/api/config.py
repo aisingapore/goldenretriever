@@ -8,10 +8,10 @@ PROJECT_ROOT = abspath(dirname(dirname(dirname(__file__))))
 DOTENV_PATH = join(PROJECT_ROOT, '.env')
 
 # paths for nearest neighbor index
-INDEX_BUCKET = 'nrf-index'
-INDEX_PICKLE = 'nrf-data.pkl'
-INDEX_FILE = 'nrf.idx'
-INDEX_PREFIX = 'nrf'
+INDEX_BUCKET = 'pdpa-index'
+INDEX_PICKLE = 'pdpa-data.pkl'
+INDEX_FILE = 'pdpa.idx'
+INDEX_PREFIX = 'pdpa'
 INDEX_FOLDER = join(PROJECT_ROOT, 'model_artefacts')
 INDEX_PICKLE_PATH = join(INDEX_FOLDER, INDEX_PICKLE)
 INDEX_FILE_PATH = join(INDEX_FOLDER, INDEX_FILE)
@@ -42,4 +42,4 @@ class QueryLog(Document):
 
 
 # qa index name 
-QA_INDEX = 'qa_nrf'
+QA_INDEX = 'qa_pdpa'

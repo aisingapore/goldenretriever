@@ -20,7 +20,7 @@ def upload_docs(qa_pairs):
         assumes that index fields correspond to template in create_doc_index.py
     Args:
         full_text: full text of document containing answer
-        qa_pairs: list of dictionaries with key:value='ans_id':integer, 'ans_str':str, 'ans_index'=integer, 'query_str'=str, 'query_id'=integer
+        qa_pairs: list of dictionaries with key:value='ans_id':integer, 'ans_str':str, 'query_str'=str, 'query_id'=integer
     Returns: 
         document and qa_pair indexed to Elastic
     """
