@@ -14,15 +14,6 @@ def test_app():
       client = TestClient(app)
       yield client
 
-# @fixture(scope='session')
-# def es_client():
-#     try:
-#         connection = get_test_client(nowait='WAIT_FOR_ES' not in os.environ)
-#         add_connection('default', connection)
-#         return connection
-#     except SkipTest:
-#         skip()
-
 @pytest.fixture
 def create_dummy_weights(tmpdir): 
     d = tmpdir.mkdir('test_folder')
@@ -35,3 +26,5 @@ def create_dummy_weights(tmpdir):
 
     tar_path = os.path.join(os.getcwd(), "weights.tar.gz")
     yield tar_path
+
+    os.remove("./weights.tar.gz")
