@@ -14,6 +14,11 @@ class MockFeedbackResponse:
     def json():
         return {'resp': 'updated'}
 
+class MockUploadWeightsResponse:
+    @staticmethod
+    def json():
+        return {'message': 'success'}
+
 
 @pytest.fixture
 def mock_upload_weights():
@@ -47,18 +52,6 @@ def test_qa_service_invalid_request(test_app, monkeypatch):
     assert response == 'invalid request parameters'
 
 
-# def test_qa_service_integration(test_app):
-#     query_string = 'debarring principal investigators' 
-#     k = 1
-
-#     response = test_app.get(f'/query/{query_string}/{k}')
-#     answers = response.json()['resp']
-#     query_id = response.json()['query_id']
-#     assert response.status_code == 200
-#     assert type(answers) == list
-#     assert type(query_id) == str
-
-
 def test_qa_service_invalid_request_integration(test_app, monkeypatch):
     async def mock_make_query(query_string, k):
         return None
@@ -90,7 +83,11 @@ def test_upload_with_minio_mocked(test_app, create_dummy_weights, monkeypatch):
          'object_name': 'weights.tar.gz'} 
     tar_path = create_dummy_weights
     files = {'file': open(tar_path, 'rb')}
-    monkeypatch.setattr(upload_weights_service_es, 'upload_weights', mock_upload_weights)
+
+    def mock_upload_weights(*args, **kwargs):
+        return MockUploadWeightsResponse()
+
+    monkeypatch.setattr(test_app, 'post', mock_upload_weights)
     response = test_app.post("/upload_weights", data=d, files=files)
     js = response.json()
     assert js['message'] == 'success'
