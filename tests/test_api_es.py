@@ -47,16 +47,16 @@ def test_qa_service_invalid_request(test_app, monkeypatch):
     assert response == 'invalid request parameters'
 
 
-def test_qa_service_integration(test_app):
-    query_string = 'debarring principal investigators' 
-    k = 1
+# def test_qa_service_integration(test_app):
+#     query_string = 'debarring principal investigators' 
+#     k = 1
 
-    response = test_app.get(f'/query/{query_string}/{k}')
-    answers = response.json()['resp']
-    query_id = response.json()['query_id']
-    assert response.status_code == 200
-    assert type(answers) == list
-    assert type(query_id) == str
+#     response = test_app.get(f'/query/{query_string}/{k}')
+#     answers = response.json()['resp']
+#     query_id = response.json()['query_id']
+#     assert response.status_code == 200
+#     assert type(answers) == list
+#     assert type(query_id) == str
 
 
 def test_qa_service_invalid_request_integration(test_app, monkeypatch):
