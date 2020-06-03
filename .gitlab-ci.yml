@@ -1,23 +1,6 @@
-variables:
-  DOCKER_HOST: tcp://docker:2375/
-  DOCKER_DRIVER: overlay2
+image: continuumio/miniconda
 
-# Official docker compose image.
-image:
-  name: docker/compose:latest
-
-services:
-  - docker:dind
-
-before_script:
-  - docker version
-  - docker-compose version
-
-build:
-  stage: build
+evaluate:
   script:
-    - docker-compose down
-    - docker-compose build
-    - docker-compose up 
     - chmod +x ./evaluate_code.sh
     - ./evaluate_code.sh
