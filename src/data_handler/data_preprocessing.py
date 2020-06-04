@@ -6,12 +6,8 @@ def question_cleaner(df_query):
     """
     used in the notebook "model_funetuning" for insuranceQA dataset to extract those questions which have answers
 
-    Parameters:
-    df_query: all the questions and answers
-
-    Returns:
-    only questions that have answers
-
+    :param df_query: all the questions and answers
+    :return: only questions that have answers
     """
     kb=([int(xx) for xx in (df_query[3].iloc[0]).split(' ')])
     gt = [int(xx) for xx in (df_query[2].iloc[0]).split(' ')]
@@ -31,7 +27,6 @@ def question_cleaner(df_query):
 def display_qn_and_ans(df_query, df_doc, index=0):
     """
     used in the notebook "model_funetuning" for insuranceQA dataset to display question, answer index and answers
-
     """
     kb=[int(xx) for xx in (df_query[3].iloc[index]).split(' ')]
     gt = [int(xx) for xx in (df_query[2].iloc[index]).split(' ')]
@@ -61,7 +56,6 @@ def split_txt(text, qa=False):
     """
     Splits a text document into clauses based on whitespaces. 
     Additionally, reads a faq document by assuming that the first line is a question between each whitespaced group
-
     """
     condition_terms = []
     stringg=''
@@ -82,9 +76,8 @@ def read_kb_csv(csv_path, meta_col='meta', answer_col='answer', query_col='quest
     """
     Only read organization meta, not personal. index=196
     
-    Parameters: 
-    cutoff(int): cutoff index in dataset. only read organization meta
-
+    :type cutoff: int
+    :param cutoff: cutoff index in dataset. only read organization meta
     """
     df = pd.read_csv(csv_path)
     if cutoff:
@@ -125,7 +118,6 @@ def aiap_qna_quickscore(aiap_context, answer_array, aiap_qa, model, k=1):
 def ranker(model, question_vectors, df_query, df_doc):
     """
     for model evaluation on InsuranceQA datset
-    
     """
     predictions=[]
     gts=[]
@@ -143,7 +135,6 @@ def ranker(model, question_vectors, df_query, df_doc):
 def scorer(predictions, gts, k=3):
     """
     For model evaluation on InsuranceQA datset. Returns score@k.
-    
     """
     score=0
     total=0
@@ -156,7 +147,6 @@ def scorer(predictions, gts, k=3):
 def make_pred(row, gr, query_col_name='queries', top_k=3):
     """
     Make line by line predictions, returns top 3 index of kb.
-    
     """
     txt, ind = gr.make_query(row['queries'], top_k=top_k, index=True)
     return ind
@@ -178,7 +168,6 @@ def make_closewrong(row, prediction_col_name='predictions', answer_col_name='ans
 def make_finetune(row, gr, kb_name='default_kb', query_col_name='queries', answer_col_name='answer', closewrong_col_name='closewrong'):
     """
     Stochastic finetuning sample by sample.
-    
     """
     loss = gr.finetune([row[query_col_name]], [gr.text[kb_name][row[answer_col_name][0]]], [gr.text[kb_name][row[answer_col_name][0]]], [gr.text[kb_name][row[closewrong_col_name]]], [gr.text[kb_name][row[closewrong_col_name]]])
     print(loss)
