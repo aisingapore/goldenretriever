@@ -346,6 +346,9 @@ class ALBERTEncoder(Encoder):
             return response_embedding
 
     def encode(self, text, context=None, string_type='response'):
+        """
+        Encode an iterable of strings
+        """
         encoded_strings = [self._encode_one_str(t, string_type=string_type)
                            for t in text]
 

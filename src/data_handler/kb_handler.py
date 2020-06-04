@@ -269,24 +269,15 @@ class kb_handler():
         """
         Function to convert PDFs to Dataframe with columns as index number & paragraphs.
 
-        Parameters
-        ----------
-
-        PDF_file_path : string
-            The filename and path of pdf 
-
-        header: string
-            To remove the header in each page
-
-        NumOfAppendix: int
-            To remove the Appendix after the main content
-            
-        kb_name: str
-            Name of returned kb object
-
-        Returns
-        -------------
-        kb : kb object
+        :type PDF_file_path: str
+        :type header: str
+        :type NumOfAppendix: int
+        :type kb_name: str
+        :param PDF_file_path: The filename and path of pdf
+        :param header: To remove the header in each page
+        :param NumOfAppendix: To remove the Appendix after the main content
+        :param kb_name: Name of returned kb object
+        :return: kb class object
         """
 
         raw = parser.from_file(PDF_file_path)
