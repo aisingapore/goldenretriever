@@ -14,12 +14,9 @@ def mrr(ranks):
     Calculate mean reciprocal rank
     Function taken from: https://github.com/google/retrieval-qa-eval/blob/master/squad_eval.py
 
-    Args:
-    -----
-        ranks: (list) predicted ranks of the correct responses 
-    return:
-    -------
-        mrr: (float)
+    :type ranks: list
+    :param ranks: predicted ranks of the correct responses 
+    :return: float value containing the MRR 
     """
     return sum([1/v for v in ranks])/len(ranks)
 
@@ -28,12 +25,9 @@ def recall_at_n(ranks, n=3):
     Calculate recall @ N
     Function taken from: https://github.com/google/retrieval-qa-eval/blob/master/squad_eval.py
 
-    Args:
-    -----
-        ranks: (list) predicted ranks of the correct responses 
-    return:
-    -------
-        Recall@N: (float)
+    :type ranks: list
+    :param ranks: predicted ranks of the correct responses 
+    :return: float value containing the Recall@N
     """
     num = len([rank for rank in ranks if rank <= n])
     return num / len(ranks)
@@ -42,12 +36,9 @@ def get_eval_dict(ranks):
     """
     Score the predicted ranks according to various metricss
 
-    args:
-    ----
-        ranks: (list) predicted ranks of the correct responses 
-    return:
-    -------
-        eval_dict: (dict) contains the metrics and their respective keys
+    :type ranks: list
+    :param ranks: predicted ranks of the correct responses 
+    :return: dict that contains the metrics and their respective keys
     """
     eval_dict = {}
     eval_dict['mrr_score'] = mrr(ranks)
@@ -61,27 +52,26 @@ def eval_model(model, df, test_dict):
     """
     Evalutate golden retriever object
 
-    args:
-    ----
-        model: goldenretriever object
-        df: contains the responses and queries
-        test_dict: contains the indices of the test data in df
-
-    return:
-    ------
-        overall_eval: (pd.DataFrame) contains the metrics
-        eval_dict: (dict) of the same metrics
+    :type model: GoldenRetriever's Model class object
+    :type df: pd.DataFrame
+    :type test_dict: dict
+    :param model:GoldenRetriever's Model class object
+    :param df: Contains the query response pairs
+    :param test_dict: pContains the indices of train test pairs
+    :return overall_eval: pd.DataFrame that contains the metrics
+    :return eval_dict: dict of the same metrics
 
     Sample output:
-    -------------
-                               mrr_score  r1_score  r2_score  r3_score
-    PDPA                        0.640719  0.525424  0.627119  0.720339
-    nrf                         0.460211  0.275862  0.482759  0.528736
-    critical-illness-insurance  0.329302  0.178571  0.342857       0.4
-    other-insurance             0.474588  0.259259  0.444444  0.611111
-    Steam_engine                0.689601  0.550388  0.744186  0.775194
-    1973_oil_crisis             0.781951   0.65625   0.84375  0.890625
-    Across_all_kb               0.551312  0.402027  0.570946  0.636824
+    .. Highlight:: python
+    .. Code-block:: python
+                                    mrr_score  r1_score  r2_score  r3_score
+        PDPA                        0.640719  0.525424  0.627119  0.720339
+        nrf                         0.460211  0.275862  0.482759  0.528736
+        critical-illness-insurance  0.329302  0.178571  0.342857       0.4
+        other-insurance             0.474588  0.259259  0.444444  0.611111
+        Steam_engine                0.689601  0.550388  0.744186  0.775194
+        1973_oil_crisis             0.781951   0.65625   0.84375  0.890625
+        Across_all_kb               0.551312  0.402027  0.570946  0.636824
     """
     eval_dict = {}
 

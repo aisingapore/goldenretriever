@@ -45,6 +45,5 @@ def upload_weights(params, files=None):
     
     # upload file
     if files is not None:
-        # print(files.filename)
         minio_client.upload_model_weights(BUCKET_NAME, OBJECT_NAME, files.filename)
     return 'success'

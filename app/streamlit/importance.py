@@ -135,9 +135,6 @@ def importance_by_erasure(model, response_string, query_string, verbose=False):
     word_importance_df['word'] = {idx:word for idx,word in enumerate(list_of_words_and_puncs)}
     word_importance_df['importance'] = word_importance
     word_importance_df = pd.DataFrame(word_importance_df).round(4)
-    
-    # add space to front of every 
-    # word_importance_df.word =  word_importance_df.word.apply(add_period)
         
     return word_importance_df
 
@@ -165,7 +162,6 @@ def partial_highlight(word_importance_, k=-1, sns_palette_str = "YlOrBr"):
 
     # create new columns
     word_importance_ = word_importance_.assign(working_string = word_importance_.word)
-    # word_importance_.working_string = word_importance_.working_string.apply(add_period)
     
     # get idx of most importance words, 
     # Quite impt, this idx will also determine the order of the color

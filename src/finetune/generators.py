@@ -11,22 +11,27 @@ from sklearn.metrics.pairwise import cosine_similarity
 def _generate_neg_ans(df, train_dict, CONFIG):
     """
     Generates negative answer from dataframe by randomization
-    
-    Returns a dict, with keys pointing to each kb, pointing to 
-    2 arrays of indices, one of correct answers and one of wrong answers,
-    generated randomly
 
+    :type df: pd.DataFrame
+    :type train_dict: dict
+    :type CONFIG: config object
+    :param df: Contains the query response pair
+    :param train_dict: Contains the indices of train test pairs
+    :param CONFIG: config object
+    :return: a dict, with keys pointing to each kb, pointing to 2 arrays of indices, one of correct answers and one of wrong answers, generated randomly
+    
     Sample output:
-    --------------
-    {'PDPA': [array([ 95,  84,  42, 185, 187, 172, 145,  71,   5,  36,  43, 153,  70,
-                    66,  53,  98, 180,  94, 138, 176,  79,  87, 103,  67,  24,   8]),
-              array([141, 129, 155,   5, 108, 180,  63,   0, 143, 130,  98, 132,  61,
-                     138,  24, 187,  86, 153,  94, 140, 162, 109,  56, 105, 185, 165])],
-     'nrf': [array([214, 240, 234, 235, 326, 244, 226, 252, 317, 331, 259, 215, 333,
-                    283, 299, 263, 220, 204]),
-              array([249, 245, 331, 290, 254, 249, 249, 261, 296, 251, 214, 240, 275,
-                     210, 223, 259, 212, 205])]}
-    """
+    .. Highlight:: python
+    .. Code-block:: python
+        {'PDPA': [array([ 95,  84,  42, 185, 187, 172, 145,  71,   5,  36,  43, 153,  70,
+                        66,  53,  98, 180,  94, 138, 176,  79,  87, 103,  67,  24,   8]),
+                array([141, 129, 155,   5, 108, 180,  63,   0, 143, 130,  98, 132,  61,
+                        138,  24, 187,  86, 153,  94, 140, 162, 109,  56, 105, 185, 165])],
+        'nrf': [array([214, 240, 234, 235, 326, 244, 226, 252, 317, 331, 259, 215, 333,
+                        283, 299, 263, 220, 204]),
+                array([249, 245, 331, 290, 254, 249, 249, 261, 296, 251, 214, 240, 275,
+                        210, 223, 259, 212, 205])]}
+"""
     train_dict_with_neg = {}
     random.seed(CONFIG.random_seed)
 
@@ -51,32 +56,42 @@ def _generate_neg_ans(df, train_dict, CONFIG):
 
 def _generate_hard_neg_ans(df, train_dict, model, CONFIG):
     """
-    Generates negative answer from dataframe by randomization
+    Generates negative answer from dataframe by based on model selection.
+
+    :type df: pd.DataFrame
+    :type train_dict: dict
+    :type CONFIG: config object
+    :param df: Contains the query response pairs
+    :param train_dict: Contains the indices of train test pairs
+    :param CONFIG: config object
+    :param model: GoldenRetriever's Model class object
+    :return: a dict, with keys pointing to each kb, pointing to 2 arrays of indices, one of correct answers and one of wrong answers, generated randomly
     
     Sample output:
-    --------------
-    {'PDPA': [array([ 95,  84,  42, 185, 187, 172, 145,  71,   5,  36,  43, 153,  70,
-                    140, 165,   0,  78, 162,  68, 184, 179,  30, 106,  13,  72,  17,
-                    18,  38, 109,  47, 113,  56,  27,  63, 147, 105, 121,   2,  80,
-                    182,  61,  49, 135, 193,  91,   4, 100, 141, 129, 159, 132, 108,
-                    155, 130,  86,  93, 137, 144,  58,  60, 107, 143, 194,  34,  14,
-                    66,  53,  98, 180,  94, 138, 176,  79,  87, 103,  67,  24,   8]),
-              array([141, 129, 155,   5, 108, 180,  63,   0, 143, 130,  98, 132,  61,
-                     103, 137,  13,  17,  71, 107, 144, 121,  68,  66, 184, 179, 135,
-                     113, 194,  58,  53, 193,  34,  42,  78,  60, 106, 182,  72, 172,
-                     145, 100, 176,  36, 159,  30,  14,  93,  43,  95,  79,   2,  87,
-                       8,  18, 147,  91,  49,   4,  70,  67,  84,  80,  27,  47,  38,
-                     138,  24, 187,  86, 153,  94, 140, 162, 109,  56, 105, 185, 165])],
-     'nrf': [array([214, 240, 234, 235, 326, 244, 226, 252, 317, 331, 259, 215, 333,
-                    318, 276, 267, 251, 329, 257, 261, 243, 245, 203, 337, 255, 287,
-                    315, 296, 279, 209, 197, 227, 200, 304, 223, 198, 282, 289, 205,
-                    319, 212, 254, 256, 303, 338, 230, 210, 262, 249, 294, 290, 275,
-                    283, 299, 263, 220, 204]),
-              array([249, 245, 331, 290, 254, 249, 249, 261, 296, 251, 214, 240, 275,
-                     294, 319, 337, 215, 197, 200, 257, 289, 203, 282, 252, 315, 317,
-                     230, 283, 304, 279, 333, 249, 299, 204, 318, 326, 262, 287, 256,
-                     234, 303, 235, 243, 276, 198, 338, 220, 329, 255, 209, 263, 267,
-                     210, 223, 259, 212, 205])]}
+    .. Highlight:: python
+    .. Code-block:: python
+        {'PDPA': [array([ 95,  84,  42, 185, 187, 172, 145,  71,   5,  36,  43, 153,  70,
+                        140, 165,   0,  78, 162,  68, 184, 179,  30, 106,  13,  72,  17,
+                        18,  38, 109,  47, 113,  56,  27,  63, 147, 105, 121,   2,  80,
+                        182,  61,  49, 135, 193,  91,   4, 100, 141, 129, 159, 132, 108,
+                        155, 130,  86,  93, 137, 144,  58,  60, 107, 143, 194,  34,  14,
+                        66,  53,  98, 180,  94, 138, 176,  79,  87, 103,  67,  24,   8]),
+                array([141, 129, 155,   5, 108, 180,  63,   0, 143, 130,  98, 132,  61,
+                        103, 137,  13,  17,  71, 107, 144, 121,  68,  66, 184, 179, 135,
+                        113, 194,  58,  53, 193,  34,  42,  78,  60, 106, 182,  72, 172,
+                        145, 100, 176,  36, 159,  30,  14,  93,  43,  95,  79,   2,  87,
+                        8,  18, 147,  91,  49,   4,  70,  67,  84,  80,  27,  47,  38,
+                        138,  24, 187,  86, 153,  94, 140, 162, 109,  56, 105, 185, 165])],
+        'nrf': [array([214, 240, 234, 235, 326, 244, 226, 252, 317, 331, 259, 215, 333,
+                        318, 276, 267, 251, 329, 257, 261, 243, 245, 203, 337, 255, 287,
+                        315, 296, 279, 209, 197, 227, 200, 304, 223, 198, 282, 289, 205,
+                        319, 212, 254, 256, 303, 338, 230, 210, 262, 249, 294, 290, 275,
+                        283, 299, 263, 220, 204]),
+                array([249, 245, 331, 290, 254, 249, 249, 261, 296, 251, 214, 240, 275,
+                        294, 319, 337, 215, 197, 200, 257, 289, 203, 282, 252, 315, 317,
+                        230, 283, 304, 279, 333, 249, 299, 204, 318, 326, 262, 287, 256,
+                        234, 303, 235, 243, 276, 198, 338, 220, 329, 255, 209, 263, 267,
+                        210, 223, 259, 212, 205])]}
     """
     train_dict_with_neg = {}
     random.seed(CONFIG.random_seed)
@@ -117,6 +132,9 @@ def _generate_hard_neg_ans(df, train_dict, model, CONFIG):
     return train_dict_with_neg
 
 def gen(query, response, neg_response, CONFIG, shuffle_data=False):
+    """
+    Create a generator that of queries, responses and negative responses.
+    """
     batch_size = CONFIG.train_batch_size
     random.seed(CONFIG.random_seed)
     zip_list = list(zip(query,response,neg_response))
@@ -134,6 +152,9 @@ def gen(query, response, neg_response, CONFIG, shuffle_data=False):
             yield(q_batch, r_batch, neg_r_batch)
 
 def random_triplet_generator(df, train_dict, CONFIG):
+    """
+    Returns a generator that gives batches of training triplets
+    """
     train_dict_with_neg = _generate_neg_ans(df, train_dict, CONFIG)
     train_pos_idxs = np.concatenate([v[0] for k,v in train_dict_with_neg.items()], axis=0)
     train_neg_idxs = np.concatenate([v[1] for k,v in train_dict_with_neg.items()], axis=0)

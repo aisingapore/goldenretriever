@@ -17,14 +17,9 @@ def unique_indexing(non_unique):
     """
     Convert a non_unique string pd.Series into a list of its indices of its unique list
     
-    Args:
-    -----
-        non_unique: (pd.Series) containing non_unique values
-    
-    Return:
-    ------
-        idxed_non_uniques: (list) contains the index of non unique values
-                                  indexed by the unique values
+    :type non_unique: pd.Series
+    :param non_unique: containing non_unique values
+    :return: list contains the index of non unique values indexed by the unique values
     """
     unique = non_unique.drop_duplicates().tolist()
     non_unique = non_unique.tolist()
@@ -35,20 +30,15 @@ def generate_mappings(responses, queries):
     """
     Generate a list of list mappings between responses and queries
     The length of responses and queries must be the same.
-    
-    
-    To note, the argument takes Responses then Queries ...
+    To note, the argument takes Responses then Queries 
     but the returned mappings list Queries then Responses 
     for convenient use in downstream scripts
 
-    Args:
-    ---
-        responses: (pd.Series) contains query strings, may be non unique
-        queries: (pd.Series) contains query strings, may be non unique
-
-    Return:
-    ------
-        mappings: (list of list of ints) contains mappings between queries responses
+    :type responses: pd.Series
+    :type queries: pd.Series
+    :param responses: contains query strings, may be non unique
+    :param queries: contains query strings, may be non unique
+    :return: mappings that is a list of list of ints containing mappings between queries responses
     """
     assert len(responses) == len(queries), "length of responses and queries do not match!"
 
@@ -65,32 +55,6 @@ def generate_mappings(responses, queries):
 
 
 class kb:
-    """
-    kb object holds the responses, queries, mapping and vectorised_responses.
-    
-    This class is used for all finetuning and training purposes.
-    Txt, csv and sql data can be loaded into this class with accompanying kb_handler class
-    
-    
-    Example:
-    -------    
-    # PDPA csv file
-    pdpa_df = pd.read_csv('../data/pdpa.csv')
-    pdpa = kbh.parse_df('pdpa', pdpa_df, 'answer', 'question', 'meta')
-
-    display(pdpa.responses)
-    display(pdpa.queries)
-    display(pdpa.mapping)
-
-    
-    #SQL kbs
-    kbs = kbh.load_sql_kb()
-    ii = -1
-    display(kbs[ii].name)
-    display(kbs[ii].responses)
-    display(kbs[ii].queries)
-    display(kbs[ii].mapping)
-    """
     def __init__(self, name, responses, queries, mapping, vectorised_responses=None):
         self.name = name
         self.responses = responses
@@ -106,9 +70,7 @@ class kb:
         Importantly, if there is many-to-many matches between Queries and Responses
         the returned dataframe will have duplicates
 
-        Return:
-        ------
-            df: (pd.DataFrame) contains the columns query_string, processed_string, kb_name
+        :return: pd.DataFrame that contains the columns query_string, processed_string, kb_name
         """
         # get processed string
         processed_string_series = ( self.responses.context_string.fillna('') + ' ' + self.responses.raw_string.fillna('')).str.replace('\n','')
@@ -164,16 +126,17 @@ class kb_handler():
         """
         parses pandas DataFrame into responses, queries and mappings
         
-        args:
-        ------
-            kb_name: (str) name of kb to be held in kb object
-            df: (pd.DataFrame) contains the queries, responses and context strings
-            answer_col: (str) column name string that points to responses
-            query_col: (str) column name string that points to queries
-            context_col: (str) column name string that points to context strings
-        Return:
-        ------
-            kb object
+        :type kb_name: str
+        :type df: pd.DataFrame
+        :type answer_col: str
+        :type query_col: str
+        :type context_col: str
+        :param kb_name:  name of kb to be held in kb object
+        :param df: contains the queries, responses and context strings
+        :param answer_col:  column name string that points to responses
+        :param query_col: column name string that points to queries
+        :param context_col: column name string that points to context strings
+        :return: kb object
         """
         df = df.assign(context_string = '') if context_col == 'context_string' else df 
         df = df.rename(columns = {
@@ -213,20 +176,24 @@ class kb_handler():
         """
         Parse text file from kb path into query, response and mappings
         
-        args:
-        ----
-            path: (str) path to txt file, 
-                        it may also be the raw text, if there is no txt. extention
-            clause_sep: (str, default = '\n') Seperates the text file into their clauses
-            inner_clause_sep: (str, default = '') In the case that either query or context 
-                                                  string is encoded within the first few 
-                                                  sentences, inner_clause_sep may separate 
-                                                  the sentences and query_idx and context_idx
-                                                  will select the query and context strings 
-                                                  accordingly
-            query_idx: (int, default = None)
-            context_idx: (int, default = None)
-            kb_name: (str, default = name of path file)
+        :type path: str
+        :type clause_sep: str
+        :type inner_clause_sep: str
+        :type query_idx: int
+        :type context_idx: int
+        :type kb_name: str
+        :param path:  path to txt file, or raw text
+        :param clause_sep: In the case that either query or context 
+                            string is encoded within the first few 
+                            sentences, inner_clause_sep may separate 
+                            the sentences and query_idx and context_idx
+                            will select the query and context strings 
+                            accordingly
+        :param inner_clause_sep: See clause_sep
+        :param query_idx: See clause_sep
+        :param context_idx: See clause_sep
+        :param kb_name: name of output kb object
+        :return: kb class object
         """
 
         if path.endswith('txt'):
@@ -281,13 +248,17 @@ class kb_handler():
         Parse CSV file into kb format
         As pandas leverages csv.sniff to parse the csv, this function leverages pandas.
         
-        args:
-        ------
-            kb_name: (str) name of kb to be held in kb object
-            df: (pd.DataFrame) contains the queries, responses and context strings
-            answer_col: (str) column name string that points to responses
-            query_col: (str) column name string that points to queries
-            context_col: (str) column name string that points to context strings
+        :type kb_name: str
+        :type df: pd.DataFrame
+        :type answer_col: str
+        :type query_col: str
+        :type context_col: str
+        :param kb_name: name of output kb object
+        :param df: contains the queries, responses and context strings
+        :param answer_col: column name string that points to responses
+        :param query_col: column name string that points to queries
+        :param context_col: column name string that points to context strings
+        :return: kb class object
         """
         kb_name = kb_name if kb_name is not None else path.split('/')[-1].split('.')[0]
         df = pd.read_csv(path)
@@ -354,11 +325,13 @@ class kb_handler():
         text and vectorized_knowledge attributes 
         as dictionaries indexed by their respective kb names
 
-        args:
-            cnxn_path: (str) string directory of the connection string 
-                            that needs to be fed into pyodbc
-            kb_names: (list, default=[]) to list specific kb_names to parse
-                                         else if empty, parse all of them
+        :type cnxn_path: str
+        :type kb_names: list
+        :param cnxn_path: string directory of the connection string 
+                          that needs to be fed into pyodbc
+        :param kb_names: to list specific kb_names to parse
+                         else if empty, parse all of them
+        :return: list of kb class objects
         """
         if ".db" in cnxn_path:
             conn = sqlite3.connect(cnxn_path, check_same_thread=False)
@@ -403,7 +376,14 @@ class kb_handler():
 
 
     def load_es_kb(self, kb_names=[]):
+        """
+        Load the knowledge bases from elasticsearch
 
+        :type kb_names: list
+        :param kb_names: to list specific kb_names to parse
+                         else if empty, parse all of them
+        :return: list of kb class objects
+        """
         # create connection
         es = Elasticsearch()
         

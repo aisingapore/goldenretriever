@@ -25,6 +25,15 @@ services:
       interval: 30s
       timeout: 20s
       retries: 3
+  app:
+    build: .
+    depends_on:
+      - "elk"
+    ports:
+      - "80:80"
+    networks:
+      - esnet
+    command: ["./wait-for-it.sh", "elk:9200", "-t", "60", "--", "bash", "entrypoint.sh"]
 
 volumes:
   data:
@@ -32,3 +41,4 @@ volumes:
 
 networks:
   esnet:
+    driver: bridge

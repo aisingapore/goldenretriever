@@ -16,13 +16,13 @@ import pandas as pd
 
 
 def upload_docs(qa_pairs):
-    """adds document with qa pair to elastic index
-        assumes that index fields correspond to template in create_doc_index.py
-    Args:
-        full_text: full text of document containing answer
-        qa_pairs: list of dictionaries with key:value='ans_id':integer, 'ans_str':str, 'query_str'=str, 'query_id'=integer
-    Returns: 
-        document and qa_pair indexed to Elastic
+    """
+    adds document with qa pair to elastic index
+    assumes that index fields correspond to template in create_doc_index.py
+
+    :param full_text: full text of document containing answer
+    :param qa_pairs: list of dictionaries with key:value='ans_id':integer, 'ans_str':str, 'query_str'=str, 'query_id'=integer
+    :return: document and qa_pair indexed to Elastic
     """
     print('uploading docs')
     counter = 0
@@ -68,7 +68,6 @@ if __name__ == '__main__':
             return super().save(**kwargs)
 
     # connect to ES instance and start indexing
-    connections.create_connection(host=[args.url])
-    qa_pairs = pd.read_csv(args.csv_file).to_dict('records')
+    connections.create_connection(hosts=[args.url])
+    qa_pairs = pd.read_csv(args.csv_file).fillna('nan').to_dict('records')
     counter = upload_docs(qa_pairs)
-    print('successfully indexed {counter} documents')
