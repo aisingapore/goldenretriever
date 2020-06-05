@@ -40,7 +40,7 @@ def index_responses(responses, embs, output_folder, index_prefix):
     """Index responses w SimpleNNIndex class"""
     simple_nn = SimpleNNIndex(len(embs[0]))
     simple_nn.build(responses, embs)
-    simple_nn.save(output_folder, index_prefix)
+    simple_nn.save(output_folder + '/' + index_prefix)
     print(f'index saved to {output_folder}')
 
 
