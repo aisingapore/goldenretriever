@@ -60,6 +60,7 @@ def eval_model(model, df, test_dict):
     :param test_dict: pContains the indices of train test pairs
     :return overall_eval: pd.DataFrame that contains the metrics
     :return eval_dict: dict of the same metrics
+<<<<<<< HEAD
 
     Sample output:
     .. Highlight:: python
@@ -72,6 +73,8 @@ def eval_model(model, df, test_dict):
         Steam_engine                0.689601  0.550388  0.744186  0.775194
         1973_oil_crisis             0.781951   0.65625   0.84375  0.890625
         Across_all_kb               0.551312  0.402027  0.570946  0.636824
+=======
+>>>>>>> 043a6d5f6cb25f97b8800a6217a30f7065ebe853
     """
     eval_dict = {}
 
