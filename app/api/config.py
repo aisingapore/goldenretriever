@@ -2,10 +2,8 @@ from os.path import join, dirname, abspath
 from elasticsearch_dsl import Index, Document, Date, Integer, Text, Boolean
 from datetime import datetime
 
-PROJECT_ROOT = abspath(dirname(dirname(dirname(__file__))))
-
-# path for dotenv file
-DOTENV_PATH = join(PROJECT_ROOT, '.env')
+# qa index name 
+QA_INDEX = 'qa_pdpa'
 
 # paths for nearest neighbor index
 INDEX_BUCKET = 'pdpa-index'
@@ -16,8 +14,10 @@ INDEX_FOLDER = join(PROJECT_ROOT, 'model_artefacts')
 INDEX_PICKLE_PATH = join(INDEX_FOLDER, INDEX_PICKLE)
 INDEX_FILE_PATH = join(INDEX_FOLDER, INDEX_FILE)
 
-# ES_URL
-ES_URL = 'localhost:9200'
+PROJECT_ROOT = abspath(dirname(dirname(dirname(__file__))))
+
+# path for dotenv file
+DOTENV_PATH = join(PROJECT_ROOT, '.env')
 
 # query log index name 
 QUERY_LOG = 'querylog'
@@ -37,7 +37,3 @@ class QueryLog(Document):
     def save(self, **kwargs):
         self.created_at = datetime.now()
         return super().save(**kwargs)
-
-
-# qa index name 
-QA_INDEX = 'qa_pdpa'
