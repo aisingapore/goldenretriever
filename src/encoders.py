@@ -120,11 +120,25 @@ class USEEncoder(Encoder):
                          loss='triplet', context=[], neg_answer=[],
                          neg_answer_context=[], label=[]):
         """
-        Finetune the model
+        Finetune the model with GradientTape
 
-        Parameters:
-        loss(string): loss function can be 'triplet', 'cosine' and 'contrastive'
-
+        :type question: list of str
+        :type answer: list of str
+        :type context: list of str
+        :type neg_answer: list of str
+        :type neg_answer_context: list of str
+        :type margin: float
+        :type label: list of int
+        :type loss: str
+        :param question: List of string queries
+        :param answer: List of string responses
+        :param context: List of string response contexts, this is applicable to the USE model
+        :param neg_answer: List of string responses that do not match with the queries. This is applicable for triplet / contrastive loss.
+        :param neg_answer_context: Similar to neg_answer for the USE model to ingest
+        :param label: List of int
+        :param margin: Marrgin tuning parameter for triplet / contrastive loss
+        :param loss: Specify loss function
+        :return:  numpy array of mean loss value
         """
         self.cost_history = []
         with tf.GradientTape() as tape:
@@ -190,9 +204,7 @@ class USEEncoder(Encoder):
 
     def save_weights(self, save_dir=None):
         '''
-        Path should include partial filename.
-        https://www.tensorflow.org/api_docs/python/tf/saved_model/save
-
+        Save model weights in folder directory
         '''
         tf.saved_model.save(
             self.embed,
@@ -207,7 +219,6 @@ class USEEncoder(Encoder):
     def restore_weights(self, save_dir=None):
         """
         Signatures need to be re-init after weights are loaded.
-
         """
         self.embed = tf.saved_model.load(save_dir)
         self.init_signatures()
@@ -299,14 +310,11 @@ class ALBERTEncoder(Encoder):
         Return the tensor representing embedding of input text.
         Type can be 'query' or 'response' 
 
-        args:
-            text: (str or iterable of str) This contains the text that is required to be encoded
-            type: (str) Either 'response' or 'query'. Default is 'response'. 
-                        This tells GR to either use the response or query encoder
-                        but in the case of BERT, this argument is ignored
-
-        Return:
-            pooled_embedding: (tf.tensor) contains the 768 dim encoding of the input text
+        :type text: str or iterable of str
+        :type type: str
+        :param text: This contains the text that is required to be encoded
+        :param type: Either 'response' or 'query'. Default is 'response'. This tells GR to either use the response or query encoder but in the case of BERT, this argument is ignored
+        :return: tf.tensor that contains the 768 dim encoding of the input text
         """
 
         if string_type == 'query':
@@ -338,6 +346,9 @@ class ALBERTEncoder(Encoder):
             return response_embedding
 
     def encode(self, text, context=None, string_type='response'):
+        """
+        Encode an iterable of strings
+        """
         encoded_strings = [self._encode_one_str(t, string_type=string_type)
                            for t in text]
 
@@ -348,21 +359,25 @@ class ALBERTEncoder(Encoder):
                          loss='triplet', context=[], neg_answer=[],
                          neg_answer_context=[], label=[]):
         """
-        Finetune model with GradientTape.
+        Finetune the model with GradientTape
 
-        args:
-            question: (str or iterable of str) This contains the questions that is required to be encoded
-            answer: (str or iterable of str) This contains the response that is required to be encoded
-            margin: (float) margin tuning parameter for triplet / contrastive loss
-            loss: (str) name of loss function. ('cosine', 'contrastive', 'triplet'). Default setting is 'triplet.
-            context: (str or iterable of str) Ignored for BERT/ALBERT
-            neg_answer: (str or iterable of str) This contains the distractor responses that is required to be encoded
-            neg_answer_context: (str or iterable of str) Ignored for BERT/ALBERT
-            label: (list of int) This contain the label for contrastive loss
-
-        return:
-            loss_value: (float) This returns the loss of the training task
-
+        :type question: list of str
+        :type answer: list of str
+        :type context: list of str
+        :type neg_answer: list of str
+        :type neg_answer_context: list of str
+        :type margin: float
+        :type label: list of int
+        :type loss: str
+        :param question: List of string queries
+        :param answer: List of string responses
+        :param context: List of string response contexts, this is applicable to the USE model
+        :param neg_answer: List of string responses that do not match with the queries. This is applicable for triplet / contrastive loss.
+        :param neg_answer_context: Similar to neg_answer for the USE model to ingest
+        :param label: List of int
+        :param margin: Marrgin tuning parameter for triplet / contrastive loss
+        :param loss: Specify loss function
+        :return:  numpy array of mean loss value
         """
         question_id_mask_seg = preprocess_str(
             question, self.max_seq_length,
@@ -440,27 +455,13 @@ class ALBERTEncoder(Encoder):
         return cost_value.numpy().mean()
 
     def save_weights(self, save_dir=None):
-        '''
-        Save the BERT model into a directory
-
-        The original saving procedure taken from:
-        https://github.com/tensorflow/models/blob/master/official/nlp/bert/export_tfhub.py
-        The tf-hub module does includes the str vocab_file directory and do_lower_case boolean
-        The future restore() function should depend on a fresh copy of the vocab file,
-        because loading the model in a different directory demands a different directory for the vocab.
-        However, the string vocab_file directory and do_lower_case boolean is kept to the saved model anyway
-        '''
+        '''Save the BERT model weights into a directory'''
         # model.save does not work if there are layers that are subclassed (eg. huggingface models)
         save_path = os.path.join(save_dir, 'model')
         self.albert_model.save_weights(save_path)
 
     def restore_weights(self, save_dir=None):
-        """
-        Load weights from savepath
-
-        Args:
-            savepath: (str) dir path of the weights
-        """
+        """Load weights from savepath"""
         save_path = os.path.join(save_dir, 'model')
         self.albert_model.load_weights(save_path)
 
@@ -559,14 +560,11 @@ class BERTEncoder(Encoder):
         Return the tensor representing embedding of input text.
         Type can be 'query' or 'response' 
 
-        args:
-            text: (str or iterable of str) This contains the text that is required to be encoded
-            type: (str) Either 'response' or 'query'. Default is 'response'. 
-                        This tells GR to either use the response or query encoder
-                        but in the case of BERT, this argument is ignored
-
-        Return:
-            pooled_embedding: (tf.tensor) contains the 768 dim encoding of the input text
+        :type text: str or iterable of str
+        :type type: str 
+        :param text: This contains the text that is required to be encoded
+        :param type: Either 'response' or 'query'. Default is 'response'. In the case of BERT, this argument is ignored
+        :return: a tf.tensor that contains the 768 dim encoding of the input text
         """
 
         if string_type == 'query':
@@ -596,21 +594,25 @@ class BERTEncoder(Encoder):
                          loss='triplet', context=[], neg_answer=[],
                          neg_answer_context=[], label=[]):
         """
-        Finetune model with GradientTape.
+        Finetune the model with GradientTape
 
-        args:
-            question: (str or iterable of str) This contains the questions that is required to be encoded
-            response: (str or iterable of str) This contains the response that is required to be encoded
-            margin: (float) margin tuning parameter for triplet / contrastive loss
-            loss: (str) name of loss function. ('cosine', 'contrastive', 'triplet'). Default setting is 'triplet.
-            context: (str or iterable of str) Ignored for BERT/ALBERT
-            neg_answer: (str or iterable of str) This contains the distractor responses that is required to be encoded
-            neg_answer_context: (str or iterable of str) Ignored for BERT/ALBERT
-            label: (list of int) This contain the label for contrastive loss
-
-        return:
-            loss_value: (float) This returns the loss of the training task
-
+        :type question: list of str
+        :type answer: list of str
+        :type context: list of str
+        :type neg_answer: list of str
+        :type neg_answer_context: list of str
+        :type margin: float
+        :type label: list of int
+        :type loss: str
+        :param question: List of string queries
+        :param answer: List of string responses
+        :param context: List of string response contexts, this is applicable to the USE model
+        :param neg_answer: List of string responses that do not match with the queries. This is applicable for triplet / contrastive loss.
+        :param neg_answer_context: Similar to neg_answer for the USE model to ingest
+        :param label: List of int
+        :param margin: Marrgin tuning parameter for triplet / contrastive loss
+        :param loss: Specify loss function
+        :return:  numpy array of mean loss value
         """
         question_id_mask_seg = preprocess_str(
             question, self.max_seq_length,
@@ -683,16 +685,7 @@ class BERTEncoder(Encoder):
         return cost_value.numpy().mean()
 
     def save_weights(self, save_dir=None):
-        '''
-        Save the BERT model into a directory
-
-        The original saving procedure taken from:
-        https://github.com/tensorflow/models/blob/master/official/nlp/bert/export_tfhub.py
-        The tf-hub module does includes the str vocab_file directory and do_lower_case boolean
-        The future restore() function should depend on a fresh copy of the vocab file,
-        because loading the model in a different directory demands a different directory for the vocab.
-        However, the string vocab_file directory and do_lower_case boolean is kept to the saved model anyway
-        '''
+        '''Save the BERT model into a directory'''
 
         self.bert_model.vocab_file = self.vocab_file
         self.bert_model.do_lower_case = self.do_lower_case
@@ -700,17 +693,7 @@ class BERTEncoder(Encoder):
         self.bert_model.save(save_dir, include_optimizer=False)
 
     def restore_weights(self, save_dir=None):
-        """
-        Load saved model from savepath
-
-        hub.KerasLayer is unrecognized by tf.keras' save and load_model methods.
-        The trick is to feed a custom_objects dict object
-        This solution given by qo-o-op in this link:
-        https://github.com/tensorflow/tensorflow/issues/26835
-
-        Args:
-            savepath: (str) dir path of the 
-        """
+        """Load saved model from savepath"""
         self.bert_model = tf.keras.models.load_model(
             save_dir,
             custom_objects={'KerasLayer': hub.KerasLayer}
