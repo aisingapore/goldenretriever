@@ -24,7 +24,7 @@ class SimpleNNIndex(SimpleNeighbors):
         :param sentence_embeddings: responses in embedding form
         :returns simpleneighbors index for nearest neighbors vector lookup
         """
-        sentence_emb_tup = list(zip(sentences, sentence_embeddings['outputs'].numpy()))
+        sentence_emb_tup = list(zip(sentences, sentence_embeddings.numpy()))
         super().feed(sentence_emb_tup)
         super().build()
         print('index built')
