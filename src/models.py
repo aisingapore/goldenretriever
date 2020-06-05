@@ -91,11 +91,7 @@ class GoldenRetriever(Model):
     def load_kb(self, kb_):
         """
         Load the knowledge base or bases
-
-        args:
-        ----
-            kb: (kb object as defined in kb_handler)
-
+        :param kb: kb object as defined in kb_handler
         """
 
         self.kb = {}
@@ -119,14 +115,13 @@ class GoldenRetriever(Model):
         """
         Make a query against the stored vectorized knowledge.
 
-        Parameters:
-        type(string): can be 'query' or 'response'. Use to compare statements
-        kb_name(string): the name of knowledge base in the knowledge dictionary
-        index(boolean): Choose index=True to return sorted index of matches. 
-
-        Returns:
-        return the top K vectorized answers and their scores
-
+        :type type: str
+        :type kb_name: str
+        :type index: boolean
+        :param type: can be 'query' or 'response'. Use to compare statements
+        :param type: the name of knowledge base in the knowledge dictionary
+        :param type: Choose index=True to return sorted index of matches. 
+        :return: Top K vectorized answers and their scores
         """
 
         similarity_score = cosine_similarity(self.kb[kb_name].vectorised_responses,
@@ -156,13 +151,11 @@ class GoldenRetriever(Model):
         '''
         Path should include partial filename.
         https://www.tensorflow.org/api_docs/python/tf/saved_model/save
-
         '''
         self.encoder.save_weights(save_dir=save_dir)
 
     def restore_encoder(self, save_dir):
         """
         Signatures need to be re-init after weights are loaded.
-
         """
         self.encoder.restore_weights(save_dir=save_dir)

@@ -22,7 +22,7 @@ class SimpleNNIndex(SimpleNeighbors):
         
         :param sentences: responses in string form
         :param sentence_embeddings: responses in embedding form
-        :returns simpleneighbors index for nearest neighbors vector lookup
+        :return: simpleneighbors index for nearest neighbors vector lookup
         """
         sentence_emb_tup = list(zip(sentences, sentence_embeddings.numpy()))
         super().feed(sentence_emb_tup)
@@ -37,7 +37,7 @@ class SimpleNNIndex(SimpleNeighbors):
         Search is limited to the given number of items. Results are given in order of proximity. 
         :param query_embeddings: query in embedding form
         :param num_nbrs: number of results to return
-        :returns: list of items sorted by pro
+        :return: list of items sorted by pro
         """
         return super().nearest(query_embeddings, num_nbrs)
 
@@ -47,7 +47,7 @@ class SimpleNNIndex(SimpleNeighbors):
         the serialized Annoy index and a pickle with other data from the object
 
         :param prefix: filename prefix for the Annoy index and object data 
-        :returns None
+        :return: None
         """
         super().save(index_prefix)
         print('index saved')
@@ -58,7 +58,7 @@ class SimpleNNIndex(SimpleNeighbors):
         restores a previously-saved index
 
         :param prefix: prefix used when saving index
-        :returns: SimpleNNIndex object restored from specified files
+        :return: SimpleNNIndex object restored from specified files
         """
 
         with open(prefix + '-data.pkl', 'rb') as fh:
