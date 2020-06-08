@@ -3,6 +3,7 @@ from os.path import join
 from os import getenv
 from dotenv import load_dotenv
 import uuid
+from pydantic import BaseModel
 
 from src.minio_handler import MinioClient
 from src.prebuilt_index import SimpleNNIndex
@@ -11,6 +12,9 @@ from app.api.config import QueryLog, DOTENV_PATH, INDEX_BUCKET, INDEX_PICKLE, IN
 
 load_dotenv(DOTENV_PATH)
 
+class query_request(BaseModel):
+    query: str
+    k: int 
 
 def load_index():
     """
@@ -26,7 +30,7 @@ def load_index():
     return index
 
 
-def get_inference(query_string, gr_obj, k, index):
+def get_inference(query_string, gr_obj, index, k=5):
     """
     Return respose to user's question
     :param query_string: question as str
@@ -55,7 +59,7 @@ def log_request(query_string, resps):
     return id
 
 
-def make_query(query_string, query_encoder, k=5):
+def make_query(query_request, query_encoder):
     """
     Return respose to user's question
     :param query_string: question as str
@@ -64,6 +68,6 @@ def make_query(query_string, query_encoder, k=5):
     :returns: top K responses that have highest similarity with question
     """
     index = load_index()
-    resp = get_inference(query_string, query_encoder, k, index)
-    query_id = log_request(query_string, resp)
+    resp = get_inference(query_request.query, query_encoder, index, query_request.k)
+    query_id = log_request(query_request.query, resp)
     return resp, query_id

@@ -6,7 +6,7 @@ from app.api.config import ES_URL
 from app.api.upload_weights_service_es import upload_weights, MinioParam
 from app.api.upload_es_kb_service import upload_es_kb_service, EsParam
 from app.api.feedback_service_es import upload_feedback, FeedbackRequest
-from app.api.qa_service_es import make_query
+from app.api.qa_service_es import make_query, query_request
 
 from src.models import GoldenRetriever
 from src.encoders import USEEncoder
@@ -24,8 +24,8 @@ gr = GoldenRetriever(enc)  # use gr_2.restore_encoder(save_dir=save_dir) if inst
 def read_root():
     return {"Hello": "World"}
 
-@app.get("/query/{query_string}/{k}")
-def query(query_string: str, k: int = 5):
+@app.post("/query")
+def query(request: query_request):
     """
     Main function for User to make requests to. 
 
@@ -40,7 +40,7 @@ def query(query_string: str, k: int = 5):
         query_id: (int) contains id of the request to be used for when they give feedback
     """
     try:
-        resp, query_id = make_query(query_string, gr, k)
+        resp, query_id = make_query(request, gr)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"{str(e)}")
     return {'resp': resp, 'query_id': query_id}
