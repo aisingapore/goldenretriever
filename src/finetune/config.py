@@ -17,7 +17,7 @@ config_dict={
     "model_name": "USE", # "USE", "albert", "bert" 
     "max_seq_length": 256, 
     
-    "kb_names": ["qa_nrf"], 
+    "kb_names": ["qa_pdpa"], 
     "random_seed": 42, 
 
     "MINIO_URL":"localhost:9001",

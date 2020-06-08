@@ -6,7 +6,7 @@ Version:
 Usage:
 ------
 Script to handle indexing of QnA datasets into Elasticsearch for downstream finetuning and serving
-- Connect and upload NRF Documents to Elasticsearch
+- Connect and upload Documents to Elasticsearch
 
 CSV files should have the following columns: 
 [ans_id, ans_str, context_str (optional), query_str, query_id]

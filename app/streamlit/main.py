@@ -1,12 +1,11 @@
 """
-Streamlit app for NRF testing
-Runs frontend to test query and feedback endpoints on GoldenRetriever's API.
+Streamlit app
 
 Sample usage:
 note the empty double flag --  to input app arguments, as opposed to streamlit arguments
 https://github.com/streamlit/streamlit/issues/337
 ---------------------------------------------------
-    streamlit run app/streamlit/main.py -- --url https://goldenretrieveraisg.azurewebsites.net/
+    streamlit run app/streamlit/main.py -- --url <url for API endpoints>
 
 """
 import streamlit as st
@@ -17,10 +16,11 @@ from urllib.parse import quote
 
 # API arguments
 parser = argparse.ArgumentParser()
-parser.add_argument('--url', 
-                    # default="http://0.0.0.0:5000/",
-                    default="https://nrfgoldenretriever-backend.azurewebsites.net/",
-                    help="GoldenRetriever's API endpoint to query / feddback to")
+parser.add_argument(
+    '--url',
+    default="http://0.0.0.0:5000/",
+    help="GoldenRetriever's API endpoint to query / feddback to"
+)
 
 args = parser.parse_args()
 APP_URL = args.url
@@ -49,7 +49,7 @@ st.markdown('Visit our [community](https://makerspace.aisingapore.org/community/
 query_string = st.text_input(label='Input query here') 
 if st.button('Fetch', key='fetch'):
     state.fetch = True
-    res = requests.get(APP_URL + 'query/' + quote(query_string) + '/10')
+    res = requests.get(APP_URL + 'query/' + quote(query_string) + '/5')
     if res.status_code == 200:
         res = res.json()
         state.prediction = res['resp']
