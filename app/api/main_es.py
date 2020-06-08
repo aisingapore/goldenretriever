@@ -40,7 +40,7 @@ def query(request: query_request):
         query_id: (int) contains id of the request to be used for when they give feedback
     """
     try:
-        resp, query_id = make_query(request, gr, k)
+        resp, query_id = make_query(request, gr)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"{str(e)}")
     return {'resp': resp, 'query_id': query_id}

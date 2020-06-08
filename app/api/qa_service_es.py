@@ -30,7 +30,7 @@ def load_index():
     return index
 
 
-def get_inference(query_string, gr_obj, k, index):
+def get_inference(query_string, gr_obj, index, k=5):
     """
     Return respose to user's question
     :param query_string: question as str
@@ -59,7 +59,7 @@ def log_request(query_string, resps):
     return id
 
 
-def make_query(query_request, query_encoder, k=5):
+def make_query(query_request, query_encoder):
     """
     Return respose to user's question
     :param query_string: question as str
@@ -68,6 +68,6 @@ def make_query(query_request, query_encoder, k=5):
     :returns: top K responses that have highest similarity with question
     """
     index = load_index()
-    resp = get_inference(query_request.query, query_encoder, k, index)
+    resp = get_inference(query_request.query, query_encoder, index, query_request.k)
     query_id = log_request(query_request.query, resp)
     return resp, query_id
