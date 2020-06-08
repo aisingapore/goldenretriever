@@ -18,8 +18,8 @@ from urllib.parse import quote
 # API arguments
 parser = argparse.ArgumentParser()
 parser.add_argument('--url', 
-                    # default="http://0.0.0.0:5000/",
-                    default="https://nrfgoldenretriever-backend.azurewebsites.net/",
+                    default="http://127.0.0.1:8000/",
+                    # default="https://nrfgoldenretriever-backend.azurewebsites.net/",
                     help="GoldenRetriever's API endpoint to query / feddback to")
 
 args = parser.parse_args()
@@ -49,7 +49,8 @@ st.markdown('Visit our [community](https://makerspace.aisingapore.org/community/
 query_string = st.text_input(label='Input query here') 
 if st.button('Fetch', key='fetch'):
     state.fetch = True
-    res = requests.get(APP_URL + 'query/' + quote(query_string) + '/10')
+    res = requests.post(APP_URL + 'query', 
+                            json = {"query": query_string, "k": 5})
     if res.status_code == 200:
         res = res.json()
         state.prediction = res['resp']

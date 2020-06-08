@@ -31,12 +31,12 @@ def query(request: query_request):
 
     Args:
     -----
-        query: (str) query string contains their natural question
-        top_k: (int, default 5) Number of top responses to query. Currently kept at 5
+    Request dict {query_string: (str) query string contains their natural question
+                   k: (int, default 5) Number of top responses to query. Default to 5}
 
     Return:
     -------
-        reply: (list) contains top_k string responses
+        resp: (list) contains top_k string responses
         query_id: (int) contains id of the request to be used for when they give feedback
     """
     try:
