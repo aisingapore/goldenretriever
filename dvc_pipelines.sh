@@ -19,5 +19,3 @@ dvc run -f dvc/finetune.dvc \
         -d src/finetune/config.py \
         -o test_finetune \
         python -m src.finetune.main
-
-# make query pipeline
