@@ -30,6 +30,7 @@ def extract_response_embeddings(responses, contexts, encoder=None, save_dir=None
 
     gr = GoldenRetriever(enc)
     if save_dir is not None:
+        print("restoring weights for encoder")
         gr.restore_encoder(save_dir=save_dir)
     embs = gr.encoder.encode(responses, contexts, string_type='response')
     print(f"responses created with dim {len(embs[0])}")
@@ -49,9 +50,10 @@ def index_responses(responses, embs, output_folder, index_prefix):
 @click.option('--output_folder', help='path to save index')
 @click.option('--index_prefix', help='prefix to add to -data.pkl of index')
 @click.option('--gr_model', help='name of gr model')
-def main(data, output_folder, index_prefix, gr_model):
+@click.option('--savedir', help='path to fine-tuned encoder weights')
+def main(data, output_folder, index_prefix, gr_model, savedir):
     responses, contexts = get_responses_and_contexts(data)
-    embs = extract_response_embeddings(responses, contexts, gr_model)
+    embs = extract_response_embeddings(responses, contexts, gr_model, savedir)
     index_responses(responses, embs, output_folder, index_prefix)
 
 

@@ -81,9 +81,9 @@ class kb:
         q_r_idx = list(map(list, zip(*self.mapping)))
 
         # Concat and create kb_name
-        df = pd.concat([self.queries.drop_duplicates('query_string').iloc[q_r_idx[0]].reset_index(drop=True), 
-                        processed_string_series.iloc[q_r_idx[1]].reset_index(drop=True)], 
-                        axis=1)
+        query_strings = self.queries.drop_duplicates().iloc[q_r_idx[0]].reset_index(drop=True)
+        processed_strings = processed_string_series.iloc[q_r_idx[1]].reset_index(drop=True)
+        df = pd.concat([query_strings, processed_strings], axis=1)
         df = df.assign(kb_name = self.name)
 
         return df
@@ -122,7 +122,7 @@ class kb_handler():
                 print(next(text_file))
                 
     
-    def parse_df(self, kb_name, df, answer_col, query_col='', context_col='context_string'):
+    def parse_df(self, kb_name, df, answer_col, query_col='', context_col=''):
         """
         parses pandas DataFrame into responses, queries and mappings
         
@@ -138,13 +138,19 @@ class kb_handler():
         :param context_col: column name string that points to context strings
         :return: kb object
         """
+
+        if context_col == '':
+            ans_strings = df[answer_col].tolist()
+            df["context_string"] = ans_strings
+            context_col = "context_string"
+
         df = df.assign(context_string = '') if context_col == 'context_string' else df 
         df = df.rename(columns = {
                                    answer_col: 'raw_string', 
                                    context_col: 'context_string',
                                    query_col: 'query_string'
                                   })
-            
+
         unique_responses_df = df.loc[~df.duplicated(), ['raw_string', 'context_string']].drop_duplicates().reset_index(drop=True)
         
         if query_col=='':
@@ -243,7 +249,7 @@ class kb_handler():
                             
         return kb(kb_name, clauses, pd.DataFrame(query_list, columns=['query_string']), mappings)
             
-    def parse_csv(self, path, answer_col, query_col='', context_col='context_string', kb_name=''):
+    def parse_csv(self, path, answer_col='', query_col='', context_col='', kb_name=''):
         """
         Parse CSV file into kb format
         As pandas leverages csv.sniff to parse the csv, this function leverages pandas.

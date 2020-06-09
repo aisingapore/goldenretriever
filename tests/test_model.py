@@ -45,8 +45,8 @@ def load_es_kb():
 
     responses_df = df.loc[:, ['clause_id', 'raw_string', 'context_string']]
     queries_df = df.loc[:, ['query_id', 'query_string']]
-    nrf = kb('nrf', responses_df, queries_df, mappings)
-    kbs.append(nrf)
+    pdpa = kb('pdpa', responses_df, queries_df, mappings)
+    kbs.append(pdpa)
     return kbs
 
 
@@ -64,8 +64,8 @@ def test_make_query(monkeypatch):
 
     gr.load_kb(kbs)
 
-    querystring = "Can I change funding source"
-    actual = gr.make_query(querystring, top_k=5, index=False, predict_type="query", kb_name="nrf")
+    querystring = "What is personal data?"
+    actual = gr.make_query(querystring, top_k=5, index=False, predict_type="query", kb_name="pdpa")
 
     assert isinstance(actual[0], list)
     assert isinstance(actual[0][0], str)
@@ -103,7 +103,7 @@ def _generate_neg_ans(df, train_dict):
                     66,  53,  98, 180,  94, 138, 176,  79,  87, 103,  67,  24,   8]),
               array([141, 129, 155,   5, 108, 180,  63,   0, 143, 130,  98, 132,  61,
                      138,  24, 187,  86, 153,  94, 140, 162, 109,  56, 105, 185, 165])],
-     'nrf': [array([214, 240, 234, 235, 326, 244, 226, 252, 317, 331, 259, 215, 333,
+     'covid19': [array([214, 240, 234, 235, 326, 244, 226, 252, 317, 331, 259, 215, 333,
                     283, 299, 263, 220, 204]),
               array([249, 245, 331, 290, 254, 249, 249, 261, 296, 251, 214, 240, 275,
                      210, 223, 259, 212, 205])]}

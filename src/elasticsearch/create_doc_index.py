@@ -7,7 +7,7 @@ Usage:
 ------
 Script to handle indexing of QnA datasets into Elasticsearch for downstream finetuning and serving
 - Define index schema using elasticsearch_dsl classes
-- Connect and upload NRF Documents to Elasticsearch
+- Connect and upload Documents to Elasticsearch
 """
 from datetime import datetime
 from elasticsearch_dsl import Index, Document, InnerDoc, Date, Nested, Keyword, Text, Integer, connections
