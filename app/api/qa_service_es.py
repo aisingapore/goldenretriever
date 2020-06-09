@@ -59,7 +59,7 @@ def log_request(query_string, resps):
     return id
 
 
-def make_query(query_request, query_encoder):
+def make_query(query_request, query_encoder, index):
     """
     Return respose to user's question
     :param query_string: question as str
@@ -67,7 +67,7 @@ def make_query(query_request, query_encoder):
     :param k: number of responses to return
     :returns: top K responses that have highest similarity with question
     """
-    index = load_index()
+    # index = load_index()
     resp = get_inference(query_request.query, query_encoder, index, query_request.k)
     query_id = log_request(query_request.query, resp)
     return resp, query_id

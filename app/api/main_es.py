@@ -6,7 +6,7 @@ from app.api.config import ES_URL
 from app.api.upload_weights_service_es import upload_weights, MinioParam
 from app.api.upload_es_kb_service import upload_es_kb_service, EsParam
 from app.api.feedback_service_es import upload_feedback, FeedbackRequest
-from app.api.qa_service_es import make_query, query_request
+from app.api.qa_service_es import make_query, query_request, load_index
 
 from src.models import GoldenRetriever
 from src.encoders import USEEncoder
@@ -16,9 +16,10 @@ app = FastAPI(title='HotDocs Golden Retriever API', description='Answer retrieva
 # connect to Elasticsearch 
 connections.create_connection(hosts=[ES_URL])
 
-# initialize model 
+# initialize model and simple neighbors index
 enc = USEEncoder()
 gr = GoldenRetriever(enc)  # use gr_2.restore_encoder(save_dir=save_dir) if instantiating a saved model 
+index = load_index()
 
 @app.get("/")
 def read_root():
@@ -40,7 +41,7 @@ def query(request: query_request):
         query_id: (int) contains id of the request to be used for when they give feedback
     """
     try:
-        resp, query_id = make_query(request, gr)
+        resp, query_id = make_query(request, gr, index)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"{str(e)}")
     return {'resp': resp, 'query_id': query_id}

@@ -109,6 +109,5 @@ inferSent/
 GloVe/
 fastText/
 
-#database file
-
-#models
+# minio
+data/.minio.*
