@@ -29,8 +29,9 @@ services:
     build: .
     depends_on:
       - "elk"
-    ports:
-      - "80:80"
+    # ports:
+    #   - "80:80"
+    #   - "8501:8501"
     networks:
       - esnet
     command: ["./wait-for-it.sh", "elk:9200", "-t", "60", "--", "bash", "entrypoint.sh"]

@@ -110,4 +110,4 @@ GloVe/
 fastText/
 
 # minio
-data/.minio.*
+data/.minio*
