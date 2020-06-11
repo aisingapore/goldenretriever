@@ -1,0 +1,11 @@
+src.elasticsearch package
+=========================
+
+src.elasticsearch.create\_doc\_index module
+-------------------------------------------
+
+.. automodule:: src.elasticsearch.create_doc_index
+   :members: upload_docs
+   :exclude-members: Version
+   :undoc-members:
+   :show-inheritance:

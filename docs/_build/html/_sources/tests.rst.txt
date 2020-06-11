@@ -1,0 +1,38 @@
+tests package
+=============
+
+Submodules
+----------
+
+tests.conftest module
+---------------------
+
+.. automodule:: tests.conftest
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+tests.test\_api\_es module
+--------------------------
+
+.. automodule:: tests.test_api_es
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+tests.test\_model module
+------------------------
+
+.. automodule:: tests.test_model
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: tests
+   :members:
+   :undoc-members:
+   :show-inheritance:

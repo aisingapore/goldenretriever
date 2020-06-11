@@ -1,0 +1,354 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>src.tokenizers package &mdash; Golden-Retriever 0.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Golden-Retriever
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../src.models_subpackages.html">Model Subpackages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../src.finetune.html">src.finetune package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../src.elasticsearch.html">src.elasticsearch package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../src.data_handler.html">src.data_handler package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Golden-Retriever</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>src.tokenizers package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/source/src.tokenizers.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="src-tokenizers-package">
+<h1>src.tokenizers package<a class="headerlink" href="#src-tokenizers-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-src.tokenizers.bert_tokenization">
+<span id="src-tokenizers-bert-tokenization-module"></span><h2>src.tokenizers.bert_tokenization module<a class="headerlink" href="#module-src.tokenizers.bert_tokenization" title="Permalink to this headline">¶</a></h2>
+<p>Tokenization classes implementation.</p>
+<p>The file is forked from:
+<a class="reference external" href="https://github.com/google-research/bert/blob/master/tokenization.py">https://github.com/google-research/bert/blob/master/tokenization.py</a>.</p>
+<dl class="py class">
+<dt id="src.tokenizers.bert_tokenization.BasicTokenizer">
+<em class="property">class </em><code class="sig-prename descclassname">src.tokenizers.bert_tokenization.</code><code class="sig-name descname">BasicTokenizer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">do_lower_case</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tokenizers.bert_tokenization.BasicTokenizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Runs basic tokenization (punctuation splitting, lower casing, etc.).</p>
+<dl class="py method">
+<dt id="src.tokenizers.bert_tokenization.BasicTokenizer.tokenize">
+<code class="sig-name descname">tokenize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tokenizers.bert_tokenization.BasicTokenizer.tokenize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tokenizes a piece of text.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="src.tokenizers.bert_tokenization.FullTokenizer">
+<em class="property">class </em><code class="sig-prename descclassname">src.tokenizers.bert_tokenization.</code><code class="sig-name descname">FullTokenizer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vocab_file</span></em>, <em class="sig-param"><span class="n">do_lower_case</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tokenizers.bert_tokenization.FullTokenizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Runs end-to-end tokenziation.</p>
+<dl class="py method">
+<dt id="src.tokenizers.bert_tokenization.FullTokenizer.convert_ids_to_tokens">
+<code class="sig-name descname">convert_ids_to_tokens</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ids</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tokenizers.bert_tokenization.FullTokenizer.convert_ids_to_tokens" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="src.tokenizers.bert_tokenization.FullTokenizer.convert_tokens_to_ids">
+<code class="sig-name descname">convert_tokens_to_ids</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tokens</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tokenizers.bert_tokenization.FullTokenizer.convert_tokens_to_ids" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="src.tokenizers.bert_tokenization.FullTokenizer.tokenize">
+<code class="sig-name descname">tokenize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tokenizers.bert_tokenization.FullTokenizer.tokenize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="src.tokenizers.bert_tokenization.WordpieceTokenizer">
+<em class="property">class </em><code class="sig-prename descclassname">src.tokenizers.bert_tokenization.</code><code class="sig-name descname">WordpieceTokenizer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vocab</span></em>, <em class="sig-param"><span class="n">unk_token</span><span class="o">=</span><span class="default_value">'[UNK]'</span></em>, <em class="sig-param"><span class="n">max_input_chars_per_word</span><span class="o">=</span><span class="default_value">200</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tokenizers.bert_tokenization.WordpieceTokenizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Runs WordPiece tokenziation.</p>
+<dl class="py method">
+<dt id="src.tokenizers.bert_tokenization.WordpieceTokenizer.tokenize">
+<code class="sig-name descname">tokenize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tokenizers.bert_tokenization.WordpieceTokenizer.tokenize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tokenizes a piece of text into its word pieces.</p>
+<p>This uses a greedy longest-match-first algorithm to perform tokenization
+using the given vocabulary.</p>
+<dl class="simple">
+<dt>For example:</dt><dd><p>input = “unaffable”
+output = [“un”, “##aff”, “##able”]</p>
+</dd>
+<dt>Args:</dt><dd><dl class="simple">
+<dt>text: A single token or whitespace separated tokens. This should have</dt><dd><p>already been passed through <a href="#id1"><span class="problematic" id="id2">`</span></a>BasicTokenizer.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>A list of wordpiece tokens.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="src.tokenizers.bert_tokenization.convert_by_vocab">
+<code class="sig-prename descclassname">src.tokenizers.bert_tokenization.</code><code class="sig-name descname">convert_by_vocab</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vocab</span></em>, <em class="sig-param"><span class="n">items</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tokenizers.bert_tokenization.convert_by_vocab" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a sequence of [tokens|ids] using the vocab.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="src.tokenizers.bert_tokenization.convert_ids_to_tokens">
+<code class="sig-prename descclassname">src.tokenizers.bert_tokenization.</code><code class="sig-name descname">convert_ids_to_tokens</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inv_vocab</span></em>, <em class="sig-param"><span class="n">ids</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tokenizers.bert_tokenization.convert_ids_to_tokens" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="src.tokenizers.bert_tokenization.convert_to_unicode">
+<code class="sig-prename descclassname">src.tokenizers.bert_tokenization.</code><code class="sig-name descname">convert_to_unicode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tokenizers.bert_tokenization.convert_to_unicode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts <cite>text</cite> to Unicode (if it’s not already), assuming utf-8 input.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="src.tokenizers.bert_tokenization.convert_tokens_to_ids">
+<code class="sig-prename descclassname">src.tokenizers.bert_tokenization.</code><code class="sig-name descname">convert_tokens_to_ids</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vocab</span></em>, <em class="sig-param"><span class="n">tokens</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tokenizers.bert_tokenization.convert_tokens_to_ids" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="src.tokenizers.bert_tokenization.get_ids">
+<code class="sig-prename descclassname">src.tokenizers.bert_tokenization.</code><code class="sig-name descname">get_ids</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tokens</span></em>, <em class="sig-param"><span class="n">tokenizer</span></em>, <em class="sig-param"><span class="n">max_seq_length</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tokenizers.bert_tokenization.get_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Token ids from Tokenizer vocab</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="src.tokenizers.bert_tokenization.get_masks">
+<code class="sig-prename descclassname">src.tokenizers.bert_tokenization.</code><code class="sig-name descname">get_masks</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tokens</span></em>, <em class="sig-param"><span class="n">max_seq_length</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tokenizers.bert_tokenization.get_masks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mask for padding</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="src.tokenizers.bert_tokenization.get_segments">
+<code class="sig-prename descclassname">src.tokenizers.bert_tokenization.</code><code class="sig-name descname">get_segments</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tokens</span></em>, <em class="sig-param"><span class="n">max_seq_length</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tokenizers.bert_tokenization.get_segments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Segments: 0 for the first sequence, 1 for the second</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="src.tokenizers.bert_tokenization.load_vocab">
+<code class="sig-prename descclassname">src.tokenizers.bert_tokenization.</code><code class="sig-name descname">load_vocab</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vocab_file</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tokenizers.bert_tokenization.load_vocab" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a vocabulary file into a dictionary.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="src.tokenizers.bert_tokenization.preprocess_one_str">
+<code class="sig-prename descclassname">src.tokenizers.bert_tokenization.</code><code class="sig-name descname">preprocess_one_str</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em>, <em class="sig-param"><span class="n">max_seq_length</span></em>, <em class="sig-param"><span class="n">tokenizer</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tokenizers.bert_tokenization.preprocess_one_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert strings into the 3 arrays that BERT takes in as input:
+tokens, masks, segments</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="src.tokenizers.bert_tokenization.preprocess_str">
+<code class="sig-prename descclassname">src.tokenizers.bert_tokenization.</code><code class="sig-name descname">preprocess_str</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em>, <em class="sig-param"><span class="n">max_seq_length</span></em>, <em class="sig-param"><span class="n">tokenizer</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tokenizers.bert_tokenization.preprocess_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Preprocess string inputs or list of string inputs 
+into their respective lists of int32 arrays.</p>
+<p>Meant to be robust for whether the input is string 
+or an iterable of strings</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="src.tokenizers.bert_tokenization.printable_text">
+<code class="sig-prename descclassname">src.tokenizers.bert_tokenization.</code><code class="sig-name descname">printable_text</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tokenizers.bert_tokenization.printable_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns text encoded in a way suitable for print or <cite>tf.logging</cite>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="src.tokenizers.bert_tokenization.truncate_str">
+<code class="sig-prename descclassname">src.tokenizers.bert_tokenization.</code><code class="sig-name descname">truncate_str</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em>, <em class="sig-param"><span class="n">max_seq_length</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tokenizers.bert_tokenization.truncate_str" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="src.tokenizers.bert_tokenization.validate_case_matches_checkpoint">
+<code class="sig-prename descclassname">src.tokenizers.bert_tokenization.</code><code class="sig-name descname">validate_case_matches_checkpoint</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">do_lower_case</span></em>, <em class="sig-param"><span class="n">init_checkpoint</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tokenizers.bert_tokenization.validate_case_matches_checkpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether the casing config is consistent with the checkpoint name.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="src.tokenizers.bert_tokenization.whitespace_tokenize">
+<code class="sig-prename descclassname">src.tokenizers.bert_tokenization.</code><code class="sig-name descname">whitespace_tokenize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.tokenizers.bert_tokenization.whitespace_tokenize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs basic whitespace cleaning and splitting on a piece of text.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.tokenizers">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src.tokenizers" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, AI Makerspace
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,283 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>GoldenRetriever’s API Functions &mdash; Golden-Retriever 0.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Data Handlers" href="src.data_handler.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Golden-Retriever
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Reference:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="src.models_subpackages.html">GoldenRetriever’s Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="src.finetune.html">Finetuning GoldenRetriever</a></li>
+<li class="toctree-l1"><a class="reference internal" href="src.data_handler.html">Data Handlers</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">GoldenRetriever’s API Functions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Golden-Retriever</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>GoldenRetriever’s API Functions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/source/api.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="goldenretriever-s-api-functions">
+<h1>GoldenRetriever’s API Functions<a class="headerlink" href="#goldenretriever-s-api-functions" title="Permalink to this headline">¶</a></h1>
+<p>GoldenRetriever may be deployed as an API application. Below are the functions that power the endpoints. Alternatively, you may view the interactive fastAPI docs at localhost:80/docs, which may look like the screenshot below.</p>
+<img alt="../_images/API_docs.png" src="../_images/API_docs.png" />
+<span class="target" id="module-api.main_es"></span><dl class="py function">
+<dt id="api.main_es.query">
+<code class="sig-prename descclassname">api.main_es.</code><code class="sig-name descname">query</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">query_string</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">k</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">5</span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.main_es.query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main function for User to make requests to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query</strong> (<em>str</em>) – query string contains their natural question</p></li>
+<li><p><strong>top_k</strong> (<em>int</em><em>, </em><em>default 5</em>) – Number of top responses to query. Currently kept at 5</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list that contains top_k string responses</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>an integer query_id that contains id of the request to be used for when they give feedback</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="api.main_es.save_feedback">
+<code class="sig-prename descclassname">api.main_es.</code><code class="sig-name descname">save_feedback</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">feedback_request</span><span class="p">:</span> <span class="n">app.api.feedback_service_es.FeedbackRequest</span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.main_es.save_feedback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update ES querylog index with user feedback</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>feedback_request</strong> – See declared basemodel below.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary indicated successful transaction as such {‘resp’: ‘updated’}</p>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">FeedbackRequest</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="n">query_id</span><span class="p">:</span> <span class="nb">str</span>
+<span class="n">is_correct</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="api.main_es.save_weights">
+<em class="property">async </em><code class="sig-prename descclassname">api.main_es.</code><code class="sig-name descname">save_weights</code><span class="sig-paren">(</span><em class="sig-param">minio_param: app.api.upload_weights_service_es.MinioParam = &lt;fastapi.params.Depends object&gt;</em>, <em class="sig-param">file: fastapi.datastructures.UploadFile = File(default=Ellipsis</em>, <em class="sig-param">extra={})</em><span class="sig-paren">)</span><a class="headerlink" href="#api.main_es.save_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload finetuned weights to an minio s3 storage container. 
+Include minio params as form data along with file for uploading</p>
+<p>Sample form data:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="s1">&#39;minio_url&#39;</span><span class="p">:</span> <span class="n">MINIO_URL</span>
+<span class="s1">&#39;minio_access_key&#39;</span><span class="p">:</span> <span class="n">MINIO_ACCESS_KEY</span>
+<span class="s1">&#39;minio_secret_key&#39;</span><span class="p">:</span> <span class="n">MINIO_SECRET_KEY</span>
+<span class="s1">&#39;bucket_name&#39;</span><span class="p">:</span> <span class="n">BUCKET_NAME</span><span class="p">,</span>
+<span class="s1">&#39;object_name&#39;</span><span class="p">:</span> <span class="n">OBJECT_NAME</span>
+<span class="p">}</span> 
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="api.main_es.upload_kb">
+<em class="property">async </em><code class="sig-prename descclassname">api.main_es.</code><code class="sig-name descname">upload_kb</code><span class="sig-paren">(</span><em class="sig-param">es_param: app.api.upload_es_kb_service.EsParam = &lt;fastapi.params.Depends object&gt;</em>, <em class="sig-param">csv_file: fastapi.datastructures.UploadFile = File(default=Ellipsis</em>, <em class="sig-param">extra={})</em><span class="sig-paren">)</span><a class="headerlink" href="#api.main_es.upload_kb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Index QnA datasets into Elasticsearch for downstream finetuning and serving</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>es_param</strong> (<em>str</em>) – can be ‘query’ or ‘response’. Use to compare statements</p></li>
+<li><p><strong>csv_file</strong> – csv file containing queries and responses. 
+CSV files should have the following columns: 
+[ans_id, ans_str, context_str (optional), query_str, query_id]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>response dictionary as such: {‘message’: ‘success’, ‘number of docs’: counter}</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>query_id, an int that contains id of the request to be used for when they give feedback</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="src.data_handler.html" class="btn btn-neutral float-left" title="Data Handlers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, AI Makerspace
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
