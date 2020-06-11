@@ -55,9 +55,9 @@ def eval_model(model, df, test_dict):
     :type model: GoldenRetriever's Model class object
     :type df: pd.DataFrame
     :type test_dict: dict
-    :param model:GoldenRetriever's Model class object
+    :param model: GoldenRetriever's Model class object
     :param df: Contains the query response pairs
-    :param test_dict: pContains the indices of train test pairs
+    :param test_dict: Contains the indices of train test pairs
     :return overall_eval: pd.DataFrame that contains the metrics
     :return eval_dict: dict of the same metrics
     """

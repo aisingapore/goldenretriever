@@ -30,15 +30,12 @@ def query(request: query_request):
     """
     Main function for User to make requests to. 
 
-    Args:
-    -----
-    Request dict {query_string: (str) query string contains their natural question
-                   k: (int, default 5) Number of top responses to query. Default to 5}
-
-    Return:
-    -------
-        resp: (list) contains top_k string responses
-        query_id: (int) contains id of the request to be used for when they give feedback
+    :type query: str
+    :type top_k: int, default 5
+    :param query: query string contains their natural question
+    :param top_k: Number of top responses to query. Currently kept at 5
+    :return: a list that contains top_k string responses
+    :return: an integer query_id that contains id of the request to be used for when they give feedback
     """
     try:
         resp, query_id = make_query(request, gr, index)
@@ -50,16 +47,21 @@ def query(request: query_request):
 @app.post("/upload_weights")
 async def save_weights(minio_param: MinioParam = Depends(), file: UploadFile = File(...)):
     """
-    Upload finetuned weights to an minio s3 storage container
+    Upload finetuned weights to an minio s3 storage container. 
     Include minio params as form data along with file for uploading 
+
     Sample form data:
-            {
-             'minio_url': MINIO_URL
-             'minio_access_key': MINIO_ACCESS_KEY
-             'minio_secret_key': MINIO_SECRET_KEY
-             'bucket_name': BUCKET_NAME,
-             'object_name': OBJECT_NAME
-            } 
+
+    .. highlight:: python
+    .. code-block:: python
+       
+        {
+        'minio_url': MINIO_URL
+        'minio_access_key': MINIO_ACCESS_KEY
+        'minio_secret_key': MINIO_SECRET_KEY
+        'bucket_name': BUCKET_NAME,
+        'object_name': OBJECT_NAME
+        } 
     """
     try:
         message = upload_weights(minio_param, file)
@@ -71,19 +73,15 @@ async def save_weights(minio_param: MinioParam = Depends(), file: UploadFile = F
 @app.post("/upload_es_kb")
 async def upload_kb(es_param: EsParam = Depends(), csv_file: UploadFile = File(...)):
     """
-    index QnA datasets into Elasticsearch for downstream finetuning and serving
+    Index QnA datasets into Elasticsearch for downstream finetuning and serving
 
-    Args:
-    -----
-        es_param: (str) ES_URL
-        csv_file: csv file containing queries and responses. 
+    :type es_param: str
+    :param es_param: can be 'query' or 'response'. Use to compare statements
+    :param csv_file: csv file containing queries and responses. 
                   CSV files should have the following columns: 
                   [ans_id, ans_str, context_str (optional), query_str, query_id]
-
-    Return:
-    -------
-        resp: (dict) {'message': 'success', 'number of docs': counter}
-        query_id: (int) contains id of the request to be used for when they give feedback
+    :return: response dictionary as such: {'message': 'success', 'number of docs': counter}
+    :return: query_id, an int that contains id of the request to be used for when they give feedback
     """
     try: 
         message = upload_es_kb_service(es_param, csv_file)
@@ -97,16 +95,15 @@ def save_feedback(feedback_request: FeedbackRequest):
     """
     Update ES querylog index with user feedback
 
-    Args:
-    -----
-        feedback_request: (pydantic BaseModel) 
-        class FeedbackRequest(BaseModel):
-            query_id: str
-            is_correct: List[bool]
+    :param feedback_request: See declared basemodel below. 
+    :return: A dictionary indicated successful transaction as such {'resp': 'updated'}
 
-    Return:
-    -------
-        resp: (dict) {'resp': 'updated'}
+    .. highlight:: python
+    .. code-block:: python
+
+        class FeedbackRequest(BaseModel):
+        query_id: str
+        is_correct: List[bool]
     """
     try:
         message = upload_feedback(feedback_request)

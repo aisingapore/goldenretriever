@@ -91,6 +91,7 @@ class GoldenRetriever(Model):
     def load_kb(self, kb_):
         """
         Load the knowledge base or bases
+
         :param kb: kb object as defined in kb_handler
         """
 
@@ -119,8 +120,8 @@ class GoldenRetriever(Model):
         :type kb_name: str
         :type index: boolean
         :param type: can be 'query' or 'response'. Use to compare statements
-        :param type: the name of knowledge base in the knowledge dictionary
-        :param type: Choose index=True to return sorted index of matches. 
+        :param kb_name: the name of knowledge base in the knowledge dictionary
+        :param index: Choose index=True to return sorted index of matches. 
         :return: Top K vectorized answers and their scores
         """
 
@@ -147,7 +148,7 @@ class GoldenRetriever(Model):
 
         return sorted_ans[:top_k], similarity_score[sortargs[:top_k]] 
 
-    def export_encoder(self, save_dir=None):
+    def export_encoder(self, save_dir):
         '''
         Path should include partial filename.
         https://www.tensorflow.org/api_docs/python/tf/saved_model/save
