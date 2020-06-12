@@ -1,0 +1,520 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>GoldenRetriever’s Models &mdash; Golden-Retriever 0.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Finetuning GoldenRetriever" href="src.finetune.html" />
+    <link rel="prev" title="Welcome to Golden-Retriever’s documentation!" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Golden-Retriever
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Reference:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">GoldenRetriever’s Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-src.encoders">Encoders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#goldenretriever-class">GoldenRetriever Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-src.loss_functions">Loss Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-src.prebuilt_index">Prebuilt Index</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="src.finetune.html">Finetuning GoldenRetriever</a></li>
+<li class="toctree-l1"><a class="reference internal" href="src.data_handler.html">Data Handlers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">GoldenRetriever’s API Functions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Golden-Retriever</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>GoldenRetriever’s Models</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/source/src.models_subpackages.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="goldenretriever-s-models">
+<h1>GoldenRetriever’s Models<a class="headerlink" href="#goldenretriever-s-models" title="Permalink to this headline">¶</a></h1>
+<p>GoldenRetriever uses loads <code class="docutils literal notranslate"><span class="pre">encoders</span></code> into the main <code class="docutils literal notranslate"><span class="pre">src.models.GoldenRetriever</span></code> class.
+The <code class="docutils literal notranslate"><span class="pre">encoders</span></code> class handles encoding, saving, loading amongst other model specific functions, whereas the <code class="docutils literal notranslate"><span class="pre">GoldenRetriever</span></code> class is a wrapper that interfaces with knowledge bases and deployed applications.
+It is possible to create a custom encoder to be loaded into the the main <code class="docutils literal notranslate"><span class="pre">src.models.GoldenRetriever</span></code> class.</p>
+<p>There is also a prebuilt index subpackage that loads encoded knowledge bases into the deployed app.</p>
+<div class="section" id="module-src.encoders">
+<span id="encoders"></span><h2>Encoders<a class="headerlink" href="#module-src.encoders" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="src.encoders.Encoder">
+<em class="property">class </em><code class="sig-prename descclassname">src.encoders.</code><code class="sig-name descname">Encoder</code><a class="headerlink" href="#src.encoders.Encoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>a shared encoder interface
+Each encoder should provide an encode() method</p>
+<dl class="py method">
+<dt id="src.encoders.Encoder.encode">
+<em class="property">abstract </em><code class="sig-name descname">encode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.encoders.Encoder.encode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="src.encoders.Encoder.finetune_weights">
+<em class="property">abstract </em><code class="sig-name descname">finetune_weights</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.encoders.Encoder.finetune_weights" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="src.encoders.Encoder.restore_weights">
+<em class="property">abstract </em><code class="sig-name descname">restore_weights</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.encoders.Encoder.restore_weights" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="src.encoders.Encoder.save_weights">
+<em class="property">abstract </em><code class="sig-name descname">save_weights</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.encoders.Encoder.save_weights" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="src.encoders.USEEncoder">
+<em class="property">class </em><code class="sig-prename descclassname">src.encoders.</code><code class="sig-name descname">USEEncoder</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">max_seq_length</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoders.USEEncoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../src.models_subpackages.html#src.encoders.Encoder" title="src.encoders.Encoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.encoders.Encoder</span></code></a></p>
+<dl class="py method">
+<dt id="src.encoders.USEEncoder.encode">
+<code class="sig-name descname">encode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em>, <em class="sig-param"><span class="n">context</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">string_type</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoders.USEEncoder.encode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="src.encoders.USEEncoder.finetune_weights">
+<code class="sig-name descname">finetune_weights</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">question</span></em>, <em class="sig-param"><span class="n">answer</span></em>, <em class="sig-param"><span class="n">margin</span><span class="o">=</span><span class="default_value">0.3</span></em>, <em class="sig-param"><span class="n">loss</span><span class="o">=</span><span class="default_value">'triplet'</span></em>, <em class="sig-param"><span class="n">context</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">neg_answer</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">neg_answer_context</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">label</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoders.USEEncoder.finetune_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finetune the model with GradientTape</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>question</strong> (<em>list of str</em>) – List of string queries</p></li>
+<li><p><strong>answer</strong> (<em>list of str</em>) – List of string responses</p></li>
+<li><p><strong>context</strong> (<em>list of str</em>) – List of string response contexts, this is applicable to the USE model</p></li>
+<li><p><strong>neg_answer</strong> (<em>list of str</em>) – List of string responses that do not match with the queries. This is applicable for triplet / contrastive loss.</p></li>
+<li><p><strong>neg_answer_context</strong> (<em>list of str</em>) – Similar to neg_answer for the USE model to ingest</p></li>
+<li><p><strong>label</strong> (<em>list of int</em>) – List of int</p></li>
+<li><p><strong>margin</strong> (<em>float</em>) – Marrgin tuning parameter for triplet / contrastive loss</p></li>
+<li><p><strong>loss</strong> (<em>str</em>) – Specify loss function</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>numpy array of mean loss value</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="src.encoders.USEEncoder.init_signatures">
+<code class="sig-name descname">init_signatures</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.encoders.USEEncoder.init_signatures" title="Permalink to this definition">¶</a></dt>
+<dd><p>Re-initialize question, response specific layers. 
+This would be needed after saving / loading the models.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="src.encoders.USEEncoder.restore_weights">
+<code class="sig-name descname">restore_weights</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">save_dir</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoders.USEEncoder.restore_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Signatures need to be re-init after weights are loaded.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="src.encoders.USEEncoder.save_weights">
+<code class="sig-name descname">save_weights</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">save_dir</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoders.USEEncoder.save_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save model weights in folder directory</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="goldenretriever-class">
+<h2>GoldenRetriever Class<a class="headerlink" href="#goldenretriever-class" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-src.models"></span><dl class="py class">
+<dt id="src.models.GoldenRetriever">
+<em class="property">class </em><code class="sig-prename descclassname">src.models.</code><code class="sig-name descname">GoldenRetriever</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">encoder</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.GoldenRetriever" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../src.models_subpackages.html#src.models.Model" title="src.models.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.models.Model</span></code></a></p>
+<dl class="py method">
+<dt id="src.models.GoldenRetriever.export_encoder">
+<code class="sig-name descname">export_encoder</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">save_dir</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.GoldenRetriever.export_encoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Path should include partial filename.
+<a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/saved_model/save">https://www.tensorflow.org/api_docs/python/tf/saved_model/save</a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="src.models.GoldenRetriever.finetune">
+<code class="sig-name descname">finetune</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">question</span></em>, <em class="sig-param"><span class="n">answer</span></em>, <em class="sig-param"><span class="n">margin</span><span class="o">=</span><span class="default_value">0.3</span></em>, <em class="sig-param"><span class="n">loss</span><span class="o">=</span><span class="default_value">'triplet'</span></em>, <em class="sig-param"><span class="n">context</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">neg_answer</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">neg_answer_context</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">label</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.GoldenRetriever.finetune" title="Permalink to this definition">¶</a></dt>
+<dd><p>finetunes encoder</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="src.models.GoldenRetriever.load_kb">
+<code class="sig-name descname">load_kb</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">kb_</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.GoldenRetriever.load_kb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the knowledge base or bases</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>kb</strong> – kb object as defined in kb_handler</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="src.models.GoldenRetriever.make_query">
+<code class="sig-name descname">make_query</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">querystring</span></em>, <em class="sig-param"><span class="n">top_k</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">predict_type</span><span class="o">=</span><span class="default_value">'query'</span></em>, <em class="sig-param"><span class="n">kb_name</span><span class="o">=</span><span class="default_value">'default_kb'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.GoldenRetriever.make_query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a query against the stored vectorized knowledge.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> (<em>str</em>) – can be ‘query’ or ‘response’. Use to compare statements</p></li>
+<li><p><strong>kb_name</strong> (<em>str</em>) – the name of knowledge base in the knowledge dictionary</p></li>
+<li><p><strong>index</strong> (<em>boolean</em>) – Choose index=True to return sorted index of matches.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Top K vectorized answers in list of string and their scores in an array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="src.models.GoldenRetriever.predict">
+<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em>, <em class="sig-param"><span class="n">context</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">string_type</span><span class="o">=</span><span class="default_value">'response'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.GoldenRetriever.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>encode method of encoder
+will be used to vectorize texts</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="src.models.GoldenRetriever.restore_encoder">
+<code class="sig-name descname">restore_encoder</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">save_dir</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.GoldenRetriever.restore_encoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Signatures need to be re-init after weights are loaded.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="src.models.Model">
+<em class="property">class </em><code class="sig-prename descclassname">src.models.</code><code class="sig-name descname">Model</code><a class="headerlink" href="#src.models.Model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>a shared model interface where
+each model should provide
+finetune, predict, make_query, export_encoder,
+restore_encoder methods</p>
+<dl class="py method">
+<dt id="src.models.Model.export_encoder">
+<em class="property">abstract </em><code class="sig-name descname">export_encoder</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.models.Model.export_encoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>export finetuned weights</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="src.models.Model.finetune">
+<em class="property">abstract </em><code class="sig-name descname">finetune</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.models.Model.finetune" title="Permalink to this definition">¶</a></dt>
+<dd><p>finetunes encoder</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="src.models.Model.load_kb">
+<em class="property">abstract </em><code class="sig-name descname">load_kb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.models.Model.load_kb" title="Permalink to this definition">¶</a></dt>
+<dd><p>load and encode knowledge bases to return predictions</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="src.models.Model.make_query">
+<em class="property">abstract </em><code class="sig-name descname">make_query</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.models.Model.make_query" title="Permalink to this definition">¶</a></dt>
+<dd><p>uses predict method to vectorize texts
+and provides relevant responses based on
+given specifications (eg. num responses) to user</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="src.models.Model.predict">
+<em class="property">abstract </em><code class="sig-name descname">predict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.models.Model.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>encode method of encoder
+will be used to vectorize texts</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="src.models.Model.restore_encoder">
+<em class="property">abstract </em><code class="sig-name descname">restore_encoder</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.models.Model.restore_encoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>restores encoder with finetuned weights</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.loss_functions">
+<span id="loss-functions"></span><h2>Loss Functions<a class="headerlink" href="#module-src.loss_functions" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="src.loss_functions.triplet_loss">
+<code class="sig-prename descclassname">src.loss_functions.</code><code class="sig-name descname">triplet_loss</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">anchor_vector</span></em>, <em class="sig-param"><span class="n">positive_vector</span></em>, <em class="sig-param"><span class="n">negative_vector</span></em>, <em class="sig-param"><span class="n">metric</span><span class="o">=</span><span class="default_value">'cosine_dist'</span></em>, <em class="sig-param"><span class="n">margin</span><span class="o">=</span><span class="default_value">0.009</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.loss_functions.triplet_loss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the triplet loss with semi-hard negative mining.
+The loss encourages the positive distances (between a pair of embeddings with
+the same labels) to be smaller than the minimum negative distance among
+which are at least greater than the positive distance plus the margin constant
+(called semi-hard negative) in the mini-batch. If no such negative exists,
+uses the largest negative distance instead.
+See: <a class="reference external" href="https://arxiv.org/abs/1503.03832">https://arxiv.org/abs/1503.03832</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>anchor_vector</strong> (<em>tf.Tensor</em>) – The anchor vector in this use case should be the encoded query.</p></li>
+<li><p><strong>positive_vector</strong> (<em>tf.Tensor</em>) – The positive vector in this use case should be the encoded response.</p></li>
+<li><p><strong>negative_vector</strong> (<em>tf.Tensor</em>) – The negative vector in this use case should be the wrong encoded response.</p></li>
+<li><p><strong>metric</strong> (<em>str</em>) – Specify loss function</p></li>
+<li><p><strong>margin</strong> (<em>float</em>) – Margin parameter in loss function. See link above.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the triplet loss value, as a tf.float32 scalar.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.prebuilt_index">
+<span id="prebuilt-index"></span><h2>Prebuilt Index<a class="headerlink" href="#module-src.prebuilt_index" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="src.prebuilt_index.SimpleNNIndex">
+<em class="property">class </em><code class="sig-prename descclassname">src.prebuilt_index.</code><code class="sig-name descname">SimpleNNIndex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">emb_dim_size</span></em>, <em class="sig-param"><span class="n">metric</span><span class="o">=</span><span class="default_value">'angular'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.prebuilt_index.SimpleNNIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">simpleneighbors.SimpleNeighbors</span></code></p>
+<p>Simple Neighbors Index for calculating similarity between queries and reponses vectorized by Golden Retriever</p>
+<p>This class wraps the SimpleNeighbors python package. SimpleNeighbors will select a backend implementation 
+depending on what packages are available in your environment. Therefore it is recommended that you install Annoy 
+<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">annoy</span></code> to enable the Annoy backend.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>emb_dim_size</strong> – number of dimensions in the data (eg. 512)</p></li>
+<li><p><strong>metric</strong> – distance metric to use. Default is ‘angular’, which is an approximation of cosine distance</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="src.prebuilt_index.SimpleNNIndex.build">
+<code class="sig-name descname">build</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sentences</span></em>, <em class="sig-param"><span class="n">sentence_embeddings</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.prebuilt_index.SimpleNNIndex.build" title="Permalink to this definition">¶</a></dt>
+<dd><p>builds precomputed vector index from QA responses. uses the Annoy library by default.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sentences</strong> – responses in string form</p></li>
+<li><p><strong>sentence_embeddings</strong> – responses in embedding form</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>simpleneighbors index for nearest neighbors vector lookup</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="src.prebuilt_index.SimpleNNIndex.load">
+<em class="property">classmethod </em><code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">prefix</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.prebuilt_index.SimpleNNIndex.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>restores a previously-saved index</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>prefix</strong> – prefix used when saving index</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>SimpleNNIndex object restored from specified files</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="src.prebuilt_index.SimpleNNIndex.query">
+<code class="sig-name descname">query</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">query_embeddings</span></em>, <em class="sig-param"><span class="n">num_nbrs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.prebuilt_index.SimpleNNIndex.query" title="Permalink to this definition">¶</a></dt>
+<dd><p>finds response closest to the query vector</p>
+<p>The query vector should have the same number of dimensions as the dimensions of the index.
+Search is limited to the given number of items. Results are given in order of proximity. 
+:param query_embeddings: query in embedding form
+:param num_nbrs: number of results to return
+:return: list of items sorted by pro</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="src.prebuilt_index.SimpleNNIndex.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index_prefix</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.prebuilt_index.SimpleNNIndex.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>saves index to disk. With the Annoy backend, there are two files produced: 
+the serialized Annoy index and a pickle with other data from the object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>prefix</strong> – filename prefix for the Annoy index and object data</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="src.finetune.html" class="btn btn-neutral float-right" title="Finetuning GoldenRetriever" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../index.html" class="btn btn-neutral float-left" title="Welcome to Golden-Retriever’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, AI Makerspace
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

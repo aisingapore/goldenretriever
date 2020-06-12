@@ -1,0 +1,26 @@
+src.finetune package
+====================
+
+src.finetune.eval module
+------------------------
+
+.. automodule:: src.finetune.eval
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+src.finetune.generators module
+------------------------------
+
+.. automodule:: src.finetune.generators
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+src.finetune.main module
+------------------------
+
+.. automodule:: src.finetune.main
+   :members:
+   :undoc-members:
+   :show-inheritance:

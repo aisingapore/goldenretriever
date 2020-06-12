@@ -10,7 +10,7 @@ class SimpleNNIndex(SimpleNeighbors):
     depending on what packages are available in your environment. Therefore it is recommended that you install Annoy 
     ``pip install annoy`` to enable the Annoy backend. 
 
-    :params emb_dim_size: number of dimensions in the data (eg. 512)
+    :param emb_dim_size: number of dimensions in the data (eg. 512)
     :param metric: distance metric to use. Default is 'angular', which is an approximation of cosine distance
     """
     def __init__(self, emb_dim_size, metric='angular'):
