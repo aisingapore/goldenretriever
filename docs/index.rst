@@ -8,7 +8,7 @@ Welcome to Golden-Retriever's documentation!
 
 This is the technical documentation on Golden-Retriever's API. For more narrative walkthroughs of Golden-Retriever or example use cases, 
 check out our `github repo <https://github.com/aimakerspace/goldenretriever>`_ 
-and our `infomation page <https://makerspace.aisingapore.org/do-ai/golden-retriever/>`_ 
+and our `information page <https://makerspace.aisingapore.org/do-ai/golden-retriever/>`_ 
 and our `demo <https://goldenretrieverstreamlit.azurewebsites.net/>`_.
 
 
