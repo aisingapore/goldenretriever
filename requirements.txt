@@ -21,3 +21,4 @@ minio
 python-dotenv
 click
 simpleneighbors
+sphinx_rtd_theme
