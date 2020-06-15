@@ -4,9 +4,8 @@ tensorflow==2.1.0
 tensorflow-estimator==2.1.0
 tensorflow-text==2.0.1
 tensorflow-hub
-transformers
-pyodbc
 tika 
+transformers
 streamlit
 seaborn 
 azure-storage-blob==12.3.0

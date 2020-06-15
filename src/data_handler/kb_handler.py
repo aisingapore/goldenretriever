@@ -5,7 +5,6 @@ This kb object may then be further used for finetuning and eval
 
 import pandas as pd
 import numpy as np
-import pyodbc
 from tika import parser
 import argparse
 import re
@@ -313,63 +312,6 @@ class kb_handler():
         # convert to kb object
         responses, queries, mapping = self.parse_df(kb_name, clause_df, 'clause')
         return kb(kb_name, responses, queries, mapping) 
-
-    def load_sql_kb(self, cnxn_str="", cnxn_path = "../db_cnxn_str.txt", kb_names=[]):
-        """
-        Load the knowledge bases from SQL.
-        
-        GoldenRetriever keeps the responses text in the 
-        text and vectorized_knowledge attributes 
-        as dictionaries indexed by their respective kb names
-
-        :type cnxn_path: str
-        :type kb_names: list
-        :param cnxn_path: string directory of the connection string 
-                          that needs to be fed into pyodbc
-        :param kb_names: to list specific kb_names to parse
-                         else if empty, parse all of them
-        :return: list of kb class objects
-        """
-        if ".db" in cnxn_path:
-            conn = sqlite3.connect(cnxn_path, check_same_thread=False)
-            cursor = conn.cursor()
-            cursor.execute("ATTACH './goldenretriever.db' as dbo;")
-        elif cnxn_str == "":
-            conn = pyodbc.connect(open(cnxn_path, 'r').read())
-        else:
-            conn = pyodbc.connect(cnxn_str)
-        
-        if len(kb_names) == 0:
-            kb_names = pd.read_sql_query("""SELECT dbo.kb_raw.kb_name FROM dbo.kb_raw """, 
-                                        conn, 
-                                        ).kb_name
-
-        kbs = []
-        for kb_name in kb_names:
-            kb_df = pd.read_sql_query("""select dbo.kb_clauses.id AS clause_id, dbo.kb_clauses.raw_string, dbo.kb_clauses.context_string, \
-                        dbo.kb_raw.kb_name, dbo.kb_clauses.processed_string, dbo.query_db.query_string,  dbo.query_db.id AS query_id \
-                        FROM dbo.users \
-                        LEFT JOIN dbo.kb_directory ON dbo.users.id = dbo.kb_directory.user_id \
-                        LEFT JOIN dbo.kb_raw ON dbo.kb_directory.id = dbo.kb_raw.directory_id \
-                        LEFT JOIN dbo.kb_clauses ON dbo.kb_raw.id = dbo.kb_clauses.raw_id \
-                        LEFT JOIN dbo.query_labels ON dbo.kb_clauses.id = dbo.query_labels.clause_id \
-                        LEFT JOIN dbo.query_db ON dbo.query_labels.query_id = dbo.query_db.id \
-                        WHERE dbo.kb_raw.kb_name = (?) """, 
-                    conn, 
-                    params=[kb_name],
-                    )
-
-            # load name, responses, queries, mapping into kb object
-            kb_df = kb_df.dropna(subset=['query_string'])
-            indexed_responses = kb_df.loc[:,['clause_id', 'raw_string', 'context_string', 'query_string']].drop_duplicates(subset=['clause_id']).fillna('').reset_index(drop=True) # fillna: not all responses have a context_string
-            indexed_queries = kb_df.loc[:,['query_id', 'query_string']].drop_duplicates(subset=['query_id']).reset_index(drop=True)
-            mappings = generate_mappings(kb_df.processed_string, kb_df.query_string)
-            kb_ = kb(kb_name, indexed_responses, indexed_queries, mappings)
-            kbs.append(kb_)
-
-        conn.close()
-        return kbs
-
 
 
     def load_es_kb(self, kb_names=[]):
