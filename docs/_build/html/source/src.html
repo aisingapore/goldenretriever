@@ -181,7 +181,7 @@
 <dl class="py class">
 <dt id="src.encoders.ALBERTEncoder">
 <em class="property">class </em><code class="sig-prename descclassname">src.encoders.</code><code class="sig-name descname">ALBERTEncoder</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">max_seq_length</span><span class="o">=</span><span class="default_value">512</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoders.ALBERTEncoder" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="../src.models_subpackages.html#src.encoders.Encoder" title="src.encoders.Encoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.encoders.Encoder</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="src.models_subpackages.html#src.encoders.Encoder" title="src.encoders.Encoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.encoders.Encoder</span></code></a></p>
 <dl class="py method">
 <dt id="src.encoders.ALBERTEncoder.encode">
 <code class="sig-name descname">encode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em>, <em class="sig-param"><span class="n">context</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">string_type</span><span class="o">=</span><span class="default_value">'response'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoders.ALBERTEncoder.encode" title="Permalink to this definition">¶</a></dt>
@@ -235,7 +235,7 @@ When restoring the model, the references to the vocab file / layers would be los
 <dl class="py class">
 <dt id="src.encoders.BERTEncoder">
 <em class="property">class </em><code class="sig-prename descclassname">src.encoders.</code><code class="sig-name descname">BERTEncoder</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">max_seq_length</span><span class="o">=</span><span class="default_value">512</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoders.BERTEncoder" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="../src.models_subpackages.html#src.encoders.Encoder" title="src.encoders.Encoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.encoders.Encoder</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="src.models_subpackages.html#src.encoders.Encoder" title="src.encoders.Encoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.encoders.Encoder</span></code></a></p>
 <dl class="py method">
 <dt id="src.encoders.BERTEncoder.encode">
 <code class="sig-name descname">encode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em>, <em class="sig-param"><span class="n">context</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">string_type</span><span class="o">=</span><span class="default_value">'response'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoders.BERTEncoder.encode" title="Permalink to this definition">¶</a></dt>
@@ -329,7 +329,7 @@ Each encoder should provide an encode() method</p>
 <dl class="py class">
 <dt id="src.encoders.USEEncoder">
 <em class="property">class </em><code class="sig-prename descclassname">src.encoders.</code><code class="sig-name descname">USEEncoder</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">max_seq_length</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoders.USEEncoder" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="../src.models_subpackages.html#src.encoders.Encoder" title="src.encoders.Encoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.encoders.Encoder</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="src.models_subpackages.html#src.encoders.Encoder" title="src.encoders.Encoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.encoders.Encoder</span></code></a></p>
 <dl class="py method">
 <dt id="src.encoders.USEEncoder.encode">
 <code class="sig-name descname">encode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em>, <em class="sig-param"><span class="n">context</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">string_type</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoders.USEEncoder.encode" title="Permalink to this definition">¶</a></dt>
@@ -361,9 +361,7 @@ Each encoder should provide an encode() method</p>
 <dl class="py method">
 <dt id="src.encoders.USEEncoder.init_signatures">
 <code class="sig-name descname">init_signatures</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.encoders.USEEncoder.init_signatures" title="Permalink to this definition">¶</a></dt>
-<dd><p>Re-initialize question, response specific layers. 
-This would be needed after saving / loading the models.</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt id="src.encoders.USEEncoder.restore_weights">
@@ -453,7 +451,7 @@ See: <a class="reference external" href="https://arxiv.org/abs/1503.03832">https
 <dl class="py class">
 <dt id="src.models.GoldenRetriever">
 <em class="property">class </em><code class="sig-prename descclassname">src.models.</code><code class="sig-name descname">GoldenRetriever</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">encoder</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.GoldenRetriever" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="../src.models_subpackages.html#src.models.Model" title="src.models.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.models.Model</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="src.models_subpackages.html#src.models.Model" title="src.models.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.models.Model</span></code></a></p>
 <dl class="py method">
 <dt id="src.models.GoldenRetriever.export_encoder">
 <code class="sig-name descname">export_encoder</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">save_dir</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.models.GoldenRetriever.export_encoder" title="Permalink to this definition">¶</a></dt>
@@ -491,7 +489,7 @@ See: <a class="reference external" href="https://arxiv.org/abs/1503.03832">https
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Top K vectorized answers in list of string and their scores in an array</p>
+<dd class="field-even"><p>Top K vectorized answers and their scores</p>
 </dd>
 </dl>
 </dd></dl>
