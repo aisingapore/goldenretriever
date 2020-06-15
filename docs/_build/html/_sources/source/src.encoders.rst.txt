@@ -1,0 +1,35 @@
+Model Subpackages
+===========
+
+src.encoders module
+-------------------
+
+.. automodule:: src.encoders
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+src.models module
+-----------------
+
+.. automodule:: src.models
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+src.loss\_functions module
+--------------------------
+
+.. automodule:: src.loss_functions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+src.prebuilt\_index module
+--------------------------
+
+.. automodule:: src.prebuilt_index
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

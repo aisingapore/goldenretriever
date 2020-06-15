@@ -1,0 +1,78 @@
+api package
+===========
+
+Submodules
+----------
+
+api.config module
+-----------------
+
+.. automodule:: api.config
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+api.db\_handler module
+----------------------
+
+.. automodule:: api.db_handler
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+api.exceptions module
+---------------------
+
+.. automodule:: api.exceptions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+api.feedback\_service\_es module
+--------------------------------
+
+.. automodule:: api.feedback_service_es
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+api.main\_es module
+-------------------
+
+.. automodule:: api.main_es
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+api.qa\_service\_es module
+--------------------------
+
+.. automodule:: api.qa_service_es
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+api.upload\_es\_kb\_service module
+----------------------------------
+
+.. automodule:: api.upload_es_kb_service
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+api.upload\_weights\_service\_es module
+---------------------------------------
+
+.. automodule:: api.upload_weights_service_es
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: api
+   :members:
+   :undoc-members:
+   :show-inheritance:

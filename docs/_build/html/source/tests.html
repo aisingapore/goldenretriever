@@ -1,0 +1,218 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>tests package &#8212; Golden-Retriever 0.3 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="tests-package">
+<h1>tests package<a class="headerlink" href="#tests-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-tests.conftest">
+<span id="tests-conftest-module"></span><h2>tests.conftest module<a class="headerlink" href="#module-tests.conftest" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="tests.conftest.create_dummy_weights">
+<code class="sig-prename descclassname">tests.conftest.</code><code class="sig-name descname">create_dummy_weights</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tmpdir</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.conftest.create_dummy_weights" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tests.conftest.test_app">
+<code class="sig-prename descclassname">tests.conftest.</code><code class="sig-name descname">test_app</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.conftest.test_app" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-tests.test_api_es">
+<span id="tests-test-api-es-module"></span><h2>tests.test_api_es module<a class="headerlink" href="#module-tests.test_api_es" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="tests.test_api_es.MockFeedbackResponse">
+<em class="property">class </em><code class="sig-prename descclassname">tests.test_api_es.</code><code class="sig-name descname">MockFeedbackResponse</code><a class="headerlink" href="#tests.test_api_es.MockFeedbackResponse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="tests.test_api_es.MockFeedbackResponse.json">
+<em class="property">static </em><code class="sig-name descname">json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_api_es.MockFeedbackResponse.json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="tests.test_api_es.MockQueryResponse">
+<em class="property">class </em><code class="sig-prename descclassname">tests.test_api_es.</code><code class="sig-name descname">MockQueryResponse</code><a class="headerlink" href="#tests.test_api_es.MockQueryResponse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="tests.test_api_es.MockQueryResponse.json">
+<em class="property">static </em><code class="sig-name descname">json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_api_es.MockQueryResponse.json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="tests.test_api_es.MockUploadWeightsResponse">
+<em class="property">class </em><code class="sig-prename descclassname">tests.test_api_es.</code><code class="sig-name descname">MockUploadWeightsResponse</code><a class="headerlink" href="#tests.test_api_es.MockUploadWeightsResponse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="tests.test_api_es.MockUploadWeightsResponse.json">
+<em class="property">static </em><code class="sig-name descname">json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_api_es.MockUploadWeightsResponse.json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="tests.test_api_es.mock_upload_weights">
+<code class="sig-prename descclassname">tests.test_api_es.</code><code class="sig-name descname">mock_upload_weights</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_api_es.mock_upload_weights" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tests.test_api_es.test_feedback_service">
+<code class="sig-prename descclassname">tests.test_api_es.</code><code class="sig-name descname">test_feedback_service</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">test_app</span></em>, <em class="sig-param"><span class="n">monkeypatch</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_api_es.test_feedback_service" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tests.test_api_es.test_qa_service">
+<code class="sig-prename descclassname">tests.test_api_es.</code><code class="sig-name descname">test_qa_service</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">test_app</span></em>, <em class="sig-param"><span class="n">monkeypatch</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_api_es.test_qa_service" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tests.test_api_es.test_qa_service_invalid_request">
+<code class="sig-prename descclassname">tests.test_api_es.</code><code class="sig-name descname">test_qa_service_invalid_request</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">test_app</span></em>, <em class="sig-param"><span class="n">monkeypatch</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_api_es.test_qa_service_invalid_request" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tests.test_api_es.test_qa_service_invalid_request_integration">
+<code class="sig-prename descclassname">tests.test_api_es.</code><code class="sig-name descname">test_qa_service_invalid_request_integration</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">test_app</span></em>, <em class="sig-param"><span class="n">monkeypatch</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_api_es.test_qa_service_invalid_request_integration" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tests.test_api_es.test_upload_with_minio_mocked">
+<code class="sig-prename descclassname">tests.test_api_es.</code><code class="sig-name descname">test_upload_with_minio_mocked</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">test_app</span></em>, <em class="sig-param"><span class="n">create_dummy_weights</span></em>, <em class="sig-param"><span class="n">monkeypatch</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_api_es.test_upload_with_minio_mocked" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-tests.test_model">
+<span id="tests-test-model-module"></span><h2>tests.test_model module<a class="headerlink" href="#module-tests.test_model" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="tests.test_model.create_delete_model_savepath">
+<code class="sig-prename descclassname">tests.test_model.</code><code class="sig-name descname">create_delete_model_savepath</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_model.create_delete_model_savepath" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tests.test_model.gen">
+<code class="sig-prename descclassname">tests.test_model.</code><code class="sig-name descname">gen</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">batch_size</span></em>, <em class="sig-param"><span class="n">query</span></em>, <em class="sig-param"><span class="n">response</span></em>, <em class="sig-param"><span class="n">neg_response</span></em>, <em class="sig-param"><span class="n">shuffle_data</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_model.gen" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tests.test_model.load_es_kb">
+<code class="sig-prename descclassname">tests.test_model.</code><code class="sig-name descname">load_es_kb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_model.load_es_kb" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tests.test_model.random_triplet_generator">
+<code class="sig-prename descclassname">tests.test_model.</code><code class="sig-name descname">random_triplet_generator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">train_dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_model.random_triplet_generator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tests.test_model.test_finetune_export_restore">
+<code class="sig-prename descclassname">tests.test_model.</code><code class="sig-name descname">test_finetune_export_restore</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">monkeypatch</span></em>, <em class="sig-param"><span class="n">create_delete_model_savepath</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_model.test_finetune_export_restore" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="tests.test_model.test_make_query">
+<code class="sig-prename descclassname">tests.test_model.</code><code class="sig-name descname">test_make_query</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">monkeypatch</span></em><span class="sig-paren">)</span><a class="headerlink" href="#tests.test_model.test_make_query" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-tests">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tests" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Golden-Retriever</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, AI Makerspace.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/source/tests.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
