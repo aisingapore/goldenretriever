@@ -2,7 +2,7 @@
 
 _Setting up your own information retrieval tool has never been easier_
 
-**Documentation**: [URL]() `TO BE UPDATED`
+**Documentation**: [https://goldenretriever.readthedocs.io/en/latest/]
 
 Retrieving information from your mobile phone or laptop seems to be a simple task. Similar to our experiences with Google’s search engine, all we need is to type our queries into a search bar, and in return we are able to receive a list of relevant responses. 
 
