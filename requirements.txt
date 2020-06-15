@@ -5,6 +5,7 @@ tensorflow-estimator==2.1.0
 tensorflow-text==2.0.1
 tensorflow-hub
 tika 
+transformers
 streamlit
 seaborn 
 azure-storage-blob==12.3.0
@@ -12,6 +13,7 @@ python-multipart==0.0.5
 elasticsearch==7.7.0
 elasticsearch-dsl==7.2.0
 pytest
+pyodbc
 uvicorn
 fastapi==0.54.0
 mock==4.0.2
