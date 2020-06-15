@@ -1,0 +1,18 @@
+src.data\_handler package
+=========================
+
+src.data\_handler.kb\_handler module
+------------------------------------
+
+.. automodule:: src.data_handler.kb_handler
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+src.data\_handler.data\_preprocessing module
+--------------------------------------------
+
+.. automodule:: src.data_handler.data_preprocessing
+   :members:
+   :undoc-members:
+   :show-inheritance:

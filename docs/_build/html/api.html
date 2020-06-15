@@ -1,0 +1,480 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>api package &mdash; Golden-Retriever 0.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Golden-Retriever
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="source/src.models_subpackages.html">GoldenRetriever’s Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/src.finetune.html">Finetuning GoldenRetriever</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/src.data_handler.html">Data Handlers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/api.html">GoldenRetriever’s API Functions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Golden-Retriever</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>api package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="api-package">
+<h1>api package<a class="headerlink" href="#api-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-api.config">
+<span id="api-config-module"></span><h2>api.config module<a class="headerlink" href="#module-api.config" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="api.config.QueryLog">
+<em class="property">class </em><code class="sig-prename descclassname">api.config.</code><code class="sig-name descname">QueryLog</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">meta</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.config.QueryLog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">elasticsearch_dsl.document.Document</span></code></p>
+<dl class="py class">
+<dt id="api.config.QueryLog.Index">
+<em class="property">class </em><code class="sig-name descname">Index</code><a class="headerlink" href="#api.config.QueryLog.Index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt id="api.config.QueryLog.Index.name">
+<code class="sig-name descname">name</code><em class="property"> = 'querylog'</em><a class="headerlink" href="#api.config.QueryLog.Index.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="api.config.QueryLog.feedback_timestamp">
+<code class="sig-name descname">feedback_timestamp</code><em class="property">: Date()</em><em class="property"> = None</em><a class="headerlink" href="#api.config.QueryLog.feedback_timestamp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="api.config.QueryLog.is_correct">
+<code class="sig-name descname">is_correct</code><em class="property">: Boolean(multi=True)</em><em class="property"> = None</em><a class="headerlink" href="#api.config.QueryLog.is_correct" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="api.config.QueryLog.query_text">
+<code class="sig-name descname">query_text</code><em class="property">: Text()</em><em class="property"> = None</em><a class="headerlink" href="#api.config.QueryLog.query_text" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="api.config.QueryLog.responses">
+<code class="sig-name descname">responses</code><em class="property">: Text(multi=True)</em><em class="property"> = None</em><a class="headerlink" href="#api.config.QueryLog.responses" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="api.config.QueryLog.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.config.QueryLog.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the document into elasticsearch. If the document doesn’t exist it
+is created, it is overwritten otherwise. Returns <code class="docutils literal notranslate"><span class="pre">True</span></code> if this
+operations resulted in new document being created.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> – elasticsearch index to use, if the <code class="docutils literal notranslate"><span class="pre">Document</span></code> is
+associated with an index this can be omitted.</p></li>
+<li><p><strong>using</strong> – connection alias to use, defaults to <code class="docutils literal notranslate"><span class="pre">'default'</span></code></p></li>
+<li><p><strong>validate</strong> – set to <code class="docutils literal notranslate"><span class="pre">False</span></code> to skip validating the document</p></li>
+<li><p><strong>skip_empty</strong> – if set to <code class="docutils literal notranslate"><span class="pre">False</span></code> will cause empty values (<code class="docutils literal notranslate"><span class="pre">None</span></code>,
+<code class="docutils literal notranslate"><span class="pre">[]</span></code>, <code class="docutils literal notranslate"><span class="pre">{}</span></code>) to be left on the document. Those values will be
+stripped out otherwise as they make no difference in elasticsearch.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Any additional keyword arguments will be passed to
+<code class="docutils literal notranslate"><span class="pre">Elasticsearch.index</span></code> unchanged.</p>
+<p>:return operation result created/updated</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-api.db_handler">
+<span id="api-db-handler-module"></span><h2>api.db_handler module<a class="headerlink" href="#module-api.db_handler" title="Permalink to this headline">¶</a></h2>
+<p>Util func to handle pyodbc connections</p>
+<dl class="py function">
+<dt id="api.db_handler.ensure_connection">
+<code class="sig-prename descclassname">api.db_handler.</code><code class="sig-name descname">ensure_connection</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">conn</span></em>, <em class="sig-param"><span class="n">conn_path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.db_handler.ensure_connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensure that pyodbc connection is still working</p>
+<p><a class="reference external" href="https://stackoverflow.com/questions/10847703/check-if-pyodbc-connection-is-open-or-closed">https://stackoverflow.com/questions/10847703/check-if-pyodbc-connection-is-open-or-closed</a>
+<a class="reference external" href="https://stackoverflow.com/questions/41473137/pyodbc-how-to-retry-to-recover-from-transient-errors">https://stackoverflow.com/questions/41473137/pyodbc-how-to-retry-to-recover-from-transient-errors</a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="api.db_handler.extract_qa_pair_based_on_idx">
+<code class="sig-prename descclassname">api.db_handler.</code><code class="sig-name descname">extract_qa_pair_based_on_idx</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lst</span></em>, <em class="sig-param"><span class="n">idx</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.db_handler.extract_qa_pair_based_on_idx" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="api.db_handler.get_kb_id_ref">
+<code class="sig-prename descclassname">api.db_handler.</code><code class="sig-name descname">get_kb_id_ref</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">conn</span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.db_handler.get_kb_id_ref" title="Permalink to this definition">¶</a></dt>
+<dd><p>Utility function to get references from SQL. 
+The returned objects conveniently identify users based on kb_name or user hashkey</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="api.db_handler.get_last_insert_ids">
+<code class="sig-prename descclassname">api.db_handler.</code><code class="sig-name descname">get_last_insert_ids</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">conn</span></em>, <em class="sig-param"><span class="n">table</span></em>, <em class="sig-param"><span class="n">inserted_iterable</span><span class="o">=</span><span class="default_value">['single_string']</span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.db_handler.get_last_insert_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get ids of last inserted iterable</p>
+<blockquote>
+<div><p>cursor: pyodbc cursor
+inserted_iterable: iterable of last inserted values</p>
+</div></blockquote>
+<blockquote>
+<div><p>last_insert_ids: (list of ints) list of indices of inserted rows</p>
+</div></blockquote>
+<dl class="simple">
+<dt>references:</dt><dd><p><a class="reference external" href="https://code.google.com/archive/p/pyodbc/wikis/FAQs.wiki#How_do_I_retrieve_autogenerated%2Fidentity_values%3F">https://code.google.com/archive/p/pyodbc/wikis/FAQs.wiki#How_do_I_retrieve_autogenerated%2Fidentity_values%3F</a>
+<a class="reference external" href="https://dba.stackexchange.com/questions/81604/how-to-insert-values-in-junction-table-for-many-to-many-relationships">https://dba.stackexchange.com/questions/81604/how-to-insert-values-in-junction-table-for-many-to-many-relationships</a>
+<a class="reference external" href="https://stackoverflow.com/questions/2548493/how-do-i-get-the-id-after-insert-into-mysql-database-with-python">https://stackoverflow.com/questions/2548493/how-do-i-get-the-id-after-insert-into-mysql-database-with-python</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="api.db_handler.get_permissions">
+<code class="sig-prename descclassname">api.db_handler.</code><code class="sig-name descname">get_permissions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">conn</span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.db_handler.get_permissions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get user permissions to allow access only to allowed KBs
+The returned df maps user hashkey with authorized kb_name(s)</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-api.exceptions">
+<span id="api-exceptions-module"></span><h2>api.exceptions module<a class="headerlink" href="#module-api.exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="py exception">
+<dt id="api.exceptions.InvalidUsage">
+<em class="property">exception </em><code class="sig-prename descclassname">api.exceptions.</code><code class="sig-name descname">InvalidUsage</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span><span class="o">=</span><span class="default_value">'query endpoint requires arguments: query, kb_name'</span></em>, <em class="sig-param"><span class="n">status_code</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">payload</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.exceptions.InvalidUsage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Raises exception
+<a class="reference external" href="https://flask.palletsprojects.com/en/1.1.x/patterns/apierrors/">https://flask.palletsprojects.com/en/1.1.x/patterns/apierrors/</a></p>
+<dl class="py attribute">
+<dt id="api.exceptions.InvalidUsage.status_code">
+<code class="sig-name descname">status_code</code><em class="property"> = 400</em><a class="headerlink" href="#api.exceptions.InvalidUsage.status_code" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="api.exceptions.InvalidUsage.to_dict">
+<code class="sig-name descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.exceptions.InvalidUsage.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-api.feedback_service_es">
+<span id="api-feedback-service-es-module"></span><h2>api.feedback_service_es module<a class="headerlink" href="#module-api.feedback_service_es" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="version">
+<h3>Version:<a class="headerlink" href="#version" title="Permalink to this headline">¶</a></h3>
+<p>0.1 16th May 2020</p>
+</div>
+<div class="section" id="usage">
+<h3>Usage:<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h3>
+<p>Update query log index is_correct field with user feedback</p>
+<p>Feedback is a list of booleans len(5) indicating whether responses are True or False</p>
+<dl class="py class">
+<dt id="api.feedback_service_es.FeedbackRequest">
+<em class="property">class </em><code class="sig-prename descclassname">api.feedback_service_es.</code><code class="sig-name descname">FeedbackRequest</code><a class="headerlink" href="#api.feedback_service_es.FeedbackRequest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.main.BaseModel</span></code></p>
+<dl class="py attribute">
+<dt id="api.feedback_service_es.FeedbackRequest.is_correct">
+<code class="sig-name descname">is_correct</code><em class="property">: List[bool]</em><em class="property"> = None</em><a class="headerlink" href="#api.feedback_service_es.FeedbackRequest.is_correct" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="api.feedback_service_es.FeedbackRequest.query_id">
+<code class="sig-name descname">query_id</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#api.feedback_service_es.FeedbackRequest.query_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="api.feedback_service_es.upload_feedback">
+<code class="sig-prename descclassname">api.feedback_service_es.</code><code class="sig-name descname">upload_feedback</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">feedback_request</span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.feedback_service_es.upload_feedback" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="api-main-es-module">
+<h2>api.main_es module<a class="headerlink" href="#api-main-es-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-api.qa_service_es">
+<span id="api-qa-service-es-module"></span><h2>api.qa_service_es module<a class="headerlink" href="#module-api.qa_service_es" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="api.qa_service_es.get_inference">
+<code class="sig-prename descclassname">api.qa_service_es.</code><code class="sig-name descname">get_inference</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">query_string</span></em>, <em class="sig-param"><span class="n">gr_obj</span></em>, <em class="sig-param"><span class="n">k</span></em>, <em class="sig-param"><span class="n">index</span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.qa_service_es.get_inference" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return respose to user’s question
+:param query_string: question as str
+:param query_encoder: encoder for returning query embeddings
+:param k: number of responses to return
+:param index: name of prebuilt nearest neighbors index  
+:returns: top K responses that have highest similarity with question</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="api.qa_service_es.load_index">
+<code class="sig-prename descclassname">api.qa_service_es.</code><code class="sig-name descname">load_index</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.qa_service_es.load_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load prebuilt vector index for nearest neighbors lookup
+:returns: Simple Nearest Neighbors index</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="api.qa_service_es.log_request">
+<code class="sig-prename descclassname">api.qa_service_es.</code><code class="sig-name descname">log_request</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">query_string</span></em>, <em class="sig-param"><span class="n">resps</span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.qa_service_es.log_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log user queries in Elasticsearch
+:param query: users input query
+:param responses: list of responses returned
+:param feedback: list of true / false responses returned by user   
+:return: True if query was logged successfully</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="api.qa_service_es.make_query">
+<code class="sig-prename descclassname">api.qa_service_es.</code><code class="sig-name descname">make_query</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">query_string</span></em>, <em class="sig-param"><span class="n">query_encoder</span></em>, <em class="sig-param"><span class="n">k</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.qa_service_es.make_query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return respose to user’s question
+:param query_string: question as str
+:param query_encoder: encoder for returning query embeddings
+:param k: number of responses to return
+:returns: top K responses that have highest similarity with question</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-api.upload_es_kb_service">
+<span id="api-upload-es-kb-service-module"></span><h2>api.upload_es_kb_service module<a class="headerlink" href="#module-api.upload_es_kb_service" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id1">
+<h3>Version:<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>0.1 11th May 2020</p>
+</div>
+<div class="section" id="id2">
+<h3>Usage:<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>Script to handle indexing of QnA datasets into Elasticsearch for downstream finetuning and serving
+- Connect and upload NRF Documents to Elasticsearch</p>
+<p>CSV files should have the following columns: 
+[ans_id, ans_str, context_str (optional), query_str, query_id]</p>
+<p>To see how index is built, refer to src.elasticsearch.create_doc_index.py</p>
+<dl class="py class">
+<dt id="api.upload_es_kb_service.EsParam">
+<em class="property">class </em><code class="sig-prename descclassname">api.upload_es_kb_service.</code><code class="sig-name descname">EsParam</code><a class="headerlink" href="#api.upload_es_kb_service.EsParam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.main.BaseModel</span></code></p>
+<dl class="py attribute">
+<dt id="api.upload_es_kb_service.EsParam.index_name">
+<code class="sig-name descname">index_name</code><em class="property">: str</em><em class="property"> = None</em><a class="headerlink" href="#api.upload_es_kb_service.EsParam.index_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="api.upload_es_kb_service.upload_es_kb_service">
+<code class="sig-prename descclassname">api.upload_es_kb_service.</code><code class="sig-name descname">upload_es_kb_service</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">es_param</span></em>, <em class="sig-param"><span class="n">csv_file</span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.upload_es_kb_service.upload_es_kb_service" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-api.upload_weights_service_es">
+<span id="api-upload-weights-service-es-module"></span><h2>api.upload_weights_service_es module<a class="headerlink" href="#module-api.upload_weights_service_es" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="api.upload_weights_service_es.MinioParam">
+<em class="property">class </em><code class="sig-prename descclassname">api.upload_weights_service_es.</code><code class="sig-name descname">MinioParam</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">minio_url</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">Form(default=Ellipsis, extra={})</span></em>, <em class="sig-param"><span class="n">minio_access_key</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">Form(default=Ellipsis, extra={})</span></em>, <em class="sig-param"><span class="n">minio_secret_key</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">Form(default=Ellipsis, extra={})</span></em>, <em class="sig-param"><span class="n">bucket_name</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">Form(default=Ellipsis, extra={})</span></em>, <em class="sig-param"><span class="n">object_name</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">Form(default=Ellipsis, extra={})</span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.upload_weights_service_es.MinioParam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="api.upload_weights_service_es.upload_weights">
+<code class="sig-prename descclassname">api.upload_weights_service_es.</code><code class="sig-name descname">upload_weights</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">params</span></em>, <em class="sig-param"><span class="n">files</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#api.upload_weights_service_es.upload_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload finetuned weights to an minio object storage container
+args:
+—-</p>
+<blockquote>
+<div><p>minio_url: (str) url endpoint for minio
+minio_access_key: (str) minio access key for authorized access to object storage
+minio_secret_key: (str) minio secret key for authorized access to object storage
+bucket_name: (str) name of newly created bucket that will store weights
+object_name: (str) name to be used for the newly stored weights in the container</p>
+</div></blockquote>
+<dl>
+<dt>Sample json body:</dt><dd><dl class="simple">
+<dt>{</dt><dd><p>‘minio_url’: MINIO_URL
+‘minio_access_key’: MINIO_ACCESS_KEY
+‘minio_secret_key’: MINIO_SECRET_KEY
+‘bucket_name’: BUCKET_NAME,
+‘object_name’: OBJECT_NAME</p>
+</dd>
+</dl>
+<p>}</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-api">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-api" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, AI Makerspace
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
