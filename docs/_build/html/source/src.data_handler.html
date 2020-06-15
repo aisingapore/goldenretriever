@@ -250,28 +250,6 @@ else if empty, parse all of them</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="src.data_handler.kb_handler.kb_handler.load_sql_kb">
-<code class="sig-name descname">load_sql_kb</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cnxn_str</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">cnxn_path</span><span class="o">=</span><span class="default_value">'../db_cnxn_str.txt'</span></em>, <em class="sig-param"><span class="n">kb_names</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.data_handler.kb_handler.kb_handler.load_sql_kb" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load the knowledge bases from SQL.</p>
-<p>GoldenRetriever keeps the responses text in the 
-text and vectorized_knowledge attributes 
-as dictionaries indexed by their respective kb names</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>cnxn_path</strong> (<em>str</em>) – string directory of the connection string 
-that needs to be fed into pyodbc</p></li>
-<li><p><strong>kb_names</strong> (<em>list</em>) – to list specific kb_names to parse
-else if empty, parse all of them</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>list of kb class objects</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt id="src.data_handler.kb_handler.kb_handler.parse_csv">
 <code class="sig-name descname">parse_csv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">answer_col</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">query_col</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">context_col</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">kb_name</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.data_handler.kb_handler.kb_handler.parse_csv" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse CSV file into kb format
