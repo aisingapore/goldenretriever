@@ -13,7 +13,6 @@ python-multipart==0.0.5
 elasticsearch==7.7.0
 elasticsearch-dsl==7.2.0
 pytest
-pyodbc
 uvicorn
 fastapi==0.54.0
 mock==4.0.2
