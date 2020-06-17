@@ -289,6 +289,9 @@ dvc checkout
 dvc repro finetune.dvc
 ```
 
+<h1 align="center"> Contributors </h1>
+
+Yeo Lik Khian, Jeanne Choo, Kenneth Wang, Jeremy Tan, Daniel Ng, Cheong Wei Yih, Tan Juan Boon
 
 <h1 align="center"> Acknowledgements </h1>
 
