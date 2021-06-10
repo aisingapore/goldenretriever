@@ -15,7 +15,7 @@ elasticsearch==7.7.0
 elasticsearch-dsl==7.2.0
 pytest
 uvicorn
-fastapi==0.54.0
+fastapi==0.65.2
 mock==4.0.2
 minio
 python-dotenv
